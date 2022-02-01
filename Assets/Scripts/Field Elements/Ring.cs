@@ -5,8 +5,8 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class Ring : CullableFieldElement
 {
-    MeshRenderer meshRenderer;
-    Material originalMaterial;
+    public MeshRenderer meshRenderer;
+    public Material originalMaterial;
 
     public override bool culled
     {
@@ -23,14 +23,9 @@ public class Ring : CullableFieldElement
             }
             else
             {
-                meshRenderer.sharedMaterial = originalMaterial;
+                if (meshRenderer)
+                    meshRenderer.sharedMaterial = originalMaterial;
             }
         }
-    }
-
-    void Awake()
-    {
-        meshRenderer = GetComponent<MeshRenderer>();
-        originalMaterial = meshRenderer.sharedMaterial;
     }
 }
