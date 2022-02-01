@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class Mogo : CullableFieldElement
 {
     public Material blueMaterial;
@@ -22,14 +23,18 @@ public class Mogo : CullableFieldElement
 
     public override bool culled
     {
+        get {
+            return base.culled;
+        }
         set {
             base.culled = value;
             SetMogoMaterial();
         }
     }
 
-    void OnValidate()
+    protected override void OnValidate()
     {
+        base.OnValidate();
         SetMogoMaterial();
     }
 
@@ -38,6 +43,7 @@ public class Mogo : CullableFieldElement
         if (culled)
         {
             colorMeshRenderer.material = culledMaterial;
+            return;
         }
 
         switch (alliance)

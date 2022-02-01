@@ -891,6 +891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   culledMaterial: {fileID: 2100000, guid: 66d7ead3ae2e48824b786239d1016215, type: 2}
+  culledPublic: 0
   blueMaterial: {fileID: 2100000, guid: 7b829bf9fb9fa9ac08055610231d4706, type: 2}
   redMaterial: {fileID: 2100000, guid: 7d8c37da736776163814a20c643bf08c, type: 2}
   neutralMaterial: {fileID: 2100000, guid: 0abd895006d068725bfde26be83a7583, type: 2}

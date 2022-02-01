@@ -2,18 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class CullableFieldElement : MonoBehaviour
 {
     public Material culledMaterial;
 
-    private bool culled_ = false;
-    public virtual bool culled
+    public bool culledPublic = false;
+
+    public virtual bool culled { get; set; }
+
+    protected virtual void OnValidate()
     {
-        get {
-            return culled_;
-        }
-        set {
-            culled_ = value;
-        }
+        culled = culledPublic;
     }
 }
