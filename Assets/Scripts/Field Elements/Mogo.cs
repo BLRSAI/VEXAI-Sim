@@ -42,20 +42,20 @@ public class Mogo : CullableFieldElement
     {
         if (culled)
         {
-            colorMeshRenderer.material = culledMaterial;
+            colorMeshRenderer.sharedMaterial = culledMaterial;
             return;
         }
 
         switch (alliance)
         {
         case Alliance.Blue:
-            colorMeshRenderer.material = blueMaterial;
+            colorMeshRenderer.sharedMaterial = blueMaterial;
             break;
         case Alliance.Red:
-            colorMeshRenderer.material = redMaterial;
+            colorMeshRenderer.sharedMaterial = redMaterial;
             break;
         case Alliance.Neutral:
-            colorMeshRenderer.material = neutralMaterial;
+            colorMeshRenderer.sharedMaterial = neutralMaterial;
             break;
         }
     }

@@ -19,11 +19,11 @@ public class Ring : CullableFieldElement
             if (value)
             {
                 if (meshRenderer)
-                    meshRenderer.material = culledMaterial;
+                    meshRenderer.sharedMaterial = culledMaterial;
             }
             else
             {
-                meshRenderer.material = originalMaterial;
+                meshRenderer.sharedMaterial = originalMaterial;
             }
         }
     }
@@ -31,6 +31,6 @@ public class Ring : CullableFieldElement
     void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
-        originalMaterial = meshRenderer.material;
+        originalMaterial = meshRenderer.sharedMaterial;
     }
 }
