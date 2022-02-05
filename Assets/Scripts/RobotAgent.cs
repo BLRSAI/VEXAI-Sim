@@ -12,15 +12,16 @@ public class RobotAgent : Agent
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private GameObject[] robots;
     [SerializeField] private GameObject[] goals;
-    [SerializeField] private GameObject[] rings;
+    private GameObject[] rings;
     private Transform[] goalTransorms;
     private Transform[] robotTransforms;
     private Transform[] ringTransforms;
-    private float time = 120;
+    [SerializeField] private float time = 120f;
     private int score = 0; 
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        //Total Observation Size: 43 - 3 robot - 9 for other robots - 1 for time - 30 for rings
         //Collect this robots x and z position and y rotation
         sensor.AddObservation(gameObject.transform.position.x);
         sensor.AddObservation(gameObject.transform.position.z);
@@ -63,10 +64,11 @@ public class RobotAgent : Agent
         foreach (GameObject g in goals)
         {
             g.transform.localPosition = goalTransorms[i].localPosition;
+            g.gameObject.SetActive(true);
             i++;
         }
         //Randomize Goals
-        int amountOfGoals = Random.Range(0, 3);
+        int amountOfGoals = Random.Range(0, goals.Length + 1);
         for (int y = 0; y < amountOfGoals; y++)
         {
             goals[y].SetActive(false);
@@ -78,6 +80,7 @@ public class RobotAgent : Agent
             r.transform.localPosition = robotTransforms[x].localPosition;
             x++;
         }
+
         //Reset rings
         int z = 0;
         foreach (GameObject ring in rings) {
@@ -123,10 +126,17 @@ public class RobotAgent : Agent
         }
     }
     void FixedUpdate() {
-        time -= Time.fixedDeltaTime;
+        time -= Time.deltaTime;
 
         if((int) time == 0) {
             EndEpisode();
+        }
+    }
+    
+    void OnCollisionEnter(Collision collision) {
+        if(collision.gameObject.tag == "Ring") {
+            collision.gameObject.SetActive(false);
+            score++;
         }
     }
 
@@ -136,5 +146,5 @@ public class RobotAgent : Agent
 
     public int getScore() {
         return score;
-    }
+    } 
 }

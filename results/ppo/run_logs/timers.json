@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1644022782",
+        "python_version": "3.9.7 (default, Sep 16 2021, 16:59:28) [MSC v.1916 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\beake\\anaconda3\\Scripts\\mlagents-learn --force",
+        "mlagents_version": "0.27.0",
+        "mlagents_envs_version": "0.27.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.7.1+cpu",
+        "numpy_version": "1.20.3",
+        "end_time_seconds": "1644022840"
+    },
+    "total": 58.2421834,
+    "count": 1,
+    "self": 0.004722499999999741,
+    "children": {
+        "run_training.setup": {
+            "total": 0.18130930000000012,
+            "count": 1,
+            "self": 0.18130930000000012
+        },
+        "TrainerController.start_learning": {
+            "total": 58.0561516,
+            "count": 1,
+            "self": 0.00031010000000009086,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 58.0558308,
+                    "count": 1,
+                    "self": 58.0558308
+                },
+                "trainer_threads": {
+                    "total": 8.99999996306633e-07,
+                    "count": 1,
+                    "self": 8.99999996306633e-07
+                },
+                "TrainerController._save_models": {
+                    "total": 9.800000000836917e-06,
+                    "count": 1,
+                    "self": 9.800000000836917e-06
+                }
+            }
+        }
+    }
+}
