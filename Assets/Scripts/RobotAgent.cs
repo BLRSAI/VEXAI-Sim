@@ -28,7 +28,7 @@ public class RobotAgent : Agent
             sensor.AddObservation(g.transform.rotation.y);
         }
         //Collect the time
-        sensor.AddObservation(time);
+        sensor.AddObservation(gm.time);
         //TODO - Collect the rings
         
     }

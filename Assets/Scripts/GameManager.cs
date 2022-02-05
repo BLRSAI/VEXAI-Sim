@@ -53,10 +53,10 @@ public class GameManager : MonoBehaviour
 
         //EndEpisode
         if ((int) time <= 0) {
-            robot1.SetReward(Math.abs(robot1.GetComponent<RingAgent>().getScore() - robot2.GetComponent<RingAgent>().getScore()));
-            robot2.SetReward(Math.abs(robot1.GetComponent<RingAgent>().getScore() - robot2.GetComponent<RingAgent>().getScore()));
-            robot1.EndEpisode();
-            robot2.EndEpisode();
+            robot1.GetComponent<RobotAgent>().SetReward(Math.abs(robot1.GetComponent<RingAgent>().getScore() - robot2.GetComponent<RingAgent>().getScore()));
+            robot2.GetComponent<RobotAgent>().SetReward(Math.abs(robot1.GetComponent<RingAgent>().getScore() - robot2.GetComponent<RingAgent>().getScore()));
+            robot1.GetComponent<RobotAgent>().EndEpisode();
+            robot2.GetComponent<RobotAgent>().EndEpisode();
         }
         //Score Control
         score = robot1.GetComponent<RobotAgent>().getScore();
