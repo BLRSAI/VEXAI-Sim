@@ -13,17 +13,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] public float time = 120 - 15;
     [SerializeField] private GameObject[] goals;
     
-    [SerializeField] private GameObject[] robots;
-    
+    [SerializeField] public GameObject[] robots;
     private Vector3[] robotPositions;
-    private GameObject[] rings;
+    public GameObject[] rings;
     private Vector3[] ringPositions;
     private Vector3[] goalPositions;
     private int score;
     void Awake()
     {
         //Collect goal transforms in order to reset them each episode
-        goalTransorms = new Transform[goals.Length];
+        goalPositions = new Vector3[goals.Length];
         int i = 0;
         foreach (GameObject g in goals) {
             goalPositions[i] = g.transform.localPosition;
@@ -36,7 +35,7 @@ public class GameManager : MonoBehaviour
             y++;
         }
         //Collect robot transforms in order to reset them each episode
-        robotPositions = new Transform[robots.Length];
+        robotPositions = new Vector3[robots.Length];
         int x = 0;
         foreach (GameObject r in robots) {
             robotPositions[x] = r.transform.localPosition;
@@ -85,14 +84,14 @@ public class GameManager : MonoBehaviour
         //Reset rings
         int z = 0;
         foreach (GameObject ring in rings) {
-            ring.transform.localPosition = ringPositions[z].localPosition;
+            ring.transform.localPosition = ringPositions[z];
             z++;
         }
         //Set Robots back to starting positions
         int x = 0;
         foreach (GameObject r in robots)
         {
-            r.transform.localPosition = robotPositions[x].localPosition;
+            r.transform.localPosition = robotPositions[x];
             x++;
         }
     }
