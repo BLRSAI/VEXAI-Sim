@@ -14,11 +14,18 @@ public class RobotAgent : Agent
     private float rotationSpeed = 10f;
     [SerializeField]
     private GameManager gm;
+
     [SerializeField]
+    private bool visualizeCulling;
+    [SerializeField]
+    private Transform cameraLocation;
+    [SerializeField]
+    private float cullingFov = 60f;
+    private bool[] ringsCulled;
+
     private float time = 120f;
     private int score = 0;
 
-    
     void Awake()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
@@ -95,5 +102,45 @@ public class RobotAgent : Agent
     public int getScore()
     {
         return score;
+    }
+
+    public void cullFieldElements()
+    {
+        foreach (GameObject ring in gm.rings)
+        {
+            if (ring.activeSelf)
+            {
+                // check if ring is within cullingFov
+                Vector3 direction = ring.transform.position - cameraLocation.position;
+                float angle = Vector3.Angle(direction, cameraLocation.forward);
+                if (angle > cullingFov)
+                {
+                    if (visualizeCulling)
+                    {
+                        ring.GetComponent<CullableFieldElement>().culled = true;
+                    }
+                    else
+                    {
+                        // raycast from cameraLocation to ring
+                        RaycastHit hit;
+                        if (Physics.Raycast(cameraLocation.position, direction, out hit, Mathf.Infinity))
+                        {
+                            if (hit.collider.gameObject != ring)
+                            {
+                                ring.GetComponent<CullableFieldElement>().culled = true;
+                            }
+                            else
+                            {
+                                ring.GetComponent<CullableFieldElement>().culled = false;
+                            }
+                        }
+                        else
+                        {
+                            ring.GetComponent<CullableFieldElement>().culled = false;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

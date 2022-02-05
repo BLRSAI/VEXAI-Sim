@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] public GameObject[] robots;
     private Vector3[] robotPositions;
-    private GameObject[] rings;
+    public GameObject[] rings;
     private Vector3[] ringPositions;
     private Vector3[] goalPositions;
     private int score;
