@@ -12,9 +12,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject robot2;
     [SerializeField] public float time = 120 - 15;
     [SerializeField] private GameObject[] goals;
+    
+    [SerializeField] private GameObject[] robots;
+    
+    private Vector3[] robotPositions;
+    private GameObject[] rings;
+    private Vector3[] ringPositions;
     private Vector3[] goalPositions;
     private int score;
-    void Start()
+    void Awake()
     {
         //Collect goal transforms in order to reset them each episode
         goalTransorms = new Transform[goals.Length];
@@ -22,6 +28,19 @@ public class GameManager : MonoBehaviour
         foreach (GameObject g in goals) {
             goalPositions[i] = g.transform.localPosition;
             i++;
+        }
+        //Collect ring transforms in order to reset them each episode
+        int y = 0;
+        foreach (GameObject ring in rings) {
+            ringPositions[y] = ring.transform.localPosition;
+            y++;
+        }
+        //Collect robot transforms in order to reset them each episode
+        robotPositions = new Transform[robots.Length];
+        int x = 0;
+        foreach (GameObject r in robots) {
+            robotPositions[x] = r.transform.localPosition;
+            x++;
         }
     }
     void Update()
@@ -55,6 +74,19 @@ public class GameManager : MonoBehaviour
             g.transform.localPosition = goalPositions[i];
             g.gameObject.SetActive(true);
             i++;
+        }
+        //Reset rings
+        int z = 0;
+        foreach (GameObject ring in rings) {
+            ring.transform.localPosition = ringPositions[z].localPosition;
+            z++;
+        }
+        //Set Robots back to starting positions
+        int x = 0;
+        foreach (GameObject r in robots)
+        {
+            r.transform.localPosition = robotPositions[x].localPosition;
+            x++;
         }
     }
 }

@@ -10,11 +10,7 @@ public class RobotAgent : Agent
     private Rigidbody rb;
     [SerializeField] private float robotSpeed = 10f;
     [SerializeField] private float rotationSpeed = 10f;
-    [SerializeField] private GameObject[] robots;
     [SerializeField] private GameManager gm;
-    private GameObject[] rings;
-    private Transform[] robotTransforms;
-    private Transform[] ringTransforms;
     [SerializeField] private float time = 120f;
     private int score = 0; 
 
@@ -58,20 +54,6 @@ public class RobotAgent : Agent
         gm.Reset();
         //Reset score
         score = 0;
-        //Set Robots back to starting positions
-        int x = 0;
-        foreach (GameObject r in robots)
-        {
-            r.transform.localPosition = robotTransforms[x].localPosition;
-            x++;
-        }
-
-        //Reset rings
-        int z = 0;
-        foreach (GameObject ring in rings) {
-            ring.transform.localPosition = ringTransforms[z].localPosition;
-            z++;
-        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -86,21 +68,6 @@ public class RobotAgent : Agent
 
     void Start() {
         rb = this.gameObject.GetComponent<Rigidbody>();
-
-        //Collect robot transforms in order to reset them each episode
-        robotTransforms = new Transform[robots.Length];
-        int x = 0;
-        foreach (GameObject r in robots) {
-            robotTransforms[x] = r.transform;
-            x++;
-        }
-
-        //Collect ring transforms in order to reset them each episode
-        int y = 0;
-        foreach (GameObject ring in rings) {
-            ringTransforms[y] = ring.transform;
-            y++;
-        }
     }
 
     void Update() {
