@@ -11,9 +11,8 @@ public class RobotAgent : Agent
     [SerializeField] private float robotSpeed = 10f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private GameObject[] robots;
-    [SerializeField] private GameObject[] goals;
+    [SerializeField] private GameManager gm;
     private GameObject[] rings;
-    private Transform[] goalTransorms;
     private Transform[] robotTransforms;
     private Transform[] ringTransforms;
     [SerializeField] private float time = 120f;
@@ -55,24 +54,10 @@ public class RobotAgent : Agent
     public override void OnEpisodeBegin()
     {
         Debug.Log("starting episode");
-        //Reset time
-        time = 120 - 15;
+        //Reset game manager
+        gm.Reset();
         //Reset score
         score = 0;
-        //Set Goals Back To Starting Position
-        int i = 0;
-        foreach (GameObject g in goals)
-        {
-            g.transform.localPosition = goalTransorms[i].localPosition;
-            g.gameObject.SetActive(true);
-            i++;
-        }
-        //Randomize Goals
-        int amountOfGoals = Random.Range(0, goals.Length + 1);
-        for (int y = 0; y < amountOfGoals; y++)
-        {
-            goals[y].SetActive(false);
-        }
         //Set Robots back to starting positions
         int x = 0;
         foreach (GameObject r in robots)
@@ -101,14 +86,6 @@ public class RobotAgent : Agent
 
     void Start() {
         rb = this.gameObject.GetComponent<Rigidbody>();
-        
-        //Collect goal transforms in order to reset them each episode
-        goalTransorms = new Transform[goals.Length];
-        int i = 0;
-        foreach (GameObject g in goals) {
-            goalTransorms[i] = g.transform;
-            i++;
-        }
 
         //Collect robot transforms in order to reset them each episode
         robotTransforms = new Transform[robots.Length];
@@ -125,10 +102,9 @@ public class RobotAgent : Agent
             y++;
         }
     }
-    void FixedUpdate() {
-        time -= Time.deltaTime;
 
-        if((int) time == 0) {
+    void Update() {
+        if ((int) gm.time <= 0) {
             EndEpisode();
         }
     }
@@ -138,10 +114,6 @@ public class RobotAgent : Agent
             collision.gameObject.SetActive(false);
             score++;
         }
-    }
-
-    public float getTime() {
-        return time;
     }
 
     public int getScore() {

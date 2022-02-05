@@ -7,26 +7,54 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private Text timer;
     [SerializeField] private Text scorer;
-    [SerializeField] private GameObject robot;
-    private float time;
+    [SerializeField] private Text scorer2;
+    [SerializeField] private GameObject robot1;
+    [SerializeField] private GameObject robot2;
+    [SerializeField] public float time = 120 - 15;
+    [SerializeField] private GameObject[] goals;
+    private Vector3[] goalPositions;
     private int score;
-    // Start is called before the first frame update
     void Start()
     {
-        
+        //Collect goal transforms in order to reset them each episode
+        goalTransorms = new Transform[goals.Length];
+        int i = 0;
+        foreach (GameObject g in goals) {
+            goalPositions[i] = g.transform.localPosition;
+            i++;
+        }
     }
-
-    // Update is called once per frame
     void Update()
     {
         //Timer Control
-        time = robot.GetComponent<RobotAgent>().getTime();
+        time -= Time.deltaTime;
         float min = Mathf.FloorToInt(time / 60);
         float sec = Mathf.FloorToInt(time % 60);
         timer.text = "Time: " + string.Format("{0:00}:{1:00}", min, sec);
 
         //Score Control
-        score = robot.GetComponent<RobotAgent>().getScore();
-        scorer.text = "Score: " + score.ToString();
+        score = robot1.GetComponent<RobotAgent>().getScore();
+        scorer.text = "Robot 1 Score: " + score.ToString();
+        score = robot2.GetComponent<RobotAgent>().getScore();
+        scorer2.text = "Robot 1 Score: " + score.ToString();
+    }
+
+    public void Reset() {
+        //Set time to 0
+        time = 0;
+        //Randomize Goals
+        int amountOfGoals = Random.Range(0, goals.Length + 1);
+        for (int y = 0; y < amountOfGoals; y++)
+        {
+            goals[y].SetActive(false);
+        }
+        //Set Goals Back To Starting Position
+        int i = 0;
+        foreach (GameObject g in goals)
+        {
+            g.transform.localPosition = goalPositions[i];
+            g.gameObject.SetActive(true);
+            i++;
+        }
     }
 }
