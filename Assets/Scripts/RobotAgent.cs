@@ -69,12 +69,6 @@ public class RobotAgent : Agent
     void Start() {
         rb = this.gameObject.GetComponent<Rigidbody>();
     }
-
-    void Update() {
-        if ((int) gm.time <= 0) {
-            EndEpisode();
-        }
-    }
     
     void OnCollisionEnter(Collision collision) {
         if(collision.gameObject.tag == "Ring") {

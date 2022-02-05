@@ -51,6 +51,13 @@ public class GameManager : MonoBehaviour
         float sec = Mathf.FloorToInt(time % 60);
         timer.text = "Time: " + string.Format("{0:00}:{1:00}", min, sec);
 
+        //EndEpisode
+        if ((int) time <= 0) {
+            robot1.SetReward(Math.abs(robot1.GetComponent<RingAgent>().getScore() - robot2.GetComponent<RingAgent>().getScore()));
+            robot2.SetReward(Math.abs(robot1.GetComponent<RingAgent>().getScore() - robot2.GetComponent<RingAgent>().getScore()));
+            robot1.EndEpisode();
+            robot2.EndEpisode();
+        }
         //Score Control
         score = robot1.GetComponent<RobotAgent>().getScore();
         scorer.text = "Robot 1 Score: " + score.ToString();
