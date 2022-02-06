@@ -7,6 +7,12 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager gameManager;
+
+    public GameManager()
+    {
+        gameManager = this;
+    }
     private struct PosAndRot
     {
         public Vector3 pos;
@@ -19,8 +25,8 @@ public class GameManager : MonoBehaviour
         }
     }
     [SerializeField] private Text timer;
-    [SerializeField] private Text scorer;
-    [SerializeField] private Text scorer2;
+    [SerializeField] private Text scoreBlue;
+    [SerializeField] private Text scoreRed;
 
     [SerializeField] private GameObject blueAllianceRobot15;
     [SerializeField] private GameObject blueAllianceRobot24;
@@ -87,6 +93,8 @@ public class GameManager : MonoBehaviour
         ringPositions = new PosAndRot[rings.Length];
         for (int i = 0; i < rings.Length; i++)
             ringPositions[i] = getGameObjectPosAndRot(rings[i]);
+
+        ResetField();
     }
 
     void ResetField()
@@ -112,7 +120,10 @@ public class GameManager : MonoBehaviour
 
         // reset ring positions
         for (int i = 0; i < rings.Length; i++)
+        {
             setGameObjectPosAndRot(rings[i], ringPositions[i]);
+            rings[i].SetActive(true);
+        }
 
         // reset score
         blueAllianceScore = 0;
@@ -126,6 +137,9 @@ public class GameManager : MonoBehaviour
         float min = Mathf.FloorToInt(time / 60);
         float sec = Mathf.FloorToInt(time % 60);
         timer.text = "Time: " + string.Format("{0:00}:{1:00}", min, sec);
+
+        scoreBlue.text = "Blue Score: " + blueAllianceScore.ToString();
+        scoreRed.text = "Red Score: " + redAllianceScore.ToString();
 
         if (time <= 0)
         {
@@ -144,15 +158,12 @@ public class GameManager : MonoBehaviour
             blueAgent.AddReward(1f);
             redAgent.AddReward(-1f);
 
-            scorer.text = "Robot 1 Score: " + blueAllianceScore.ToString();
         }
         else if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
         {
             redAllianceScore++;
             redAgent.AddReward(1f);
             blueAgent.AddReward(-1f);
-
-            scorer2.text = "Robot 2 Score: " + redAllianceScore.ToString();
         }
     }
 }

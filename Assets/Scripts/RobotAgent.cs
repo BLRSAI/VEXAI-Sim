@@ -8,8 +8,6 @@ using Unity.MLAgents.Actuators;
 public class RobotAgent : Agent
 {
 
-    [SerializeField] private GameManager gm;
-
     [Header("Robot Movement Settings")]
     [SerializeField] private float robotSpeed = 10f;
     [SerializeField] private float rotationSpeed = 10f;
@@ -56,7 +54,12 @@ public class RobotAgent : Agent
         rotation = actions.ContinuousActions[1];
     }
 
-    public void FixedUpdate()
+    void Update()
+    {
+        CullRings();
+    }
+
+    void FixedUpdate()
     {
         Vector3 movement = transform.forward * robotSpeed * speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + movement);
@@ -68,6 +71,8 @@ public class RobotAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        speed = 0;
+        rotation = 0;
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -77,25 +82,19 @@ public class RobotAgent : Agent
         control[1] = Input.GetAxis("Horizontal");
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ring")
-        {
-            collision.gameObject.SetActive(false);
-        }
-    }
 
-    public void CullFieldElements()
+    public void CullRings()
     {
-        if (ringsCulled == null) ringsCulled = new bool[gm.rings.Length];
+        if (ringsCulled == null) ringsCulled = new bool[GameManager.gameManager.rings.Length];
 
-        foreach (GameObject ring in gm.rings)
+        foreach (GameObject ring in GameManager.gameManager.rings)
         {
             if (ring.activeSelf)
             {
-                // check if ring is within cullingFov
                 Vector3 direction = ring.transform.position - cameraLocation.position;
                 float angle = Vector3.Angle(direction, cameraLocation.forward);
+                ring.GetComponent<CullableFieldElement>().culled = false;
+
                 if (angle > cullingFov)
                 {
                     if (visualizeCulling)
@@ -104,7 +103,6 @@ public class RobotAgent : Agent
                     }
                     else
                     {
-                        // raycast from cameraLocation to ring
                         RaycastHit hit;
                         if (Physics.Raycast(cameraLocation.position, direction, out hit, Mathf.Infinity))
                         {

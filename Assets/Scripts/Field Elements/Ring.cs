@@ -10,10 +10,12 @@ public class Ring : CullableFieldElement
 
     public override bool culled
     {
-        get {
+        get
+        {
             return base.culled;
         }
-        set {
+        set
+        {
             base.culled = value;
 
             if (value)
@@ -26,6 +28,15 @@ public class Ring : CullableFieldElement
                 if (meshRenderer)
                     meshRenderer.sharedMaterial = originalMaterial;
             }
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag.Equals("Intake"))
+        {
+            GameManager.gameManager.CollectRing(other.gameObject.transform.parent.gameObject);
+            gameObject.SetActive(false);
         }
     }
 }
