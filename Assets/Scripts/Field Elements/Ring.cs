@@ -33,7 +33,7 @@ public class Ring : CullableFieldElement
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag.Equals("Intake"))
+        if (other.gameObject.CompareTag("Intake"))
         {
             GameManager.gameManager.CollectRing(other.gameObject.transform.parent.gameObject);
             gameObject.SetActive(false);

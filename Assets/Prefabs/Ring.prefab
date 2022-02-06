@@ -51,6 +51,7 @@ MonoBehaviour:
   culledPublic: 0
   meshRenderer: {fileID: 4976181631423375633}
   originalMaterial: {fileID: 2100000, guid: 800aa9932319f6087af07ced2b091867, type: 2}
+  colliderGameObject: {fileID: 9016219163512456134}
 --- !u!54 &4954987111854646794
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -87,37 +87,35 @@ public class RobotAgent : Agent
     {
         if (ringsCulled == null) ringsCulled = new bool[GameManager.gameManager.rings.Length];
 
-        foreach (GameObject ring in GameManager.gameManager.rings)
+        for (int i = 0; i < ringsCulled.Length; i++)
         {
+            GameObject ring = GameManager.gameManager.rings[i];
+
             if (ring.activeSelf)
             {
-                Vector3 direction = ring.transform.position - cameraLocation.position;
-                float angle = Vector3.Angle(direction, cameraLocation.forward);
+                // get vector from camera to ring
+                Vector3 direction = (ring.transform.position - cameraLocation.position).normalized;
+                // get horizontal angle from camera to ring
+                float angle = Vector3.Angle(new Vector3(direction.x, cameraLocation.position.y, direction.z), cameraLocation.forward);
+
                 ring.GetComponent<CullableFieldElement>().culled = false;
+                ringsCulled[i] = false;
 
                 if (angle > cullingFov)
                 {
+                    ringsCulled[i] = true;
                     if (visualizeCulling)
-                    {
                         ring.GetComponent<CullableFieldElement>().culled = true;
-                    }
-                    else
+                }
+                else
+                {
+                    if (Physics.Linecast(cameraLocation.position, ring.transform.position, out RaycastHit hit))
                     {
-                        RaycastHit hit;
-                        if (Physics.Raycast(cameraLocation.position, direction, out hit, Mathf.Infinity))
+                        if (hit.collider.gameObject.transform.parent.gameObject != ring)
                         {
-                            if (hit.collider.gameObject != ring)
-                            {
+                            ringsCulled[i] = true;
+                            if (visualizeCulling)
                                 ring.GetComponent<CullableFieldElement>().culled = true;
-                            }
-                            else
-                            {
-                                ring.GetComponent<CullableFieldElement>().culled = false;
-                            }
-                        }
-                        else
-                        {
-                            ring.GetComponent<CullableFieldElement>().culled = false;
                         }
                     }
                 }
