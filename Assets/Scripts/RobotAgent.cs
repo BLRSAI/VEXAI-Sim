@@ -51,6 +51,7 @@ public class RobotAgent : Agent
             sensor.AddObservation(observations[i]);
         }
 
+        CullRings();
         SortRings();
         for (int i = 0; i < numRings; i++)
         {
@@ -62,11 +63,6 @@ public class RobotAgent : Agent
     {
         speed = actions.ContinuousActions[0];
         rotation = actions.ContinuousActions[1];
-    }
-
-    void Update()
-    {
-        CullRings();
     }
 
     void FixedUpdate()
@@ -103,12 +99,11 @@ public class RobotAgent : Agent
 
             if (ring.activeSelf)
             {
-                // get vector from camera to ring
                 Vector3 direction = (ring.transform.position - cameraLocation.position).normalized;
-                // get horizontal angle from camera to ring
                 float angle = Vector3.Angle(new Vector3(direction.x, cameraLocation.position.y, direction.z), cameraLocation.forward);
 
-                ring.GetComponent<CullableFieldElement>().culled = false;
+                if (visualizeCulling)
+                    ring.GetComponent<CullableFieldElement>().culled = false;
                 ringsCulled[i] = false;
 
                 if (angle > cullingFov)
@@ -121,7 +116,7 @@ public class RobotAgent : Agent
                 {
                     if (Physics.Linecast(cameraLocation.position, ring.transform.position, out RaycastHit hit))
                     {
-                        if (hit.collider.gameObject.transform.parent.gameObject != ring)
+                        if (hit.collider.transform.parent != null && hit.collider.transform.parent.gameObject != ring)
                         {
                             ringsCulled[i] = true;
                             if (visualizeCulling)
@@ -147,6 +142,16 @@ public class RobotAgent : Agent
         nearestRingsTemp.Sort((x, y) => Vector3.Distance(x, this.transform.position).CompareTo(Vector3.Distance(y, this.transform.position)));
 
         if (nearestRings == null) nearestRings = new Vector3[numRings];
-        nearestRingsTemp.CopyTo(nearestRings);
+        for (int i = 0; i < numRings; i++)
+        {
+            if (i < nearestRingsTemp.Count)
+            {
+                nearestRings[i] = nearestRingsTemp[i];
+            }
+            else
+            {
+                nearestRings[i] = Vector3.zero;
+            }
+        }
     }
 }

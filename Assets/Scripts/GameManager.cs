@@ -157,13 +157,14 @@ public class GameManager : MonoBehaviour
             blueAllianceScore++;
             blueAgent.AddReward(1f);
             redAgent.AddReward(-1f);
-
+            return;
         }
         else if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
         {
             redAllianceScore++;
             redAgent.AddReward(1f);
             blueAgent.AddReward(-1f);
+            return;
         }
 
         throw new System.ArgumentException("Invalid robot");

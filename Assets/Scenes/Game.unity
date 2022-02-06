@@ -1291,6 +1291,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8152154535649889232, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: visualizeCulling
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: TeamId
       value: 1

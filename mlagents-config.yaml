@@ -1,0 +1,31 @@
+engine_settings:
+  time_scale: 20
+checkpoint_settings:
+  run_id: testing
+  force: true
+  train_model: true
+torch_settings:
+  device: cpu
+behaviors:
+  15robot:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 1024
+      buffer_size: 10240
+      learning_rate: 1.0e-4
+      learning_rate_schedule: linear
+
+      num_epoch: 5
+
+    network_settings:
+      vis_encode_type: simple
+      normalize: false
+      hidden_units: 128
+      num_layers: 2
+
+    self_play:
+      window: 10
+      play_against_latest_model_ratio: 0.5
+      save_steps: 50000
+      swap_steps: 2000
+      team_change: 100000
