@@ -17,8 +17,13 @@ public class RobotAgent : Agent
     [SerializeField] private Transform cameraLocation;
     [SerializeField] private float cullingFov = 60f;
 
+    [Header("AI Settings")]
+    [SerializeField] private int numRings = 10;
+
     private Rigidbody rb;
+
     private bool[] ringsCulled;
+    private Vector3[] nearestRings;
 
     // running movement variables
     private float speed = 0f;
@@ -31,21 +36,26 @@ public class RobotAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // // Total Observation Size: 43 - 3 robot - 9 for other robots - 1 for time - 30 for rings
-        // // Collect this robots x and z position and y rotation
-        // sensor.AddObservation(gameObject.transform.position.x);
-        // sensor.AddObservation(gameObject.transform.position.z);
-        // sensor.AddObservation(gameObject.transform.rotation.y);
-        // foreach (GameObject g in gm.robots)
-        // {
-        //     sensor.AddObservation(g.transform.position.x);
-        //     sensor.AddObservation(g.transform.position.z);
-        //     sensor.AddObservation(g.transform.rotation.y);
-        // }
-        // //Collect the time
-        // sensor.AddObservation(gm.time);
-        // //TODO - Collect the rings
+        (var allianceRobot24Pos, var opponentRobot15Pos, var opponentRobot24Pos) = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
 
+        Vector3[] observations = {
+            this.transform.position,
+            this.transform.forward,
+            allianceRobot24Pos,
+            opponentRobot15Pos,
+            opponentRobot24Pos
+        };
+
+        for (int i = 0; i < observations.Length; i++)
+        {
+            sensor.AddObservation(observations[i]);
+        }
+
+        SortRings();
+        for (int i = 0; i < numRings; i++)
+        {
+            sensor.AddObservation(nearestRings[i]);
+        }
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -121,5 +131,22 @@ public class RobotAgent : Agent
                 }
             }
         }
+    }
+
+    void SortRings()
+    {
+        var nearestRingsTemp = new List<Vector3>();
+        for (int i = 0; i < GameManager.gameManager.rings.Length; i++)
+        {
+            if (!ringsCulled[i])
+            {
+                nearestRingsTemp.Add(GameManager.gameManager.rings[i].transform.position);
+            }
+        }
+
+        nearestRingsTemp.Sort((x, y) => Vector3.Distance(x, this.transform.position).CompareTo(Vector3.Distance(y, this.transform.position)));
+
+        if (nearestRings == null) nearestRings = new Vector3[numRings];
+        nearestRingsTemp.CopyTo(nearestRings);
     }
 }

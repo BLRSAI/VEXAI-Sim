@@ -165,5 +165,29 @@ public class GameManager : MonoBehaviour
             redAgent.AddReward(1f);
             blueAgent.AddReward(-1f);
         }
+
+        throw new System.ArgumentException("Invalid robot");
+    }
+
+    public (Vector3, Vector3, Vector3) GetObservationsFromAlliancePerspective(GameObject robot)
+    {
+        if (robot == blueAllianceRobot15)
+        {
+            return (
+                blueAllianceRobot24.transform.position,
+                redAllianceRobot15.transform.position,
+                redAllianceRobot24.transform.position
+            );
+        }
+        else if (robot == redAllianceRobot15)
+        {
+            return (
+                redAllianceRobot24.transform.position,
+                blueAllianceRobot15.transform.position,
+                blueAllianceRobot24.transform.position
+            );
+        }
+
+        throw new System.ArgumentException("Invalid robot");
     }
 }

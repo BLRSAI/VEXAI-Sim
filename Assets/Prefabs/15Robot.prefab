@@ -262,12 +262,13 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
+  MaxStep: 100000
   robotSpeed: 1
-  rotationSpeed: 10
+  rotationSpeed: 360
   visualizeCulling: 1
   cameraLocation: {fileID: 8152154534930837859}
   cullingFov: 60
+  numRings: 10
 --- !u!114 &8152154535649889235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,8 +282,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 43
-    NumStackedVectorObservations: 1
+    VectorObservationSize: 45
+    NumStackedVectorObservations: 10
     m_ActionSpec:
       m_NumContinuousActions: 2
       BranchSizes: 
@@ -292,8 +293,8 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 1
-  m_BehaviorName: robot_001
+  m_BehaviorType: 0
+  m_BehaviorName: 15robot
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
