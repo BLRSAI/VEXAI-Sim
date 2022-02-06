@@ -1,47 +1,124 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.MLAgents;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class GameManager : MonoBehaviour
 {
+    private struct PosAndRot
+    {
+        public Vector3 pos;
+        public Quaternion rot;
+
+        public PosAndRot(Vector3 pos, Quaternion rot)
+        {
+            this.pos = pos;
+            this.rot = rot;
+        }
+    }
     [SerializeField] private Text timer;
     [SerializeField] private Text scorer;
     [SerializeField] private Text scorer2;
-    [SerializeField] private GameObject robot1;
-    [SerializeField] private GameObject robot2;
-    [SerializeField] public float time = 120 - 15;
-    [SerializeField] private GameObject[] goals;
-    
-    [SerializeField] public GameObject[] robots;
-    private Vector3[] robotPositions;
-    public GameObject[] rings;
-    private Vector3[] ringPositions;
-    private Vector3[] goalPositions;
-    private int score;
+
+    [SerializeField] private GameObject blueAllianceRobot15;
+    [SerializeField] private GameObject blueAllianceRobot24;
+    [SerializeField] private GameObject redAllianceRobot15;
+    [SerializeField] private GameObject redAllianceRobot24;
+    private PosAndRot[] robotPositions;
+
+    private Agent blueAgent;
+    private Agent redAgent;
+
+    [SerializeField] private GameObject[] blueAllianceMogos;
+    [SerializeField] private GameObject[] redAllianceMogos;
+    [SerializeField] private GameObject[] neutralMogos;
+    private PosAndRot[] mogoPositions;
+
+    public GameObject[] rings { get; set; }
+    private PosAndRot[] ringPositions;
+
+    private const float initTime = 120f - 15f;
+
+    [SerializeField] public float time = initTime;
+    private int blueAllianceScore;
+    private int redAllianceScore;
+
+    private PosAndRot getGameObjectPosAndRot(GameObject go)
+    {
+        return new PosAndRot(go.transform.position, go.transform.rotation);
+    }
+
+    private void setGameObjectPosAndRot(GameObject go, PosAndRot posAndRot)
+    {
+        go.transform.position = posAndRot.pos;
+        go.transform.rotation = posAndRot.rot;
+    }
+
     void Awake()
     {
-        //Collect goal transforms in order to reset them each episode
-        goalPositions = new Vector3[goals.Length];
-        int i = 0;
-        foreach (GameObject g in goals) {
-            goalPositions[i] = g.transform.localPosition;
-            i++;
-        }
-        //Collect ring transforms in order to reset them each episode
-        int y = 0;
-        foreach (GameObject ring in rings) {
-            ringPositions[y] = ring.transform.localPosition;
-            y++;
-        }
-        //Collect robot transforms in order to reset them each episode
-        robotPositions = new Vector3[robots.Length];
-        int x = 0;
-        foreach (GameObject r in robots) {
-            robotPositions[x] = r.transform.localPosition;
-            x++;
-        }
+        // get robot positions
+        robotPositions = new PosAndRot[4];
+        robotPositions[0] = getGameObjectPosAndRot(blueAllianceRobot15);
+        robotPositions[1] = getGameObjectPosAndRot(blueAllianceRobot24);
+        robotPositions[2] = getGameObjectPosAndRot(redAllianceRobot15);
+        robotPositions[3] = getGameObjectPosAndRot(redAllianceRobot24);
+
+        blueAgent = blueAllianceRobot15.GetComponent<Agent>();
+        redAgent = redAllianceRobot15.GetComponent<Agent>();
+
+        // get mogo positions
+        mogoPositions = new PosAndRot[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];
+        int offsetLength = 0;
+        for (int i = 0; i < blueAllianceMogos.Length; i++)
+            mogoPositions[i] = getGameObjectPosAndRot(blueAllianceMogos[i]);
+        offsetLength += blueAllianceMogos.Length;
+        for (int i = 0; i < redAllianceMogos.Length; i++)
+            mogoPositions[i + offsetLength] = getGameObjectPosAndRot(redAllianceMogos[i]);
+        offsetLength += redAllianceMogos.Length;
+        for (int i = 0; i < neutralMogos.Length; i++)
+            mogoPositions[i + offsetLength] = getGameObjectPosAndRot(neutralMogos[i]);
+
+        // get rings
+        rings = GameObject.FindGameObjectsWithTag("Ring");
+
+        // get ring positions
+        ringPositions = new PosAndRot[rings.Length];
+        for (int i = 0; i < rings.Length; i++)
+            ringPositions[i] = getGameObjectPosAndRot(rings[i]);
     }
+
+    void ResetField()
+    {
+        time = initTime;
+
+        // reset robot positions
+        setGameObjectPosAndRot(blueAllianceRobot15, robotPositions[0]);
+        setGameObjectPosAndRot(blueAllianceRobot24, robotPositions[1]);
+        setGameObjectPosAndRot(redAllianceRobot15, robotPositions[2]);
+        setGameObjectPosAndRot(redAllianceRobot24, robotPositions[3]);
+
+        // reset mogo positions
+        int offsetLength = 0;
+        for (int i = 0; i < blueAllianceMogos.Length; i++)
+            setGameObjectPosAndRot(blueAllianceMogos[i], mogoPositions[i]);
+        offsetLength += blueAllianceMogos.Length;
+        for (int i = 0; i < redAllianceMogos.Length; i++)
+            setGameObjectPosAndRot(redAllianceMogos[i], mogoPositions[i + offsetLength]);
+        offsetLength += redAllianceMogos.Length;
+        for (int i = 0; i < neutralMogos.Length; i++)
+            setGameObjectPosAndRot(neutralMogos[i], mogoPositions[i + offsetLength]);
+
+        // reset ring positions
+        for (int i = 0; i < rings.Length; i++)
+            setGameObjectPosAndRot(rings[i], ringPositions[i]);
+
+        // reset score
+        blueAllianceScore = 0;
+        redAllianceScore = 0;
+    }
+
     void Update()
     {
         //Timer Control
@@ -50,49 +127,32 @@ public class GameManager : MonoBehaviour
         float sec = Mathf.FloorToInt(time % 60);
         timer.text = "Time: " + string.Format("{0:00}:{1:00}", min, sec);
 
-        //EndEpisode
-        if ((int) time <= 0) {
-            robot1.GetComponent<RobotAgent>().SetReward(Math.abs(robot1.GetComponent<RingAgent>().getScore() - robot2.GetComponent<RingAgent>().getScore()));
-            robot2.GetComponent<RobotAgent>().SetReward(Math.abs(robot1.GetComponent<RingAgent>().getScore() - robot2.GetComponent<RingAgent>().getScore()));
-            robot1.GetComponent<RobotAgent>().EndEpisode();
-            robot2.GetComponent<RobotAgent>().EndEpisode();
+        if (time <= 0)
+        {
+            blueAgent.EndEpisode();
+            redAgent.EndEpisode();
+
+            ResetField();
         }
-        //Score Control
-        score = robot1.GetComponent<RobotAgent>().getScore();
-        scorer.text = "Robot 1 Score: " + score.ToString();
-        score = robot2.GetComponent<RobotAgent>().getScore();
-        scorer2.text = "Robot 1 Score: " + score.ToString();
     }
 
-    public void Reset() {
-        //Set time to 0
-        time = 0;
-        //Randomize Goals
-        int amountOfGoals = Random.Range(0, goals.Length + 1);
-        for (int y = 0; y < amountOfGoals; y++)
+    public void CollectRing(GameObject robot)
+    {
+        if (robot == blueAllianceRobot15 || robot == blueAllianceRobot24)
         {
-            goals[y].SetActive(false);
+            blueAllianceScore++;
+            blueAgent.AddReward(1f);
+            redAgent.AddReward(-1f);
+
+            scorer.text = "Robot 1 Score: " + blueAllianceScore.ToString();
         }
-        //Set Goals Back To Starting Position
-        int i = 0;
-        foreach (GameObject g in goals)
+        else if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
         {
-            g.transform.localPosition = goalPositions[i];
-            g.gameObject.SetActive(true);
-            i++;
-        }
-        //Reset rings
-        int z = 0;
-        foreach (GameObject ring in rings) {
-            ring.transform.localPosition = ringPositions[z];
-            z++;
-        }
-        //Set Robots back to starting positions
-        int x = 0;
-        foreach (GameObject r in robots)
-        {
-            r.transform.localPosition = robotPositions[x];
-            x++;
+            redAllianceScore++;
+            redAgent.AddReward(1f);
+            blueAgent.AddReward(-1f);
+
+            scorer2.text = "Robot 2 Score: " + redAllianceScore.ToString();
         }
     }
 }
