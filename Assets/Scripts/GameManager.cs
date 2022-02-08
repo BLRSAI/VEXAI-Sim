@@ -24,6 +24,10 @@ public class GameManager : MonoBehaviour
             this.rot = rot;
         }
     }
+
+    public const float fieldSize = 12f * 0.3048f;
+    public const float halfFieldSize = fieldSize / 2f;
+
     [SerializeField] private Text timer;
     [SerializeField] private Text scoreBlue;
     [SerializeField] private Text scoreRed;
@@ -123,6 +127,7 @@ public class GameManager : MonoBehaviour
         {
             setGameObjectPosAndRot(rings[i], ringPositions[i]);
             rings[i].SetActive(true);
+            rings[i].GetComponent<Rigidbody>().ResetInertiaTensor();
         }
 
         // reset score

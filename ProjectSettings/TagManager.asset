@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ring
   - Intake
+  - Ring Collider
   layers:
   - Default
   - TransparentFX

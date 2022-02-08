@@ -1,6 +1,9 @@
 engine_settings:
   time_scale: 60
   capture_frame_rate: 60
+  target_frame_rate: -1
+  quality_level: 1
+  no_grahpics: false
 checkpoint_settings:
   run_id: testing
   resume: true
@@ -13,22 +16,22 @@ behaviors:
     trainer_type: ppo
     hyperparameters:
       batch_size: 1024
-      buffer_size: 10240
+      buffer_size: 10000
       learning_rate: 1.0e-4
-      learning_rate_schedule: linear
+      learning_rate_schedule: constant
 
       num_epoch: 2
 
     network_settings:
       vis_encode_type: simple
-      normalize: false
+      normalize: true
       hidden_units: 512
       num_layers: 4
 
     summary_freq: 10000
     self_play:
-      window: 10
-      play_against_latest_model_ratio: 0.5
-      save_steps: 10000
-      swap_steps: 20000
+      window: 1
+      play_against_latest_model_ratio: 1.0
+      save_steps: 20000
+      swap_steps: 40000
       team_change: 40000

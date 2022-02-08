@@ -45,11 +45,11 @@ public class RobotAgent : Agent
         (var allianceRobot24Pos, var opponentRobot15Pos, var opponentRobot24Pos) = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
 
         Vector3[] observations = {
-            this.transform.position,
+            this.transform.position / GameManager.halfFieldSize,
             this.transform.forward,
-            allianceRobot24Pos,
-            opponentRobot15Pos,
-            opponentRobot24Pos
+            allianceRobot24Pos / GameManager.halfFieldSize,
+            opponentRobot15Pos / GameManager.halfFieldSize,
+            opponentRobot24Pos / GameManager.halfFieldSize
         };
 
         for (int i = 0; i < observations.Length; i++)
@@ -61,7 +61,7 @@ public class RobotAgent : Agent
         SortRings();
         for (int i = 0; i < numRings; i++)
         {
-            sensor.AddObservation(nearestRings[i]);
+            sensor.AddObservation(nearestRings[i] / GameManager.halfFieldSize);
         }
     }
 
@@ -129,18 +129,15 @@ public class RobotAgent : Agent
                 }
                 else
                 {
-                    ringsCulled[i] = false;
-                    if (visualizeCulling)
-                        ring.GetComponent<CullableFieldElement>().culled = false;
-                    // if (Physics.Linecast(cameraLocation.position, ring.transform.position, out RaycastHit hit))
-                    // {
-                    //     if (hit.collider.transform.parent != null && hit.collider.transform.parent.gameObject != ring)
-                    //     {
-                    //         ringsCulled[i] = true;
-                    //         if (visualizeCulling)
-                    //             ring.GetComponent<CullableFieldElement>().culled = true;
-                    //     }
-                    // }
+                    if (Physics.Linecast(cameraLocation.position, ring.transform.position, out RaycastHit hit))
+                    {
+                        if (!hit.collider.gameObject.CompareTag("Ring Collider"))
+                        {
+                            ringsCulled[i] = true;
+                            if (visualizeCulling)
+                                ring.GetComponent<CullableFieldElement>().culled = true;
+                        }
+                    }
                 }
             }
         }
