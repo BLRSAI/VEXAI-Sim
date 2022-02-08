@@ -1,8 +1,9 @@
 engine_settings:
   time_scale: 60
-  capture_frame_rate: 10
+  capture_frame_rate: 60
 checkpoint_settings:
   run_id: testing
+  resume: true
   force: true
   train_model: true
 torch_settings:
@@ -24,6 +25,7 @@ behaviors:
       hidden_units: 512
       num_layers: 4
 
+    summary_freq: 10000
     self_play:
       window: 10
       play_against_latest_model_ratio: 0.5

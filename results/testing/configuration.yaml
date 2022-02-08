@@ -38,7 +38,7 @@ behaviors:
     checkpoint_interval: 500000
     max_steps: 500000
     time_horizon: 64
-    summary_freq: 50000
+    summary_freq: 10000
     threaded: false
     self_play:
       save_steps: 10000
@@ -71,7 +71,7 @@ checkpoint_settings:
   run_id: testing
   initialize_from: null
   load_model: false
-  resume: false
+  resume: true
   force: true
   train_model: true
   inference: false
