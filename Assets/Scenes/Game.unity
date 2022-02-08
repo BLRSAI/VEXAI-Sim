@@ -4696,14 +4696,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1742173475}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
-      propertyPath: scorer
-      value: 
-      objectReference: {fileID: 391699579}
-    - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
-      propertyPath: scorer2
-      value: 
-      objectReference: {fileID: 132013644}
-    - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: scoreRed
       value: 
       objectReference: {fileID: 132013644}

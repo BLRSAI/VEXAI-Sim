@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: {fileID: 0}
-  scorer: {fileID: 0}
-  scorer2: {fileID: 0}
+  scoreBlue: {fileID: 0}
+  scoreRed: {fileID: 0}
   blueAllianceRobot15: {fileID: 0}
   blueAllianceRobot24: {fileID: 0}
   redAllianceRobot15: {fileID: 0}
