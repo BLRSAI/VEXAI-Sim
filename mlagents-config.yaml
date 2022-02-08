@@ -1,3 +1,6 @@
+# 1260 steps in a 105 second game. All values are based off of this
+# train every 10 games, with opponent every 20 games
+
 engine_settings:
   time_scale: 60
   capture_frame_rate: 60
@@ -16,7 +19,7 @@ behaviors:
     trainer_type: ppo
     hyperparameters:
       batch_size: 1024
-      buffer_size: 10000
+      buffer_size: 12600
       learning_rate: 1.0e-4
       learning_rate_schedule: constant
 
@@ -28,10 +31,10 @@ behaviors:
       hidden_units: 512
       num_layers: 4
 
-    summary_freq: 10000
+    summary_freq: 12600
     self_play:
       window: 1
       play_against_latest_model_ratio: 1.0
-      save_steps: 20000
-      swap_steps: 40000
-      team_change: 40000
+      save_steps: 12600
+      swap_steps: 25200
+      team_change: 25200
