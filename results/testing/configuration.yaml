@@ -9,14 +9,14 @@ behaviors:
       beta: 0.005
       epsilon: 0.2
       lambd: 0.95
-      num_epoch: 5
+      num_epoch: 2
       learning_rate_schedule: linear
       beta_schedule: linear
       epsilon_schedule: linear
     network_settings:
       normalize: false
-      hidden_units: 128
-      num_layers: 2
+      hidden_units: 512
+      num_layers: 4
       vis_encode_type: simple
       memory: null
       goal_conditioning_type: hyper
@@ -41,9 +41,9 @@ behaviors:
     summary_freq: 50000
     threaded: false
     self_play:
-      save_steps: 50000
-      team_change: 100000
-      swap_steps: 2000
+      save_steps: 10000
+      team_change: 40000
+      swap_steps: 20000
       window: 10
       play_against_latest_model_ratio: 0.5
       initial_elo: 1200.0

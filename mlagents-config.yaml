@@ -1,6 +1,6 @@
 engine_settings:
-  time_scale: 20
-  capture_frame_rate: 60
+  time_scale: 60
+  capture_frame_rate: 10
 checkpoint_settings:
   run_id: testing
   force: true
