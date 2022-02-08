@@ -6,11 +6,10 @@ engine_settings:
   capture_frame_rate: 60
   target_frame_rate: -1
   quality_level: 1
-  no_grahpics: false
 checkpoint_settings:
-  run_id: testing
-  resume: true
+  run_id: training_run
   force: true
+  resume: false
   train_model: true
 torch_settings:
   device: cpu
@@ -32,6 +31,8 @@ behaviors:
       num_layers: 4
 
     summary_freq: 12600
+    max_steps: 1000000
+
     self_play:
       window: 1
       play_against_latest_model_ratio: 1.0
