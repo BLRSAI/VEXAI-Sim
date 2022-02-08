@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using Unity.Mathematics;
 
 public class RobotAgent : Agent
 {
@@ -15,7 +16,12 @@ public class RobotAgent : Agent
     [Header("Ring Culling Settings")]
     [SerializeField] private bool visualizeCulling;
     [SerializeField] private Transform cameraLocation;
-    [SerializeField] private float cullingFov = 60f;
+    [SerializeField] private float fx = 608.38952271f;
+    [SerializeField] private float fy = 610.59807426f;
+    [SerializeField] private float cx = 332.60130193f;
+    [SerializeField] private float cy = 236.58507294f;
+    [SerializeField] private float h = 480f;
+    [SerializeField] private float w = 640f;
 
     [Header("AI Settings")]
     [SerializeField] private int numRings = 10;
@@ -99,14 +105,23 @@ public class RobotAgent : Agent
 
             if (ring.activeSelf)
             {
-                Vector3 direction = (ring.transform.position - cameraLocation.position).normalized;
-                float angle = Vector3.Angle(new Vector3(direction.x, cameraLocation.position.y, direction.z), cameraLocation.forward);
-
                 if (visualizeCulling)
                     ring.GetComponent<CullableFieldElement>().culled = false;
                 ringsCulled[i] = false;
 
-                if (angle > cullingFov)
+                bool ringInFrame = true;
+
+                Vector3 ringPosTransformed = cameraLocation.InverseTransformPoint(ring.transform.position);
+                ringInFrame &= ringPosTransformed.z > 0;
+
+                Vector3 projectedPos = new Vector3(
+                    (fx * ringPosTransformed.x) + (cx * ringPosTransformed.z),
+                    (fy * ringPosTransformed.y) + (cy * ringPosTransformed.z),
+                    (ringPosTransformed.z)
+                ) / ringPosTransformed.z;
+                ringInFrame &= projectedPos.x > 0 && projectedPos.x < w && projectedPos.y > 0 && projectedPos.y < h;
+
+                if (!ringInFrame)
                 {
                     ringsCulled[i] = true;
                     if (visualizeCulling)
@@ -114,15 +129,18 @@ public class RobotAgent : Agent
                 }
                 else
                 {
-                    if (Physics.Linecast(cameraLocation.position, ring.transform.position, out RaycastHit hit))
-                    {
-                        if (hit.collider.transform.parent != null && hit.collider.transform.parent.gameObject != ring)
-                        {
-                            ringsCulled[i] = true;
-                            if (visualizeCulling)
-                                ring.GetComponent<CullableFieldElement>().culled = true;
-                        }
-                    }
+                    ringsCulled[i] = false;
+                    if (visualizeCulling)
+                        ring.GetComponent<CullableFieldElement>().culled = false;
+                    // if (Physics.Linecast(cameraLocation.position, ring.transform.position, out RaycastHit hit))
+                    // {
+                    //     if (hit.collider.transform.parent != null && hit.collider.transform.parent.gameObject != ring)
+                    //     {
+                    //         ringsCulled[i] = true;
+                    //         if (visualizeCulling)
+                    //             ring.GetComponent<CullableFieldElement>().culled = true;
+                    //     }
+                    // }
                 }
             }
         }

@@ -1291,29 +1291,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8152154535649889234, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
-      propertyPath: DecisionPeriod
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: TeamId
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: 507b306447e81fa72bf7e08e1cbb4a6a, type: 3}
     - target: {fileID: 8152154535649889321, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Name
       value: 15Robot Red
       objectReference: {fileID: 0}
-    - target: {fileID: 8152154535649889321, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889325, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889325, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4608,7 +4596,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4028720681043828745, guid: d79093b0701c188a394cd4d63ec45940, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4028720681043828745, guid: d79093b0701c188a394cd4d63ec45940, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4772,18 +4760,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8152154535649889234, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
-      propertyPath: DecisionPeriod
-      value: 5
+    - target: {fileID: 8152154534930837859, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9659258
       objectReference: {fileID: 0}
-    - target: {fileID: 8152154535649889234, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
-      propertyPath: TakeActionsBetweenDecisions
-      value: 1
+    - target: {fileID: 8152154534930837859, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.2588191
       objectReference: {fileID: 0}
-    - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: 507b306447e81fa72bf7e08e1cbb4a6a, type: 3}
+    - target: {fileID: 8152154534930837859, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889321, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Name
       value: 15Robot Blue
