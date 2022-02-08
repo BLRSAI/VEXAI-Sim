@@ -1,6 +1,6 @@
 {
     "15robot": {
-        "elo": 1199.5346056358828,
+        "elo": 1198.6045707893977,
         "checkpoints": [
             {
                 "steps": 152856,
@@ -28,15 +28,33 @@
                 "auxillary_file_paths": [
                     "results/testing/15robot/15robot-206597.pt"
                 ]
+            },
+            {
+                "steps": 499993,
+                "file_path": "results/testing/15robot/15robot-499993.onnx",
+                "reward": -6.333333333333333,
+                "creation_time": 1644289136.5256982,
+                "auxillary_file_paths": [
+                    "results/testing/15robot/15robot-499993.pt"
+                ]
+            },
+            {
+                "steps": 500057,
+                "file_path": "results/testing/15robot/15robot-500057.onnx",
+                "reward": -6.333333333333333,
+                "creation_time": 1644289136.6679,
+                "auxillary_file_paths": [
+                    "results/testing/15robot/15robot-500057.pt"
+                ]
             }
         ],
         "final_checkpoint": {
-            "steps": 206597,
+            "steps": 500057,
             "file_path": "results/testing/15robot.onnx",
-            "reward": 3.3333333333333335,
-            "creation_time": 1644285635.832219,
+            "reward": -6.333333333333333,
+            "creation_time": 1644289136.6679,
             "auxillary_file_paths": [
-                "results/testing/15robot/15robot-206597.pt"
+                "results/testing/15robot/15robot-500057.pt"
             ]
         }
     },
