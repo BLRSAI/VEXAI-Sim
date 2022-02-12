@@ -10,21 +10,30 @@
                 "auxillary_file_paths": [
                     "results/training_run/15robot/15robot-146718.pt"
                 ]
+            },
+            {
+                "steps": 147870,
+                "file_path": "results\\training_run\\15robot\\15robot-147870.onnx",
+                "reward": null,
+                "creation_time": 1644636428.2450902,
+                "auxillary_file_paths": [
+                    "results\\training_run\\15robot\\15robot-147870.pt"
+                ]
             }
         ],
         "final_checkpoint": {
-            "steps": 146718,
-            "file_path": "results/training_run/15robot.onnx",
-            "reward": 4.428571428571429,
-            "creation_time": 1644310230.1282356,
+            "steps": 147870,
+            "file_path": "results\\training_run\\15robot.onnx",
+            "reward": null,
+            "creation_time": 1644636428.2450902,
             "auxillary_file_paths": [
-                "results/training_run/15robot/15robot-146718.pt"
+                "results\\training_run\\15robot\\15robot-147870.pt"
             ]
         }
     },
     "metadata": {
         "stats_format_version": "0.3.0",
         "mlagents_version": "0.28.0",
-        "torch_version": "1.8.1+cu102"
+        "torch_version": "1.7.1+cu110"
     }
 }
