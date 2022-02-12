@@ -180,17 +180,17 @@ public class GameManager : MonoBehaviour
         if (robot == blueAllianceRobot15)
         {
             return (
-                blueAllianceRobot24.transform.position,
-                redAllianceRobot15.transform.position,
-                redAllianceRobot24.transform.position
+                blueAllianceRobot24.transform.localPosition,
+                redAllianceRobot15.transform.localPosition,
+                redAllianceRobot24.transform.localPosition
             );
         }
         else if (robot == redAllianceRobot15)
         {
             return (
-                redAllianceRobot24.transform.position,
-                blueAllianceRobot15.transform.position,
-                blueAllianceRobot24.transform.position
+                redAllianceRobot24.transform.localPosition,
+                blueAllianceRobot15.transform.localPosition,
+                blueAllianceRobot24.transform.localPosition
             );
         }
 
