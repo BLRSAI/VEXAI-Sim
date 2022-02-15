@@ -135,6 +135,14 @@ public class GameManager : MonoBehaviour
         blueAllianceScore = 0;
         redAllianceScore = 0;
 
+        // enable all mogos
+        for (int i = 0; i < blueAllianceMogos.Length; i++)
+            blueAllianceMogos[i].SetActive(true);
+        for (int i = 0; i < redAllianceMogos.Length; i++)
+            redAllianceMogos[i].SetActive(true);
+        for (int i = 0; i < neutralMogos.Length; i++)
+            neutralMogos[i].SetActive(true);
+
         int blueAllianceMogoIndex = Random.Range(0, blueAllianceMogos.Length);
         int redAllianceMogoIndex = Random.Range(0, redAllianceMogos.Length);
         blueAllianceMogos[blueAllianceMogoIndex].SetActive(false);
@@ -170,20 +178,26 @@ public class GameManager : MonoBehaviour
         }
 
         //Pinning rule
-        if(Vector3.Distance(robotPositions[0].pos, robotPositions[1].pos) < 0.1f) {
+        if (Vector3.Distance(robotPositions[0].pos, robotPositions[1].pos) < 0.1f)
+        {
             timeTogether += Time.deltaTime;
-        } else {
+        }
+        else
+        {
             timeTogether = 0;
         }
-        if (timeTogether >= 10f) {
+        if (timeTogether >= 10f)
+        {
             blueAgent.AddReward(-100f);
             redAgent.AddReward(-100f);
         }
         //End of game rules - cannot be on other teams side to end game
-        if(redAgent.transform.localPosition.z > 0.3825585) {
+        if (redAgent.transform.localPosition.z > 0.3825585)
+        {
             redAgent.AddReward(-100f);
         }
-        if(blueAgent.transform.localPosition.z < 0.3825585) {
+        if (blueAgent.transform.localPosition.z < 0.3825585)
+        {
             blueAgent.AddReward(-100f);
         }
     }
@@ -193,7 +207,8 @@ public class GameManager : MonoBehaviour
         if (robot == blueAllianceRobot15 || robot == blueAllianceRobot24)
         {
             blueAllianceScore++;
-            if(blueAllianceScore <= 9) {
+            if (blueAllianceScore <= 9)
+            {
                 blueAgent.AddReward(1f);
                 redAgent.AddReward(-1f);
             }
@@ -202,7 +217,8 @@ public class GameManager : MonoBehaviour
         else if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
         {
             redAllianceScore++;
-            if(redAllianceScore <= 9) {
+            if (redAllianceScore <= 9)
+            {
                 redAgent.AddReward(1f);
                 blueAgent.AddReward(-1f);
             }
@@ -234,7 +250,8 @@ public class GameManager : MonoBehaviour
         throw new System.ArgumentException("Invalid robot");
     }
 
-    public Vector3 TransformPositionToAlliance(GameObject robot, Vector3 input){
+    public Vector3 TransformPositionToAlliance(GameObject robot, Vector3 input)
+    {
         if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
             return Quaternion.Euler(0, 180, 0) * input;
         else
