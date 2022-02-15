@@ -133,6 +133,20 @@ public class GameManager : MonoBehaviour
         // reset score
         blueAllianceScore = 0;
         redAllianceScore = 0;
+
+        int blueAllianceMogoIndex = Random.Range(0, blueAllianceMogos.Length);
+        int redAllianceMogoIndex = Random.Range(0, redAllianceMogos.Length);
+        blueAllianceMogos[blueAllianceMogoIndex].SetActive(false);
+        redAllianceMogos[redAllianceMogoIndex].SetActive(false);
+
+        List<int> list = new List<int>();
+        for (int i = 0; i < neutralMogos.Length; i++)
+            list.Add(i);
+        list.Sort((x, y) => 1 - 2 * Random.Range(0, 1));
+
+        int numToDisable = Random.Range(0, 3);
+        for (int i = 0; i < numToDisable; i++)
+            neutralMogos[list[i]].SetActive(false);
     }
 
     void Update()
