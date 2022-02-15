@@ -63,6 +63,8 @@ public class RobotAgent : Agent
         {
             sensor.AddObservation(nearestRings[i] / GameManager.halfFieldSize);
         }
+
+        sensor.AddObservation(GameManager.gameManager.time);
     }
 
     public override void OnActionReceived(ActionBuffers actions)

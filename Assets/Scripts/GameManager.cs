@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     private const float initTime = 120f - 15f;
 
-    [SerializeField] public float time = initTime;
+    public float time { get; set; } = initTime;
     private int blueAllianceScore;
     private int redAllianceScore;
     private float timeTogether = 0f;
@@ -171,6 +171,13 @@ public class GameManager : MonoBehaviour
 
         if (time <= 0)
         {
+            //End of game rules - cannot be on other teams side to end game
+            if(redAgent.transform.localPosition.z > 0.3825585) {
+                redAgent.AddReward(-100f);
+            }
+            if(blueAgent.transform.localPosition.z < 0.3825585) {
+                blueAgent.AddReward(-100f);
+            }
             blueAgent.EndEpisode();
             redAgent.EndEpisode();
 
@@ -190,15 +197,6 @@ public class GameManager : MonoBehaviour
         {
             blueAgent.AddReward(-100f);
             redAgent.AddReward(-100f);
-        }
-        //End of game rules - cannot be on other teams side to end game
-        if (redAgent.transform.localPosition.z > 0.3825585)
-        {
-            redAgent.AddReward(-100f);
-        }
-        if (blueAgent.transform.localPosition.z < 0.3825585)
-        {
-            blueAgent.AddReward(-100f);
         }
     }
 
