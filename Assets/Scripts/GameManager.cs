@@ -158,8 +158,8 @@ public class GameManager : MonoBehaviour
         float sec = Mathf.FloorToInt(time % 60);
         timer.text = "Time: " + string.Format("{0:00}:{1:00}", min, sec);
 
-        scoreBlue.text = "Blue Score: " + blueAllianceScore.ToString();
-        scoreRed.text = "Red Score: " + redAllianceScore.ToString();
+        scoreBlue.text = "Blue Rings: " + blueAllianceScore.ToString();
+        scoreRed.text = "Red Rings: " + redAllianceScore.ToString();
 
         if (time <= 0)
         {
@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour
         }
 
         //Pinning rule
-        if(Vector3.Distance(ringPositions[0].pos, ringPositions[1].pos) < 0.1f) {
+        if(Vector3.Distance(robotPositions[0].pos, robotPositions[1].pos) < 0.1f) {
             timeTogether += Time.deltaTime;
         } else {
             timeTogether = 0;
@@ -193,15 +193,19 @@ public class GameManager : MonoBehaviour
         if (robot == blueAllianceRobot15 || robot == blueAllianceRobot24)
         {
             blueAllianceScore++;
-            blueAgent.AddReward(1f);
-            redAgent.AddReward(-1f);
+            if(blueAllianceScore <= 9) {
+                blueAgent.AddReward(1f);
+                redAgent.AddReward(-1f);
+            }
             return;
         }
         else if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
         {
             redAllianceScore++;
-            redAgent.AddReward(1f);
-            blueAgent.AddReward(-1f);
+            if(redAllianceScore <= 9) {
+                redAgent.AddReward(1f);
+                blueAgent.AddReward(-1f);
+            }
             return;
         }
 
