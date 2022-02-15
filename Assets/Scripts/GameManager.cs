@@ -233,4 +233,11 @@ public class GameManager : MonoBehaviour
 
         throw new System.ArgumentException("Invalid robot");
     }
+
+    public Vector3 TransformPositionToAlliance(GameObject robot, Vector3 input){
+        if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
+            return Quaternion.Euler(0, 180, 0) * input;
+        else
+            return input;
+    }
 }
