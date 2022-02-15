@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public float time = initTime;
     private int blueAllianceScore;
     private int redAllianceScore;
+    private float timeTogether = 0f;
 
     private PosAndRot getGameObjectPosAndRot(GameObject go)
     {
@@ -157,8 +158,8 @@ public class GameManager : MonoBehaviour
         float sec = Mathf.FloorToInt(time % 60);
         timer.text = "Time: " + string.Format("{0:00}:{1:00}", min, sec);
 
-        scoreBlue.text = "Blue Score: " + blueAllianceScore.ToString();
-        scoreRed.text = "Red Score: " + redAllianceScore.ToString();
+        scoreBlue.text = "Blue Rings: " + blueAllianceScore.ToString();
+        scoreRed.text = "Red Rings: " + redAllianceScore.ToString();
 
         if (time <= 0)
         {
@@ -167,6 +168,24 @@ public class GameManager : MonoBehaviour
 
             ResetField();
         }
+
+        //Pinning rule
+        if(Vector3.Distance(robotPositions[0].pos, robotPositions[1].pos) < 0.1f) {
+            timeTogether += Time.deltaTime;
+        } else {
+            timeTogether = 0;
+        }
+        if (timeTogether >= 10f) {
+            blueAgent.AddReward(-100f);
+            redAgent.AddReward(-100f);
+        }
+        //End of game rules - cannot be on other teams side to end game
+        if(redAgent.transform.localPosition.z > 0.3825585) {
+            redAgent.AddReward(-100f);
+        }
+        if(blueAgent.transform.localPosition.z < 0.3825585) {
+            blueAgent.AddReward(-100f);
+        }
     }
 
     public void CollectRing(GameObject robot)
@@ -174,15 +193,19 @@ public class GameManager : MonoBehaviour
         if (robot == blueAllianceRobot15 || robot == blueAllianceRobot24)
         {
             blueAllianceScore++;
-            blueAgent.AddReward(1f);
-            redAgent.AddReward(-1f);
+            if(blueAllianceScore <= 9) {
+                blueAgent.AddReward(1f);
+                redAgent.AddReward(-1f);
+            }
             return;
         }
         else if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
         {
             redAllianceScore++;
-            redAgent.AddReward(1f);
-            blueAgent.AddReward(-1f);
+            if(redAllianceScore <= 9) {
+                redAgent.AddReward(1f);
+                blueAgent.AddReward(-1f);
+            }
             return;
         }
 
