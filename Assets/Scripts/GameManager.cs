@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public float time = initTime;
     private int blueAllianceScore;
     private int redAllianceScore;
+    private float timeTogether = 0f;
 
     private PosAndRot getGameObjectPosAndRot(GameObject go)
     {
@@ -152,6 +153,24 @@ public class GameManager : MonoBehaviour
             redAgent.EndEpisode();
 
             ResetField();
+        }
+
+        //Pinning rule
+        if(Vector3.Distance(ringPositions[0].pos, ringPositions[1].pos) < 0.1f) {
+            timeTogether += Time.deltaTime;
+        } else {
+            timeTogether = 0;
+        }
+        if (timeTogether >= 10f) {
+            blueAgent.AddReward(-100f);
+            redAgent.AddReward(-100f);
+        }
+        //End of game rules - cannot be on other teams side to end game
+        if(redAgent.transform.localPosition.z > 0.3825585) {
+            redAgent.AddReward(-100f);
+        }
+        if(blueAgent.transform.localPosition.z < 0.3825585) {
+            blueAgent.AddReward(-100f);
         }
     }
 
