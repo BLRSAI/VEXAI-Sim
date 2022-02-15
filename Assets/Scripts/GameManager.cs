@@ -163,6 +163,13 @@ public class GameManager : MonoBehaviour
 
         if (time <= 0)
         {
+            //End of game rules - cannot be on other teams side to end game
+            if(redAgent.transform.localPosition.z > 0.3825585) {
+                redAgent.AddReward(-100f);
+            }
+            if(blueAgent.transform.localPosition.z < 0.3825585) {
+                blueAgent.AddReward(-100f);
+            }
             blueAgent.EndEpisode();
             redAgent.EndEpisode();
 
@@ -178,13 +185,6 @@ public class GameManager : MonoBehaviour
         if (timeTogether >= 10f) {
             blueAgent.AddReward(-100f);
             redAgent.AddReward(-100f);
-        }
-        //End of game rules - cannot be on other teams side to end game
-        if(redAgent.transform.localPosition.z > 0.3825585) {
-            redAgent.AddReward(-100f);
-        }
-        if(blueAgent.transform.localPosition.z < 0.3825585) {
-            blueAgent.AddReward(-100f);
         }
     }
 
