@@ -1,0 +1,30 @@
+{
+    "15robot": {
+        "elo": 1191.158099318111,
+        "checkpoints": [
+            {
+                "steps": 164568,
+                "file_path": "results\\2-14\\15robot\\15robot-164568.onnx",
+                "reward": null,
+                "creation_time": 1644890842.5163648,
+                "auxillary_file_paths": [
+                    "results\\2-14\\15robot\\15robot-164568.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 164568,
+            "file_path": "results\\2-14\\15robot.onnx",
+            "reward": null,
+            "creation_time": 1644890842.5163648,
+            "auxillary_file_paths": [
+                "results\\2-14\\15robot\\15robot-164568.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.28.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
