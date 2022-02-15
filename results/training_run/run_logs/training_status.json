@@ -1,33 +1,60 @@
 {
     "15robot": {
-        "elo": 1200.0,
         "checkpoints": [
             {
-                "steps": 146718,
-                "file_path": "results/training_run/15robot/15robot-146718.onnx",
-                "reward": 4.428571428571429,
-                "creation_time": 1644310230.1282356,
+                "steps": 499990,
+                "file_path": "results\\training_run\\15robot\\15robot-499990.onnx",
+                "reward": 6.166666666666667,
+                "creation_time": 1644687756.842268,
                 "auxillary_file_paths": [
-                    "results/training_run/15robot/15robot-146718.pt"
+                    "results\\training_run\\15robot\\15robot-499990.pt"
                 ]
             },
             {
-                "steps": 147870,
-                "file_path": "results\\training_run\\15robot\\15robot-147870.onnx",
-                "reward": null,
-                "creation_time": 1644636428.2450902,
+                "steps": 999978,
+                "file_path": "results\\training_run\\15robot\\15robot-999978.onnx",
+                "reward": 4.0,
+                "creation_time": 1644691093.9263854,
                 "auxillary_file_paths": [
-                    "results\\training_run\\15robot\\15robot-147870.pt"
+                    "results\\training_run\\15robot\\15robot-999978.pt"
+                ]
+            },
+            {
+                "steps": 1000042,
+                "file_path": "results\\training_run\\15robot\\15robot-1000042.onnx",
+                "reward": 4.0,
+                "creation_time": 1644691094.2195315,
+                "auxillary_file_paths": [
+                    "results\\training_run\\15robot\\15robot-1000042.pt"
+                ]
+            },
+            {
+                "steps": 1000042,
+                "file_path": "results\\training_run\\15robot\\15robot-1000042.onnx",
+                "reward": null,
+                "creation_time": 1644691542.554741,
+                "auxillary_file_paths": [
+                    "results\\training_run\\15robot\\15robot-1000042.pt"
+                ]
+            },
+            {
+                "steps": 1004151,
+                "file_path": "results\\training_run\\15robot\\15robot-1004151.onnx",
+                "reward": -3.0,
+                "creation_time": 1644691644.9548957,
+                "auxillary_file_paths": [
+                    "results\\training_run\\15robot\\15robot-1004151.pt"
                 ]
             }
         ],
+        "elo": 1200.0,
         "final_checkpoint": {
-            "steps": 147870,
+            "steps": 1004151,
             "file_path": "results\\training_run\\15robot.onnx",
-            "reward": null,
-            "creation_time": 1644636428.2450902,
+            "reward": -3.0,
+            "creation_time": 1644691644.9548957,
             "auxillary_file_paths": [
-                "results\\training_run\\15robot\\15robot-147870.pt"
+                "results\\training_run\\15robot\\15robot-1004151.pt"
             ]
         }
     },
