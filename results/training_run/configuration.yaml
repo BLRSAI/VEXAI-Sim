@@ -4,19 +4,19 @@ behaviors:
     trainer_type: ppo
     hyperparameters:
       batch_size: 1024
-      buffer_size: 10240
-      learning_rate: 0.0003
+      buffer_size: 12600
+      learning_rate: 0.0001
       beta: 0.005
       epsilon: 0.2
       lambd: 0.95
-      num_epoch: 3
-      learning_rate_schedule: linear
-      beta_schedule: linear
-      epsilon_schedule: linear
+      num_epoch: 2
+      learning_rate_schedule: constant
+      beta_schedule: constant
+      epsilon_schedule: constant
     network_settings:
-      normalize: false
-      hidden_units: 128
-      num_layers: 2
+      normalize: true
+      hidden_units: 512
+      num_layers: 4
       vis_encode_type: simple
       memory: null
       goal_conditioning_type: hyper
@@ -36,11 +36,17 @@ behaviors:
     init_path: null
     keep_checkpoints: 5
     checkpoint_interval: 500000
-    max_steps: 500000
+    max_steps: 2000000
     time_horizon: 64
-    summary_freq: 50000
+    summary_freq: 12600
     threaded: false
-    self_play: null
+    self_play:
+      save_steps: 12600
+      team_change: 25200
+      swap_steps: 25200
+      window: 1
+      play_against_latest_model_ratio: 1.0
+      initial_elo: 1200.0
     behavioral_cloning: null
 env_settings:
   env_path: null
@@ -55,8 +61,8 @@ env_settings:
 engine_settings:
   width: 84
   height: 84
-  quality_level: 5
-  time_scale: 20
+  quality_level: 1
+  time_scale: 60.0
   target_frame_rate: -1
   capture_frame_rate: 60
   no_graphics: false
@@ -66,10 +72,10 @@ checkpoint_settings:
   initialize_from: null
   load_model: false
   resume: true
-  force: false
-  train_model: false
+  force: true
+  train_model: true
   inference: false
   results_dir: results
 torch_settings:
-  device: null
+  device: cpu
 debug: false
