@@ -45,11 +45,11 @@ public class RobotAgent : Agent
         (var allianceRobot24Pos, var opponentRobot15Pos, var opponentRobot24Pos) = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
 
         Vector3[] observations = {
-            this.transform.localPosition / GameManager.halfFieldSize,
-            this.transform.forward,
-            allianceRobot24Pos / GameManager.halfFieldSize,
-            opponentRobot15Pos / GameManager.halfFieldSize,
-            opponentRobot24Pos / GameManager.halfFieldSize
+            GameManager.gameManager.TransformPositionToAlliance(gameObject, this.transform.localPosition / GameManager.halfFieldSize),
+            GameManager.gameManager.TransformPositionToAlliance(gameObject, transform.forward),
+            GameManager.gameManager.TransformPositionToAlliance(gameObject, allianceRobot24Pos / GameManager.halfFieldSize),
+            GameManager.gameManager.TransformPositionToAlliance(gameObject, opponentRobot15Pos / GameManager.halfFieldSize),
+            GameManager.gameManager.TransformPositionToAlliance(gameObject, opponentRobot24Pos / GameManager.halfFieldSize),
         };
 
         for (int i = 0; i < observations.Length; i++)
