@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     private const float initTime = 120f - 15f;
 
-    [SerializeField] public float time = initTime;
+    public float time { get; set; } = initTime;
     private int blueAllianceScore;
     private int redAllianceScore;
     private float timeTogether = 0f;
