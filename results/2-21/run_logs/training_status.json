@@ -1,0 +1,39 @@
+{
+    "15robot": {
+        "elo": 1200.9828585283212,
+        "checkpoints": [
+            {
+                "steps": 67175,
+                "file_path": "results\\2-21\\15robot\\15robot-67175.onnx",
+                "reward": 67.66666666666667,
+                "creation_time": 1645494307.705954,
+                "auxillary_file_paths": [
+                    "results\\2-21\\15robot\\15robot-67175.pt"
+                ]
+            },
+            {
+                "steps": 77456,
+                "file_path": "results\\2-21\\15robot\\15robot-77456.onnx",
+                "reward": 74.11111111111111,
+                "creation_time": 1645494431.184526,
+                "auxillary_file_paths": [
+                    "results\\2-21\\15robot\\15robot-77456.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 77456,
+            "file_path": "results\\2-21\\15robot.onnx",
+            "reward": 74.11111111111111,
+            "creation_time": 1645494431.184526,
+            "auxillary_file_paths": [
+                "results\\2-21\\15robot\\15robot-77456.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.28.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

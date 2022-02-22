@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     {
         gameManager = this;
     }
+
+    [SerializeField] private static float no_man_zone_width = 0;
+
     private struct PosAndRot
     {
         public Vector3 pos;
