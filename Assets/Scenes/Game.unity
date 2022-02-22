@@ -1893,7 +1893,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5129941549357922194, guid: ae2396f42adc0c62aa22b8f238a76e44, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.21300137
+      value: -0.009
       objectReference: {fileID: 0}
     - target: {fileID: 5129941549357922194, guid: ae2396f42adc0c62aa22b8f238a76e44, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2026,7 +2026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5557533161709068992, guid: 5abac26db65a7d9f4af3daaaf39865c4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.72
+      value: 0.879
       objectReference: {fileID: 0}
     - target: {fileID: 5557533161709068992, guid: 5abac26db65a7d9f4af3daaaf39865c4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2965,7 +2965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5557533161709068992, guid: 5abac26db65a7d9f4af3daaaf39865c4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.116
+      value: -0.932
       objectReference: {fileID: 0}
     - target: {fileID: 5557533161709068992, guid: 5abac26db65a7d9f4af3daaaf39865c4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4843,6 +4843,10 @@ PrefabInstance:
       propertyPath: scoreBlue
       value: 
       objectReference: {fileID: 391699579}
+    - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
+      propertyPath: no_man_zone_width
+      value: 0.622
+      objectReference: {fileID: 0}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: redAllianceRobot15
       value: 
