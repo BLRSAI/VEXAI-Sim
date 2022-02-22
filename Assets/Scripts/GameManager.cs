@@ -185,7 +185,7 @@ public class GameManager : MonoBehaviour
             } else {
                 blueAgent.AddReward(-100f);
             }
-            
+
             blueAgent.EndEpisode();
             redAgent.EndEpisode();
 
@@ -215,8 +215,8 @@ public class GameManager : MonoBehaviour
             blueAllianceScore++;
             if (blueAllianceScore <= 9)
             {
-                blueAgent.AddReward(1f);
-                redAgent.AddReward(-1f);
+                blueAgent.AddReward(3f);
+                redAgent.AddReward(-3f);
             }
             return;
         }
@@ -225,8 +225,8 @@ public class GameManager : MonoBehaviour
             redAllianceScore++;
             if (redAllianceScore <= 9)
             {
-                redAgent.AddReward(1f);
-                blueAgent.AddReward(-1f);
+                redAgent.AddReward(3f);
+                blueAgent.AddReward(-3f);
             }
             return;
         }
