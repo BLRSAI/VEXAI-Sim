@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
         gameManager = this;
     }
 
-    [SerializeField] private static float no_man_zone_width = 0;
+    [SerializeField] private float no_man_zone_width = 0;
 
     private struct PosAndRot
     {
@@ -175,17 +175,17 @@ public class GameManager : MonoBehaviour
         if (time <= 0)
         {
             foreach (PosAndRot mogo in mogoPositions) {
-                if (mogo.pos.z < 0) {
+                if (mogo.pos.z < -no_man_zone_width) {
                     blueAgent.AddReward(20f);
-                } else {
+                } else if (mogo.pos.z > no_man_zone_width) {
                     redAgent.AddReward(20f);
                 }
             }
 
             //End of game rules - cannot be on other teams side to end game
-            if(redAgent.transform.position.z > 0) {
+            if(redAgent.transform.position.z > no_man_zone_width) {
                 redAgent.AddReward(-100f);
-            } else {
+            } else if (blueAgent.transform.position.z < -no_man_zone_width) {
                 blueAgent.AddReward(-100f);
             }
 
@@ -196,7 +196,7 @@ public class GameManager : MonoBehaviour
         }
 
         //Pinning rule
-        if (Vector3.Distance(robotPositions[0].pos, robotPositions[1].pos) < 0.1f)
+        if (Vector3.Distance(robotPositions[0].pos, robotPositions[1].pos) < 0.6f)
         {
             timeTogether += Time.deltaTime;
         }

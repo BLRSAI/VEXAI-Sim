@@ -4844,6 +4844,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 391699579}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
+      propertyPath: no_man_zone_width
+      value: 0.622
+      objectReference: {fileID: 0}
+    - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: redAllianceRobot15
       value: 
       objectReference: {fileID: 495552427}
