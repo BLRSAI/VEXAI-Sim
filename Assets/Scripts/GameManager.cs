@@ -59,6 +59,12 @@ public class GameManager : MonoBehaviour
     private int redAllianceScore;
     private float timeTogether = 0f;
 
+    private float bluePinningPenalty = 0f;
+    private float redPinningPenalty = 0f;
+    private float redRingReward = 0f;
+    private float blueRingReward = 0f;
+
+
     private PosAndRot getGameObjectPosAndRot(GameObject go)
     {
         return new PosAndRot(go.transform.position, go.transform.rotation);
@@ -174,20 +180,39 @@ public class GameManager : MonoBehaviour
 
         if (time <= 0)
         {
-            foreach (PosAndRot mogo in mogoPositions) {
-                if (mogo.pos.z < 0) {
+            var statsRecorder = Academy.Instance.StatsRecorder;
+
+            foreach (PosAndRot mogo in mogoPositions)
+            {
+                if (mogo.pos.z < 0)
+                {
                     blueAgent.AddReward(20f);
-                } else {
+                    statsRecorder.Add("Blue Agent Mogo Reward", 20f);
+                }
+                else
+                {
                     redAgent.AddReward(20f);
+                    statsRecorder.Add("Red Agent Mogo Reward", 20f);
                 }
             }
 
             //End of game rules - cannot be on other teams side to end game
-            if(redAgent.transform.position.z > 0) {
+            if (redAgent.transform.position.z > 0)
+            {
                 redAgent.AddReward(-100f);
-            } else {
-                blueAgent.AddReward(-100f);
+                statsRecorder.Add("Red Agent Position Penalty", -100f);
             }
+            else
+            {
+                blueAgent.AddReward(-100f);
+                statsRecorder.Add("Blue Agent Position Penalty", -100f);
+            }
+
+            statsRecorder.Add("Blue Agent Pinning Penalty", bluePinningPenalty);
+            statsRecorder.Add("Red Agent Pinning Penalty", redPinningPenalty);
+
+            statsRecorder.Add("Blue Agent Ring Reward", blueRingReward);
+            statsRecorder.Add("Red Agent Ring Reward", redRingReward);
 
             blueAgent.EndEpisode();
             redAgent.EndEpisode();
@@ -208,6 +233,9 @@ public class GameManager : MonoBehaviour
         {
             blueAgent.AddReward(-100f);
             redAgent.AddReward(-100f);
+
+            bluePinningPenalty -= 100f;
+            redPinningPenalty -= 100f;
         }
     }
 
@@ -220,6 +248,8 @@ public class GameManager : MonoBehaviour
             {
                 blueAgent.AddReward(3f);
                 redAgent.AddReward(-3f);
+
+                blueRingReward += 3f;
             }
             return;
         }
@@ -230,6 +260,8 @@ public class GameManager : MonoBehaviour
             {
                 redAgent.AddReward(3f);
                 blueAgent.AddReward(-3f);
+
+                redRingReward += 3f;
             }
             return;
         }
