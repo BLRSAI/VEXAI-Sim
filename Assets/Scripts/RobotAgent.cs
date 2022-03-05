@@ -42,6 +42,8 @@ public class RobotAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        sensor.AddObservation(GameManager.gameManager.time);
+
         var observations = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
         var observationsArray = new Vector3[] { observations.Item1, observations.Item2, observations.Item3, observations.Item4, observations.Item5 };
 
@@ -60,7 +62,6 @@ public class RobotAgent : Agent
             sensor.AddObservation(combinedPositionTransform(nearestRings[i]));
         }
 
-        sensor.AddObservation(GameManager.gameManager.time);
     }
 
     public override void OnActionReceived(ActionBuffers actions)

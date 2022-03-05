@@ -1333,7 +1333,11 @@ PrefabInstance:
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 18fef67b0ed65a04a8394687eef1f4e5, type: 3}
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 46
+      objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889321, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Name
       value: 15Robot Red
@@ -4911,10 +4915,14 @@ PrefabInstance:
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 18fef67b0ed65a04a8394687eef1f4e5, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_BehaviorType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889321, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Name

@@ -277,9 +277,6 @@ public class GameManager : MonoBehaviour
 
     public (Vector3, Vector3, Vector3, Vector3, Vector3) GetObservationsFromAlliancePerspective(GameObject robot)
     {
-        var allianceTransform = VectorAllianceTransform(robot);
-        var combinedTransform = CombinedPositionTransform(robot);
-
         GameObject allianceSecondary;
         GameObject opponentPrimary;
         GameObject opponentSecondary;
@@ -313,6 +310,9 @@ public class GameManager : MonoBehaviour
             throw new System.ArgumentException("Invalid robot");
         }
 
+        var allianceTransform = VectorAllianceTransform(robot);
+        var combinedTransform = CombinedPositionTransform(robot);
+
         return (
             allianceTransform(robot.transform.forward),
             combinedTransform(robot.transform.position),
@@ -324,7 +324,7 @@ public class GameManager : MonoBehaviour
 
     public System.Func<Vector3, Vector3> VectorAllianceTransform(GameObject robot)
     {
-        if (robot != blueAllianceRobot15 || robot != blueAllianceRobot24 || robot != redAllianceRobot15 || robot != redAllianceRobot24)
+        if (robot != blueAllianceRobot15 && robot != blueAllianceRobot24 && robot != redAllianceRobot15 && robot != redAllianceRobot24)
         {
             throw new System.ArgumentException("Invalid robot");
         }
