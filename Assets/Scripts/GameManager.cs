@@ -143,7 +143,6 @@ public class GameManager : MonoBehaviour
         // reset score
         blueAllianceScore = 0;
         redAllianceScore = 0;
-
         // enable all mogos
         for (int i = 0; i < blueAllianceMogos.Length; i++)
             blueAllianceMogos[i].SetActive(true);
@@ -269,33 +268,75 @@ public class GameManager : MonoBehaviour
         throw new System.ArgumentException("Invalid robot");
     }
 
-    public (Vector3, Vector3, Vector3) GetObservationsFromAlliancePerspective(GameObject robot)
+    public (Vector3, Vector3, Vector3, Vector3, Vector3) GetObservationsFromAlliancePerspective(GameObject robot)
     {
+        var allianceTransform = VectorAllianceTransform(robot);
+        var combinedTransform = CombinedPositionTransform(robot);
+
+        GameObject allianceSecondary;
+        GameObject opponentPrimary;
+        GameObject opponentSecondary;
+
         if (robot == blueAllianceRobot15)
         {
-            return (
-                blueAllianceRobot24.transform.localPosition,
-                redAllianceRobot15.transform.localPosition,
-                redAllianceRobot24.transform.localPosition
-            );
+            allianceSecondary = blueAllianceRobot24;
+            opponentPrimary = redAllianceRobot15;
+            opponentSecondary = redAllianceRobot24;
+        }
+        else if (robot == blueAllianceRobot24)
+        {
+            allianceSecondary = blueAllianceRobot15;
+            opponentPrimary = redAllianceRobot15;
+            opponentSecondary = redAllianceRobot24;
         }
         else if (robot == redAllianceRobot15)
         {
-            return (
-                redAllianceRobot24.transform.localPosition,
-                blueAllianceRobot15.transform.localPosition,
-                blueAllianceRobot24.transform.localPosition
-            );
+            allianceSecondary = redAllianceRobot24;
+            opponentPrimary = blueAllianceRobot15;
+            opponentSecondary = blueAllianceRobot24;
+        }
+        else if (robot == redAllianceRobot24)
+        {
+            allianceSecondary = redAllianceRobot15;
+            opponentPrimary = blueAllianceRobot15;
+            opponentSecondary = blueAllianceRobot24;
+        }
+        else
+        {
+            throw new System.ArgumentException("Invalid robot");
         }
 
-        throw new System.ArgumentException("Invalid robot");
+        return (
+            allianceTransform(robot.transform.forward),
+            combinedTransform(robot.transform.position),
+            combinedTransform(allianceSecondary.transform.position),
+            combinedTransform(opponentPrimary.transform.position),
+            combinedTransform(opponentSecondary.transform.position)
+        );
     }
 
-    public Vector3 TransformPositionToAlliance(GameObject robot, Vector3 input)
+    public System.Func<Vector3, Vector3> VectorAllianceTransform(GameObject robot)
     {
+        if (robot != blueAllianceRobot15 || robot != blueAllianceRobot24 || robot != redAllianceRobot15 || robot != redAllianceRobot24)
+        {
+            throw new System.ArgumentException("Invalid robot");
+        }
+
+        Quaternion rotation = Quaternion.Euler(0, 0, 0);
+
         if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
-            return Quaternion.Euler(0, 180, 0) * input;
-        else
-            return input;
+        {
+            rotation = Quaternion.Euler(0, 180, 0);
+        }
+
+        return (Vector3 input) => rotation * input;
+    }
+
+    public System.Func<Vector3, Vector3> CombinedPositionTransform(GameObject robot)
+    {
+        var allianceTransform = VectorAllianceTransform(robot);
+        var scalePositionVector = (Vector3 input) => input / halfFieldSize;
+
+        return (Vector3 input) => allianceTransform(scalePositionVector(input));
     }
 }

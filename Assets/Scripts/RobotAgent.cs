@@ -42,26 +42,22 @@ public class RobotAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        (var allianceRobot24Pos, var opponentRobot15Pos, var opponentRobot24Pos) = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
+        var observations = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
+        var observationsArray = new Vector3[] { observations.Item1, observations.Item2, observations.Item3, observations.Item4, observations.Item5 };
 
-        Vector3[] observations = {
-            GameManager.gameManager.TransformPositionToAlliance(gameObject, this.transform.localPosition / GameManager.halfFieldSize),
-            GameManager.gameManager.TransformPositionToAlliance(gameObject, transform.forward),
-            GameManager.gameManager.TransformPositionToAlliance(gameObject, allianceRobot24Pos / GameManager.halfFieldSize),
-            GameManager.gameManager.TransformPositionToAlliance(gameObject, opponentRobot15Pos / GameManager.halfFieldSize),
-            GameManager.gameManager.TransformPositionToAlliance(gameObject, opponentRobot24Pos / GameManager.halfFieldSize),
-        };
-
-        for (int i = 0; i < observations.Length; i++)
+        for (int i = 0; i < observationsArray.Length; i++)
         {
-            sensor.AddObservation(observations[i]);
+            sensor.AddObservation(observationsArray[i]);
         }
 
         CullRings();
         SortRings();
+
+        var combinedPositionTransform = GameManager.gameManager.CombinedPositionTransform(gameObject);
+
         for (int i = 0; i < numRings; i++)
         {
-            sensor.AddObservation(nearestRings[i] / GameManager.halfFieldSize);
+            sensor.AddObservation(combinedPositionTransform(nearestRings[i]));
         }
 
         sensor.AddObservation(GameManager.gameManager.time);
