@@ -342,7 +342,7 @@ public class GameManager : MonoBehaviour
     public System.Func<Vector3, Vector3> CombinedPositionTransform(GameObject robot)
     {
         var allianceTransform = VectorAllianceTransform(robot);
-        var scalePositionVector = (Vector3 input) => input / halfFieldSize;
+        System.Func<Vector3, Vector3> scalePositionVector = (Vector3 input) => input / halfFieldSize;
 
         return (Vector3 input) => allianceTransform(scalePositionVector(input));
     }
