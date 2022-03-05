@@ -144,6 +144,13 @@ public class GameManager : MonoBehaviour
         blueAllianceScore = 0;
         redAllianceScore = 0;
 
+        //reset vars
+        bluePinningPenalty = 0f;
+        redPinningPenalty = 0f;
+        redRingReward = 0f;
+        blueRingReward = 0f;
+
+
         // enable all mogos
         for (int i = 0; i < blueAllianceMogos.Length; i++)
             blueAllianceMogos[i].SetActive(true);
@@ -196,12 +203,12 @@ public class GameManager : MonoBehaviour
             }
 
             //End of game rules - cannot be on other teams side to end game
-            if (redAgent.transform.position.z > no_man_zone_width)
+            if (redAgent.transform.position.z < no_man_zone_width)
             {
                 redAgent.AddReward(-100f);
                 statsRecorder.Add("Red Agent Position Penalty", -100f);
             }
-            else if (blueAgent.transform.position.z < -no_man_zone_width)
+            else if (blueAgent.transform.position.z > -no_man_zone_width)
             {
                 blueAgent.AddReward(-100f);
                 statsRecorder.Add("Blue Agent Position Penalty", -100f);
