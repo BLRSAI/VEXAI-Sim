@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657832, g: 0.49641222, b: 0.57481664, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1341,6 +1341,10 @@ PrefabInstance:
     - target: {fileID: 8152154535649889321, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Name
       value: 15Robot Red
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889321, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889325, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_RootOrder

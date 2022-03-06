@@ -66,8 +66,8 @@ public class RobotAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        speed = actions.ContinuousActions[0];
-        rotation = actions.ContinuousActions[1];
+        speed = Mathf.Max(1f, Mathf.Min(0f, actions.ContinuousActions[0]));
+        rotation = Mathf.Max(1f, Mathf.Min(0f, actions.ContinuousActions[1]));
     }
 
     void FixedUpdate()
