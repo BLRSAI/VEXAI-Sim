@@ -187,6 +187,7 @@ public class GameManager : MonoBehaviour
         if (time <= 0)
         {
             var statsRecorder = Academy.Instance.StatsRecorder;
+            /*
             foreach (PosAndRot mogo in mogoPositions)
             {
                 if (mogo.pos.z < -no_man_zone_width)
@@ -200,7 +201,9 @@ public class GameManager : MonoBehaviour
                     statsRecorder.Add("Red Agent Mogo Reward", 20f);
                 }
             }
+            */
 
+            /*
             //End of game rules - cannot be on other teams side to end game
             if (redAgent.transform.position.z < no_man_zone_width)
             {
@@ -213,6 +216,7 @@ public class GameManager : MonoBehaviour
                 statsRecorder.Add("Blue Agent Position Penalty", -100f);
 
             }
+            */
 
             statsRecorder.Add("Blue Agent Pinning Penalty", bluePinningPenalty);
             statsRecorder.Add("Red Agent Pinning Penalty", redPinningPenalty);
@@ -329,14 +333,16 @@ public class GameManager : MonoBehaviour
             throw new System.ArgumentException("Invalid robot");
         }
 
-        Quaternion rotation = Quaternion.Euler(0, 0, 0);
+        // Quaternion rotation = Quaternion.Euler(0, 0, 0);
 
-        if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
-        {
-            rotation = Quaternion.Euler(0, 180, 0);
-        }
+        // if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
+        // {
+        //     rotation = Quaternion.Euler(0, 180, 0);
+        // }
 
-        return (Vector3 input) => rotation * input;
+        // return (Vector3 input) => rotation * input;
+
+        return (Vector3 input) => input;
     }
 
     public System.Func<Vector3, Vector3> CombinedPositionTransform(GameObject robot)
