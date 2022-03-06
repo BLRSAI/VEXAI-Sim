@@ -1,0 +1,21 @@
+engine_config:
+  timescale: 1 # how fast to run Unity
+
+model_config:
+  # ----------model hyperparameters----------
+  lr_actor: 3e-4 # actor learning rate
+  lr_critic: 1e-3 # critic learning rate
+  eps_clip: 0.2 # PPO epsilon clipping
+
+  epochs: 10 # epochs per update step
+
+  # ----------trainer settings----------
+  update_episodes: 5 # update every n episodes
+  max_episode_len: 105 # max episode length in seconds
+  decision_frequency: 5 # n decisions per second
+
+  gamma: 0.99 # reward discount
+  action_std_init: 0.5 # starting standard deviation for action sampling
+
+  # ----------self-play settings----------
+  swap_episodes: 10 # swap model weights every n episodes
