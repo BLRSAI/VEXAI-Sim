@@ -1,5 +1,6 @@
 engine_config:
-  timescale: 1 # how fast to run Unity
+  time_scale: 1 # how fast to run Unity
+  fixed_timestep: 0.02 # FixedUpdate timestep in Unity
 
 model_config:
   # ----------model hyperparameters----------
@@ -12,7 +13,7 @@ model_config:
   # ----------trainer settings----------
   update_episodes: 5 # update every n episodes
   max_episode_len: 105 # max episode length in seconds
-  decision_frequency: 5 # n decisions per second
+  decision_period: 5 # The unity agent requests a decision every n frames (see the DecisionRequestor component)
 
   gamma: 0.99 # reward discount
   action_std_init: 0.5 # starting standard deviation for action sampling

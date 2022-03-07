@@ -1,4 +1,5 @@
 from statistics import mean
+import time
 import yaml
 
 from gym_unity.envs import UnityToGymWrapper
@@ -15,12 +16,13 @@ def main():
     with open("properties.yaml", "r") as stream:
         props = yaml.safe_load(stream)
 
-    timescale = props["engine_config"]["timescale"]
+    time_scale = int(props["engine_config"]["time_scale"])
+    fixed_timestep = float(props["engine_config"]["fixed_timestep"])
 
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(side_channels=[channel])
 
-    channel.set_configuration_parameters(time_scale=timescale)
+    channel.set_configuration_parameters(time_scale=time_scale, fixed_timestep=fixed_timestep)
 
     env = UnityToGymWrapper(unity_env)
 
@@ -71,6 +73,7 @@ def main():
         for t in range(1, episode_steps + 1):
             # action = ppo_agent.select_action(state)
             # state, reward, done, _ = env.step(action)
+
             state, reward, done, _ = env.step(env.action_space.sample())
 
             # ppo_agent.buffer.rewards.append(reward)
