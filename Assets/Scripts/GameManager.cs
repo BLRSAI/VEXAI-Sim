@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
         blueAgent = blueAllianceRobot15.GetComponent<Agent>();
         redAgent = redAllianceRobot15.GetComponent<Agent>();
 
+        /*
         // get mogo positions
         mogoPositions = new PosAndRot[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];
         int offsetLength = 0;
@@ -99,6 +100,7 @@ public class GameManager : MonoBehaviour
         offsetLength += redAllianceMogos.Length;
         for (int i = 0; i < neutralMogos.Length; i++)
             mogoPositions[i + offsetLength] = getGameObjectPosAndRot(neutralMogos[i]);
+        */
 
         // get rings
         rings = GameObject.FindGameObjectsWithTag("Ring");
@@ -121,6 +123,7 @@ public class GameManager : MonoBehaviour
         setGameObjectPosAndRot(redAllianceRobot15, robotPositions[2]);
         setGameObjectPosAndRot(redAllianceRobot24, robotPositions[3]);
 
+        /*
         // reset mogo positions
         int offsetLength = 0;
         for (int i = 0; i < blueAllianceMogos.Length; i++)
@@ -131,6 +134,7 @@ public class GameManager : MonoBehaviour
         offsetLength += redAllianceMogos.Length;
         for (int i = 0; i < neutralMogos.Length; i++)
             setGameObjectPosAndRot(neutralMogos[i], mogoPositions[i + offsetLength]);
+        */
 
         // reset ring positions
         for (int i = 0; i < rings.Length; i++)
@@ -150,6 +154,7 @@ public class GameManager : MonoBehaviour
         redRingReward = 0f;
         blueRingReward = 0f;
 
+        /*
         // enable all mogos
         for (int i = 0; i < blueAllianceMogos.Length; i++)
             blueAllianceMogos[i].SetActive(true);
@@ -168,9 +173,10 @@ public class GameManager : MonoBehaviour
             list.Add(i);
         list.Sort((x, y) => 1 - 2 * Random.Range(0, 1));
 
-        int numToDisable = Random.Range(0, 3);
+        int numToDisable = Random.Range(0, 1);
         for (int i = 0; i < numToDisable; i++)
             neutralMogos[list[i]].SetActive(false);
+        */
     }
 
     void Update()
