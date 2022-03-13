@@ -4,7 +4,6 @@ using Unity.MLAgents;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager gameManager;
@@ -14,7 +13,7 @@ public class GameManager : MonoBehaviour
         gameManager = this;
     }
 
-    [SerializeField] private float no_man_zone_width = 0;
+    [SerializeField] private float no_man_zone_width = 0.6f;
 
     private struct PosAndRot
     {
@@ -63,6 +62,8 @@ public class GameManager : MonoBehaviour
     private float redPinningPenalty = 0f;
     private float redRingReward = 0f;
     private float blueRingReward = 0f;
+    private float redMogoReward = 0f;
+    private float blueMogoReward = 0f;
 
 
     private PosAndRot getGameObjectPosAndRot(GameObject go)
@@ -221,8 +222,56 @@ public class GameManager : MonoBehaviour
                 blueAgent.AddReward(-100f);
                 statsRecorder.Add("Blue Agent Position Penalty", -100f);
 
+            
             }
             */
+
+            // Change score and add reward based on mogo locations. 
+
+            /*
+             [SerializeField] private GameObject[] blueAllianceMogos;
+            [SerializeField] private GameObject[] redAllianceMogos;
+            [SerializeField] private GameObject[] neutralMogos;
+            */
+
+            foreach (GameObject mogo in blueAllianceMogos){
+                if (mogo.transform.position.z <= -no_man_zone_width)
+                {
+                    blueAgent.AddReward(20f);
+                    statsRecorder.Add("Blue Agent Mogo Reward", 20f);
+                    print("Alliance blue mogo");
+
+                }
+            }
+
+            foreach (GameObject mogo in redAllianceMogos){
+                if (mogo.transform.position.z >= no_man_zone_width)
+                {
+                    redAgent.AddReward(20f);
+                    statsRecorder.Add("Red Agent Mogo Reward", 20f);
+                    print("Alliance red mogo");
+
+                }
+            }
+
+            foreach (GameObject mogo in neutralMogos){
+                print(mogo.transform.position.z);
+                if (mogo.transform.position.z <= -no_man_zone_width)
+                {
+                    blueAgent.AddReward(20f);
+                    statsRecorder.Add("Blue Agent Mogo Reward", 20f);
+                    print("Neutral blue mogo");
+
+                }
+                else if (mogo.transform.position.z >= no_man_zone_width)
+                {
+                    redAgent.AddReward(20f);
+                    statsRecorder.Add("Red Agent Mogo Reward", 20f);
+                    print("Neutral red mogo");
+                }
+            }
+
+
 
             statsRecorder.Add("Blue Agent Pinning Penalty", bluePinningPenalty);
             statsRecorder.Add("Red Agent Pinning Penalty", redPinningPenalty);
