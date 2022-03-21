@@ -2774,6 +2774,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3308006381840085782, guid: f7d13d6cedb2b9783b949d2967ae6398, type: 3}
   m_PrefabInstance: {fileID: 1058021037}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1121321796 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5074292735497681018, guid: 5abac26db65a7d9f4af3daaaf39865c4, type: 3}
+  m_PrefabInstance: {fileID: 1376496893}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1132592796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4929,10 +4934,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 391699579}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
-      propertyPath: no_man_zone_width
-      value: 0.622
-      objectReference: {fileID: 0}
-    - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: redAllianceRobot15
       value: 
       objectReference: {fileID: 495552427}
@@ -4949,28 +4950,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1395577748}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
-      propertyPath: neutralMogos.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: neutralMogos.Array.data[0]
       value: 
       objectReference: {fileID: 781784079}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: neutralMogos.Array.data[1]
       value: 
-      objectReference: {fileID: 790608823}
+      objectReference: {fileID: 1121321796}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: neutralMogos.Array.data[2]
       value: 
-      objectReference: {fileID: 781784079}
-    - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
-      propertyPath: redAllianceMogos.Array.size
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 790608823}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: blueAllianceMogos.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: redAllianceMogos.Array.data[0]
@@ -4986,6 +4979,10 @@ PrefabInstance:
       objectReference: {fileID: 387822735}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: blueAllianceMogos.Array.data[1]
+      value: 
+      objectReference: {fileID: 44503700}
+    - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
+      propertyPath: blueAllianceMogos.Array.data[2]
       value: 
       objectReference: {fileID: 44503700}
     - target: {fileID: 6105863120855785001, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
