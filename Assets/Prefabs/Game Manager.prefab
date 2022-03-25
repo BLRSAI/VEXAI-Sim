@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f23fd616b47c8746b5164c1f17a09d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  no_man_zone_width: 0.622
   timer: {fileID: 0}
   scoreBlue: {fileID: 0}
   scoreRed: {fileID: 0}
@@ -62,7 +63,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  time: 105
 --- !u!114 &6105863120855784996
 MonoBehaviour:
   m_ObjectHideFlags: 0
