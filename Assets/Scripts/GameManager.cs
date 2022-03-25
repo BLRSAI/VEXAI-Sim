@@ -13,8 +13,6 @@ public class GameManager : MonoBehaviour
         gameManager = this;
     }
 
-    [SerializeField] private float no_man_zone_width = 0.6f;
-
     private struct PosAndRot
     {
         public Vector3 pos;
@@ -52,6 +50,7 @@ public class GameManager : MonoBehaviour
     private PosAndRot[] ringPositions;
 
     private const float initTime = 120f - 15f;
+    private const float no_man_zone_width = 0.6f;
 
     public float time { get; set; } = initTime;
     private int blueAllianceScore;
@@ -80,6 +79,48 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         // get robot positions
+        GetRobotPos();
+
+        // get mogo positions
+        GetMogoPos();
+
+        // get rings
+        rings = GameObject.FindGameObjectsWithTag("Ring");
+
+        // get ring positions
+        GetRingPos();
+
+        ResetField();
+    }
+
+    private void GetRingPos()
+    {
+        ringPositions = new PosAndRot[rings.Length];
+        for (int i = 0; i < rings.Length; i++)
+            ringPositions[i] = getGameObjectPosAndRot(rings[i]);
+    }
+
+    private void GetMogoPos()
+    {
+        // mogoPositions = new PosAndRot[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];
+        // int offsetLength = 0;
+        // for (int i = 0; i < blueAllianceMogos.Length; i++)
+        //     mogoPositions[i] = getGameObjectPosAndRot(blueAllianceMogos[i]);
+        // offsetLength += blueAllianceMogos.Length;
+        // for (int i = 0; i < redAllianceMogos.Length; i++)
+        //     mogoPositions[i + offsetLength] = getGameObjectPosAndRot(redAllianceMogos[i]);
+        // offsetLength += redAllianceMogos.Length;
+        // for (int i = 0; i < neutralMogos.Length; i++)
+        //     mogoPositions[i + offsetLength] = getGameObjectPosAndRot(neutralMogos[i]);
+        GameObject [] mogos = GameObject.FindGameObjectsWithTag("MoGo");
+        mogoPositions = new PosAndRot[mogos.Length];
+        for (int i = 0; i < mogos.Length; i++) {
+            mogoPositions[i] = getGameObjectPosAndRot(mogos[i]);
+        }
+    }
+
+    private void GetRobotPos()
+    {
         robotPositions = new PosAndRot[4];
         robotPositions[0] = getGameObjectPosAndRot(blueAllianceRobot15);
         robotPositions[1] = getGameObjectPosAndRot(blueAllianceRobot24);
@@ -88,30 +129,6 @@ public class GameManager : MonoBehaviour
 
         blueAgent = blueAllianceRobot15.GetComponent<Agent>();
         redAgent = redAllianceRobot15.GetComponent<Agent>();
-
-        /*
-        // get mogo positions
-        mogoPositions = new PosAndRot[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];
-        int offsetLength = 0;
-        for (int i = 0; i < blueAllianceMogos.Length; i++)
-            mogoPositions[i] = getGameObjectPosAndRot(blueAllianceMogos[i]);
-        offsetLength += blueAllianceMogos.Length;
-        for (int i = 0; i < redAllianceMogos.Length; i++)
-            mogoPositions[i + offsetLength] = getGameObjectPosAndRot(redAllianceMogos[i]);
-        offsetLength += redAllianceMogos.Length;
-        for (int i = 0; i < neutralMogos.Length; i++)
-            mogoPositions[i + offsetLength] = getGameObjectPosAndRot(neutralMogos[i]);
-        */
-
-        // get rings
-        rings = GameObject.FindGameObjectsWithTag("Ring");
-
-        // get ring positions
-        ringPositions = new PosAndRot[rings.Length];
-        for (int i = 0; i < rings.Length; i++)
-            ringPositions[i] = getGameObjectPosAndRot(rings[i]);
-
-        ResetField();
     }
 
     void ResetField()
@@ -124,7 +141,7 @@ public class GameManager : MonoBehaviour
         setGameObjectPosAndRot(redAllianceRobot15, robotPositions[2]);
         setGameObjectPosAndRot(redAllianceRobot24, robotPositions[3]);
 
-        /*
+        
         // reset mogo positions
         int offsetLength = 0;
         for (int i = 0; i < blueAllianceMogos.Length; i++)
@@ -135,7 +152,7 @@ public class GameManager : MonoBehaviour
         offsetLength += redAllianceMogos.Length;
         for (int i = 0; i < neutralMogos.Length; i++)
             setGameObjectPosAndRot(neutralMogos[i], mogoPositions[i + offsetLength]);
-        */
+        
 
         // reset ring positions
         for (int i = 0; i < rings.Length; i++)
@@ -154,8 +171,9 @@ public class GameManager : MonoBehaviour
         redPinningPenalty = 0f;
         redRingReward = 0f;
         blueRingReward = 0f;
+        
 
-        /*
+        
         // enable all mogos
         for (int i = 0; i < blueAllianceMogos.Length; i++)
             blueAllianceMogos[i].SetActive(true);
@@ -177,7 +195,7 @@ public class GameManager : MonoBehaviour
         int numToDisable = Random.Range(0, 1);
         for (int i = 0; i < numToDisable; i++)
             neutralMogos[list[i]].SetActive(false);
-        */
+        
     }
 
     void Update()
@@ -194,7 +212,7 @@ public class GameManager : MonoBehaviour
         if (time <= 0)
         {
             var statsRecorder = Academy.Instance.StatsRecorder;
-            /*
+            
             foreach (PosAndRot mogo in mogoPositions)
             {
                 if (mogo.pos.z < -no_man_zone_width)
@@ -208,9 +226,9 @@ public class GameManager : MonoBehaviour
                     statsRecorder.Add("Red Agent Mogo Reward", 20f);
                 }
             }
-            */
+            
 
-            /*
+        
             //End of game rules - cannot be on other teams side to end game
             if (redAgent.transform.position.z < no_man_zone_width)
             {
@@ -224,15 +242,9 @@ public class GameManager : MonoBehaviour
 
             
             }
-            */
+            
 
             // Change score and add reward based on mogo locations. 
-
-            /*
-             [SerializeField] private GameObject[] blueAllianceMogos;
-            [SerializeField] private GameObject[] redAllianceMogos;
-            [SerializeField] private GameObject[] neutralMogos;
-            */
 
             foreach (GameObject mogo in blueAllianceMogos){
                 if (mogo.transform.position.z <= -no_man_zone_width)
@@ -294,7 +306,7 @@ public class GameManager : MonoBehaviour
         {
             timeTogether = 0;
         }
-        if (timeTogether >= 10f)
+        if (timeTogether >= 5f)
         {
             blueAgent.AddReward(-100f);
             redAgent.AddReward(-100f);
