@@ -199,7 +199,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //Timer Control
         time -= Time.deltaTime;
