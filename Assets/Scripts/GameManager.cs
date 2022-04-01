@@ -214,21 +214,27 @@ public class GameManager : MonoBehaviour
         {
             var statsRecorder = Academy.Instance.StatsRecorder;
 
-            foreach (PosAndRot mogo in mogoPositions)
+            Vector3[] allMogoPos = new Vector3[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];
+            for (int i = 0; i < blueAllianceMogos.Length; i++)
+                allMogoPos[i] = blueAllianceMogos[i].transform.position;
+            for (int i = 0; i < redAllianceMogos.Length; i++)
+                allMogoPos[i + blueAllianceMogos.Length] = redAllianceMogos[i].transform.position;
+            for (int i = 0; i < neutralMogos.Length; i++)
+                allMogoPos[i + blueAllianceMogos.Length + redAllianceMogos.Length] = neutralMogos[i].transform.position;
+
+            foreach (Vector3 mogoPos in allMogoPos)
             {
-                if (mogo.pos.z < -no_man_zone_width)
+                if (mogoPos.z < -no_man_zone_width)
                 {
                     blueAgent.AddReward(20f);
                     statsRecorder.Add("Blue Agent Mogo Reward", 20f);
                 }
-                else if (mogo.pos.z > no_man_zone_width)
+                else if (mogoPos.z > no_man_zone_width)
                 {
                     redAgent.AddReward(20f);
                     statsRecorder.Add("Red Agent Mogo Reward", 20f);
                 }
             }
-
-
 
             //End of game rules - cannot be on other teams side to end game
             if (redAgent.transform.position.z < no_man_zone_width)
@@ -240,53 +246,7 @@ public class GameManager : MonoBehaviour
             {
                 blueAgent.AddReward(-100f);
                 statsRecorder.Add("Blue Agent Position Penalty", -100f);
-
-
             }
-
-
-            // Change score and add reward based on mogo locations. 
-
-            foreach (GameObject mogo in blueAllianceMogos)
-            {
-                if (mogo.transform.position.z <= -no_man_zone_width)
-                {
-                    blueAgent.AddReward(20f);
-                    statsRecorder.Add("Blue Agent Mogo Reward", 20f);
-                    print("Alliance blue mogo");
-
-                }
-            }
-
-            foreach (GameObject mogo in redAllianceMogos)
-            {
-                if (mogo.transform.position.z >= no_man_zone_width)
-                {
-                    redAgent.AddReward(20f);
-                    statsRecorder.Add("Red Agent Mogo Reward", 20f);
-                    print("Alliance red mogo");
-
-                }
-            }
-
-            foreach (GameObject mogo in neutralMogos)
-            {
-                print(mogo.transform.position.z);
-                if (mogo.transform.position.z <= -no_man_zone_width)
-                {
-                    blueAgent.AddReward(20f);
-                    statsRecorder.Add("Blue Agent Mogo Reward", 20f);
-                    print("Neutral blue mogo");
-
-                }
-                else if (mogo.transform.position.z >= no_man_zone_width)
-                {
-                    redAgent.AddReward(20f);
-                    statsRecorder.Add("Red Agent Mogo Reward", 20f);
-                    print("Neutral red mogo");
-                }
-            }
-
 
 
             statsRecorder.Add("Blue Agent Pinning Penalty", bluePinningPenalty);
@@ -302,7 +262,7 @@ public class GameManager : MonoBehaviour
         }
 
         //Pinning rule
-        if (Vector3.Distance(robotPositions[0].pos, robotPositions[1].pos) < 0.6f)
+        if (Vector3.Distance(blueAgent.transform.position, redAgent.transform.position) < 0.5f)
         {
             timeTogether += Time.deltaTime;
         }
@@ -310,6 +270,7 @@ public class GameManager : MonoBehaviour
         {
             timeTogether = 0;
         }
+
         if (timeTogether >= 5f)
         {
             blueAgent.AddReward(-100f);
@@ -317,6 +278,11 @@ public class GameManager : MonoBehaviour
 
             bluePinningPenalty -= 100f;
             redPinningPenalty -= 100f;
+
+            blueAgent.EndEpisode();
+            redAgent.EndEpisode();
+
+            ResetField();
         }
     }
 
