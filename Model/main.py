@@ -22,7 +22,8 @@ def main():
     channel = EngineConfigurationChannel()
     unity_env = UnityEnvironment(side_channels=[channel])
 
-    channel.set_configuration_parameters(time_scale=time_scale, fixed_timestep=fixed_timestep)
+    # channel.set_configuration_parameters(time_scale=time_scale, fixed_timestep=fixed_timestep)
+    channel.set_configuration_parameters(time_scale=time_scale)
 
     env = UnityToGymWrapper(unity_env)
 
