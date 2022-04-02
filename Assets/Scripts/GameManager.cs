@@ -228,11 +228,13 @@ public class GameManager : MonoBehaviour
                 {
                     blueAgent.AddReward(20f);
                     statsRecorder.Add("Blue Agent Mogo Reward", 20f);
+                    Debug.Log("Blue mogo reward: 20f");
                 }
-                else if (mogoPos.z > no_man_zone_width)
+                if (mogoPos.z > no_man_zone_width)
                 {
                     redAgent.AddReward(20f);
                     statsRecorder.Add("Red Agent Mogo Reward", 20f);
+                    Debug.Log("Red mogo reward: 20f");
                 }
             }
 
@@ -241,11 +243,13 @@ public class GameManager : MonoBehaviour
             {
                 redAgent.AddReward(-100f);
                 statsRecorder.Add("Red Agent Position Penalty", -100f);
+                Debug.Log("Red position penalty: -100f");
             }
-            else if (blueAgent.transform.position.z > -no_man_zone_width)
+            if (blueAgent.transform.position.z > -no_man_zone_width)
             {
                 blueAgent.AddReward(-100f);
                 statsRecorder.Add("Blue Agent Position Penalty", -100f);
+                Debug.Log("Blue position penalty: -100f");
             }
 
 
@@ -279,6 +283,8 @@ public class GameManager : MonoBehaviour
             bluePinningPenalty -= 100f;
             redPinningPenalty -= 100f;
 
+            Debug.Log("Pinning Penalty: -100f");
+
             blueAgent.EndEpisode();
             redAgent.EndEpisode();
 
@@ -296,6 +302,8 @@ public class GameManager : MonoBehaviour
                 blueAgent.AddReward(3f);
                 redAgent.AddReward(-3f);
 
+                Debug.Log("Blue Agent Ring Reward: 3f");
+
                 blueRingReward += 3f;
             }
             return;
@@ -307,6 +315,8 @@ public class GameManager : MonoBehaviour
             {
                 redAgent.AddReward(3f);
                 blueAgent.AddReward(-3f);
+
+                Debug.Log("Red Agent Ring Reward: 3f");
 
                 redRingReward += 3f;
             }
