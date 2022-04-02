@@ -1363,14 +1363,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 0}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Constraints
       value: 116
@@ -1382,6 +1374,10 @@ PrefabInstance:
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Model
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
@@ -1447,6 +1443,22 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7d8c37da736776163814a20c643bf08c, type: 2}
+    - target: {fileID: 8152154535831049691, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_Size.x
+      value: 0.11247451
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535831049691, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_Size.z
+      value: 0.46195495
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535831049691, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_Center.x
+      value: 0.4879055
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535831049691, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_Center.z
+      value: -0.0029488886
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
 --- !u!1 &495552427 stripped
@@ -1683,7 +1695,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 100
-  field of view: 90
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -5100,5 +5112,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7b829bf9fb9fa9ac08055610231d4706, type: 2}
+    - target: {fileID: 8152154535831049691, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_Size.x
+      value: 0.11247451
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535831049691, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_Size.z
+      value: 0.46195495
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535831049691, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_Center.x
+      value: 0.4879055
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535831049691, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_Center.z
+      value: -0.0029488886
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
