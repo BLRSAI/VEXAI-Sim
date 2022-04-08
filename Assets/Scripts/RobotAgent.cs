@@ -42,14 +42,31 @@ public class RobotAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(GameManager.gameManager.time);
+        var obs = new float[48];
+        int obs_pos = 0;
+        //normalize time
+        float time = GameManager.gameManager.time;
+        time = time / GameManager.maxTime;
+        sensor.AddObservation(time);
+        obs[obs_pos++] = time;
 
+        //Gets 4 observations, all 4 positions for the robots
+        //blueAllianceRobot15.transform.position,blueAllianceRobot24.transform.position, redAllianceRobot15.transform.position, redAllianceRobot24.transform.position
         var observations = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
-        var observationsArray = new Vector3[] { observations.Item1, observations.Item2, observations.Item3, observations.Item4, observations.Item5 };
+        var observationsArray = new Vector3[] { observations.Item1, observations.Item2, observations.Item3, observations.Item4};
 
         for (int i = 0; i < observationsArray.Length; i++)
         {
-            sensor.AddObservation(observationsArray[i]);
+            //normalize all observations
+            float x = observationsArray[i].x;
+            x = x / GameManager.maxPosDist;
+            float z = observationsArray[i].z;
+            z = z / GameManager.maxPosDist;
+
+            sensor.AddObservation(x);
+            obs[obs_pos++] = observationsArray[i].x;
+            sensor.AddObservation(z);
+            obs[obs_pos++] = observationsArray[i].z;
         }
 
         CullRings();
@@ -59,15 +76,48 @@ public class RobotAgent : Agent
 
         for (int i = 0; i < numRings; i++)
         {
-            sensor.AddObservation(combinedPositionTransform(nearestRings[i]));
+            //sensor.AddObservation(combinedPositionTransform(nearestRings[i])); 
+            // if the robot is blue add the x and z nearest ring position to the sensor
+            if (this.gameObject.name == "15Robot Blue")
+            {
+                //normalize ring pos
+                var ringPos = nearestRings[i];
+                ringPos.x = ringPos.x / GameManager.maxRingXDist;
+                ringPos.z = ringPos.z / GameManager.maxRingZDist;
+                //add observation
+                sensor.AddObservation(ringPos.x);
+                obs[obs_pos++] = ringPos.x;
+                sensor.AddObservation(ringPos.z);
+                obs[obs_pos++] = ringPos.z;
+            } else {
+                // if the robot is red add the x and z nearest ring position to the sensor
+                //normalize ring pos
+                var ringPos = nearestRings[i];
+                ringPos.x = ringPos.x / GameManager.maxRingXDist;
+                ringPos.z = ringPos.z / GameManager.maxRingZDist;
+                //add observation
+                sensor.AddObservation(-ringPos.x);
+                obs[obs_pos++] = ringPos.x;
+                sensor.AddObservation(-ringPos.z);
+                obs[obs_pos++] = ringPos.z;
+            }
         }
-
+        //print contents of obs
+        string obs_str = "";
+        for (int i = 0; i < 26; i++) {
+            obs_str += obs[i] + ", ";
+        }
+        Debug.Log(obs_str);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        /* no need for math to be done, actions are alwasy between -1 and 1
         speed = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[0]));
         rotation = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[1]));
+        */
+        speed = actions.ContinuousActions[0];
+        rotation = actions.ContinuousActions[1];
     }
 
     void FixedUpdate()
@@ -145,13 +195,21 @@ public class RobotAgent : Agent
     void SortRings()
     {
         var nearestRingsTemp = new List<Vector3>();
+        string ring_str = "";
         for (int i = 0; i < GameManager.gameManager.rings.Length; i++)
         {
             if (!ringsCulled[i])
             {
                 nearestRingsTemp.Add(GameManager.gameManager.rings[i].transform.position);
             }
+
+           // if (i < 5) {
+                ring_str += GameManager.gameManager.rings[i].transform.position.x + ", ";
+                ring_str += GameManager.gameManager.rings[i].transform.position.z + "| ";
+            //}
+
         }
+        Debug.Log(ring_str);
 
         nearestRingsTemp.Sort((x, y) => Vector3.Distance(x, this.transform.position).CompareTo(Vector3.Distance(y, this.transform.position)));
 
@@ -167,5 +225,6 @@ public class RobotAgent : Agent
                 nearestRings[i] = Vector3.zero;
             }
         }
+
     }
 }
