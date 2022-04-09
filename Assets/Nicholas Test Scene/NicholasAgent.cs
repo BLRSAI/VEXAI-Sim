@@ -17,6 +17,9 @@ public class NicholasAgent : Agent
   [SerializeField] private GameObject[] goals; //array of all mogo game objects
   [SerializeField] private bool randomizeGoals = false; //whether or not to randomize enablization of goals
 
+  [Header("Other Robot Settings")]
+  [SerializeField] private GameObject[] otherRobots; //array of all other robots
+
   [Header("AI Settings")]
   [SerializeField] private int numRingsToObserve = 10; //the number of rings whose x and z position to obersve
 
@@ -52,11 +55,21 @@ public class NicholasAgent : Agent
     time = 0f;
     
     //Reset reward
+    totalReward = 0;
 
+    //Reset this and all other robots
+    foreach (GameObject robot in otherRobots) {
+      
+    }
   }
 
   public override void Heuristic(in ActionBuffers actionsOut)
   {
-    
+    //get use input to determine the forward speed and rotation speed
+    float forwardSpeed = Input.GetAxis("Vertical");
+    float rotationSpeed = Input.GetAxis("Horizontal");
+    //move the robot
+    transform.Translate(Vector3.forward * forwardSpeed * robotSpeed * Time.deltaTime);
+    transform.Rotate(Vector3.up * rotationSpeed * rotationSpeed * Time.deltaTime);
   }
 }
