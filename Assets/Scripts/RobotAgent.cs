@@ -8,6 +8,8 @@ using Unity.Mathematics;
 
 public class RobotAgent : Agent
 {
+    [Header("Observation Settings")]
+    [SerializeField] private Transform localTransform;
 
     [Header("Robot Movement Settings")]
     [SerializeField] private float robotSpeed = 10f;
@@ -44,22 +46,26 @@ public class RobotAgent : Agent
     {
         sensor.AddObservation(GameManager.gameManager.time);
 
+        Vector3 pointingVectorLocal = localTransform.InverseTransformVector(transform.forward);
+
         var observations = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
-        var observationsArray = new Vector3[] { observations.Item1, observations.Item2, observations.Item3, observations.Item4, observations.Item5 };
+        var observationsArray = new Vector3[] { observations.Item1, observations.Item2, observations.Item3, observations.Item4 };
 
         for (int i = 0; i < observationsArray.Length; i++)
         {
-            sensor.AddObservation(observationsArray[i]);
+            Vector3 observationLocal = localTransform.InverseTransformPoint(observationsArray[i]);
+            sensor.AddObservation(observationLocal.x);
+            sensor.AddObservation(observationLocal.z);
         }
 
         CullRings();
         SortRings();
 
-        var combinedPositionTransform = GameManager.gameManager.CombinedPositionTransform(gameObject);
-
         for (int i = 0; i < numRings; i++)
         {
-            sensor.AddObservation(combinedPositionTransform(nearestRings[i]));
+            Vector3 ringLocal = localTransform.InverseTransformPoint(nearestRings[i]);
+            sensor.AddObservation(ringLocal.x);
+            sensor.AddObservation(ringLocal.z);
         }
 
     }

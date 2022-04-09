@@ -326,7 +326,7 @@ public class GameManager : MonoBehaviour
         throw new System.ArgumentException("Invalid robot");
     }
 
-    public (Vector3, Vector3, Vector3, Vector3, Vector3) GetObservationsFromAlliancePerspective(GameObject robot)
+    public (Vector3, Vector3, Vector3, Vector3) GetObservationsFromAlliancePerspective(GameObject robot)
     {
         GameObject allianceSecondary;
         GameObject opponentPrimary;
@@ -361,42 +361,11 @@ public class GameManager : MonoBehaviour
             throw new System.ArgumentException("Invalid robot");
         }
 
-        var allianceTransform = VectorAllianceTransform(robot);
-        var combinedTransform = CombinedPositionTransform(robot);
-
         return (
-            allianceTransform(robot.transform.forward),
-            combinedTransform(robot.transform.position),
-            combinedTransform(allianceSecondary.transform.position),
-            combinedTransform(opponentPrimary.transform.position),
-            combinedTransform(opponentSecondary.transform.position)
+            robot.transform.position,
+            allianceSecondary.transform.position,
+            opponentPrimary.transform.position,
+            opponentSecondary.transform.position
         );
-    }
-
-    public System.Func<Vector3, Vector3> VectorAllianceTransform(GameObject robot)
-    {
-        if (robot != blueAllianceRobot15 && robot != blueAllianceRobot24 && robot != redAllianceRobot15 && robot != redAllianceRobot24)
-        {
-            throw new System.ArgumentException("Invalid robot");
-        }
-
-        // Quaternion rotation = Quaternion.Euler(0, 0, 0);
-
-        // if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
-        // {
-        //     rotation = Quaternion.Euler(0, 180, 0);
-        // }
-
-        // return (Vector3 input) => rotation * input;
-
-        return (Vector3 input) => input;
-    }
-
-    public System.Func<Vector3, Vector3> CombinedPositionTransform(GameObject robot)
-    {
-        var allianceTransform = VectorAllianceTransform(robot);
-        System.Func<Vector3, Vector3> scalePositionVector = (Vector3 input) => input / halfFieldSize;
-
-        return (Vector3 input) => allianceTransform(scalePositionVector(input));
     }
 }
