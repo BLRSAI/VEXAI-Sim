@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1094902339652025282, guid: 386a621c4eba3174cbfc3f5486fd32b8, type: 3}
       propertyPath: m_Name
-      value: 15Robot Blue
+      value: 15Robot Blue Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1094902339652025286, guid: 386a621c4eba3174cbfc3f5486fd32b8, type: 3}
       propertyPath: m_RootOrder
@@ -123,4 +123,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   robotSpeed: 10
+  rotationSpeed: 10
   goals: []
+  randomizeGoals: 0
+  numRingsToObserve: 10
