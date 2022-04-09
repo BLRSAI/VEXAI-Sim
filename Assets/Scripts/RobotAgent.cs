@@ -44,13 +44,9 @@ public class RobotAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        var obs = new float[48];
-        int obs_pos = 0;
-        //normalize time
         float time = GameManager.gameManager.time;
         time = time / GameManager.maxTime;
         sensor.AddObservation(time);
-        obs[obs_pos++] = time;
 
         Vector3 pointingVectorLocal = localTransform.InverseTransformVector(transform.forward);
 
@@ -73,13 +69,17 @@ public class RobotAgent : Agent
             sensor.AddObservation(ringLocal.x);
             sensor.AddObservation(ringLocal.z);
         }
-        //print contents of obs
-        string obs_str = "";
-        for (int i = 0; i < 26; i++)
-        {
-            obs_str += obs[i] + ", ";
-        }
-        Debug.Log(obs_str);
+
+        // print all observations
+        var obs = this.GetObservations();
+        // Debug.Log(obs.Count);
+        // string obsStr = "";
+        // for (int i = 0; i < obs.Count; i++)
+        // {
+        //     obsStr += obs[i].ToString() + "|";
+        // }
+
+        // Debug.Log(obsStr);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -167,21 +167,13 @@ public class RobotAgent : Agent
     void SortRings()
     {
         var nearestRingsTemp = new List<Vector3>();
-        string ring_str = "";
         for (int i = 0; i < GameManager.gameManager.rings.Length; i++)
         {
             if (!ringsCulled[i])
             {
                 nearestRingsTemp.Add(GameManager.gameManager.rings[i].transform.position);
             }
-
-            // if (i < 5) {
-            ring_str += GameManager.gameManager.rings[i].transform.position.x + ", ";
-            ring_str += GameManager.gameManager.rings[i].transform.position.z + "| ";
-            //}
-
         }
-        Debug.Log(ring_str);
 
         nearestRingsTemp.Sort((x, y) => Vector3.Distance(x, this.transform.position).CompareTo(Vector3.Distance(y, this.transform.position)));
 
