@@ -44,7 +44,13 @@ public class RobotAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(GameManager.gameManager.time);
+        var obs = new float[48];
+        int obs_pos = 0;
+        //normalize time
+        float time = GameManager.gameManager.time;
+        time = time / GameManager.maxTime;
+        sensor.AddObservation(time);
+        obs[obs_pos++] = time;
 
         Vector3 pointingVectorLocal = localTransform.InverseTransformVector(transform.forward);
 
@@ -67,13 +73,23 @@ public class RobotAgent : Agent
             sensor.AddObservation(ringLocal.x);
             sensor.AddObservation(ringLocal.z);
         }
-
+        //print contents of obs
+        string obs_str = "";
+        for (int i = 0; i < 26; i++)
+        {
+            obs_str += obs[i] + ", ";
+        }
+        Debug.Log(obs_str);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        /* no need for math to be done, actions are alwasy between -1 and 1
         speed = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[0]));
         rotation = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[1]));
+        */
+        speed = actions.ContinuousActions[0];
+        rotation = actions.ContinuousActions[1];
     }
 
     void FixedUpdate()
@@ -151,13 +167,21 @@ public class RobotAgent : Agent
     void SortRings()
     {
         var nearestRingsTemp = new List<Vector3>();
+        string ring_str = "";
         for (int i = 0; i < GameManager.gameManager.rings.Length; i++)
         {
             if (!ringsCulled[i])
             {
                 nearestRingsTemp.Add(GameManager.gameManager.rings[i].transform.position);
             }
+
+            // if (i < 5) {
+            ring_str += GameManager.gameManager.rings[i].transform.position.x + ", ";
+            ring_str += GameManager.gameManager.rings[i].transform.position.z + "| ";
+            //}
+
         }
+        Debug.Log(ring_str);
 
         nearestRingsTemp.Sort((x, y) => Vector3.Distance(x, this.transform.position).CompareTo(Vector3.Distance(y, this.transform.position)));
 
@@ -173,5 +197,6 @@ public class RobotAgent : Agent
                 nearestRings[i] = Vector3.zero;
             }
         }
+
     }
 }

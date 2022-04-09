@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour
 
     public const float fieldSize = 12f * 0.3048f;
     public const float halfFieldSize = fieldSize / 2f;
+    public const float maxTime = 120f - 15f;
+    public const float maxRingXDist = 3.404f;
+    public const float maxRingZDist = 3.404f;
+    public const float maxPosDist = 1.64f;
 
     [SerializeField] private Text timer;
     [SerializeField] private Text scoreBlue;
@@ -93,75 +97,20 @@ public class GameManager : MonoBehaviour
         ResetField();
     }
 
-    private void GetRingPos()
-    {
-        ringPositions = new PosAndRot[rings.Length];
-        for (int i = 0; i < rings.Length; i++)
-            ringPositions[i] = getGameObjectPosAndRot(rings[i]);
-    }
-
-    private void GetMogoPos()
-    {
-        mogoPositions = new PosAndRot[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];
-        int offsetLength = 0;
-        for (int i = 0; i < blueAllianceMogos.Length; i++)
-            mogoPositions[i] = getGameObjectPosAndRot(blueAllianceMogos[i]);
-        offsetLength += blueAllianceMogos.Length;
-        for (int i = 0; i < redAllianceMogos.Length; i++)
-            mogoPositions[i + offsetLength] = getGameObjectPosAndRot(redAllianceMogos[i]);
-        offsetLength += redAllianceMogos.Length;
-        for (int i = 0; i < neutralMogos.Length; i++)
-            mogoPositions[i + offsetLength] = getGameObjectPosAndRot(neutralMogos[i]);
-        // GameObject[] mogos = GameObject.FindGameObjectsWithTag("MoGo");
-        // mogoPositions = new PosAndRot[mogos.Length];
-        // for (int i = 0; i < mogos.Length; i++)
-        // {
-        //     mogoPositions[i] = getGameObjectPosAndRot(mogos[i]);
-        // }
-    }
-
-    private void GetRobotPos()
-    {
-        robotPositions = new PosAndRot[4];
-        robotPositions[0] = getGameObjectPosAndRot(blueAllianceRobot15);
-        robotPositions[1] = getGameObjectPosAndRot(blueAllianceRobot24);
-        robotPositions[2] = getGameObjectPosAndRot(redAllianceRobot15);
-        robotPositions[3] = getGameObjectPosAndRot(redAllianceRobot24);
-
-        blueAgent = blueAllianceRobot15.GetComponent<Agent>();
-        redAgent = redAllianceRobot15.GetComponent<Agent>();
-    }
-
     void ResetField()
     {
         time = initTime;
 
         // reset robot positions
-        setGameObjectPosAndRot(blueAllianceRobot15, robotPositions[0]);
-        setGameObjectPosAndRot(blueAllianceRobot24, robotPositions[1]);
-        setGameObjectPosAndRot(redAllianceRobot15, robotPositions[2]);
-        setGameObjectPosAndRot(redAllianceRobot24, robotPositions[3]);
+        ResetRobotPos();
 
 
         // reset mogo positions
-        int offsetLength = 0;
-        for (int i = 0; i < blueAllianceMogos.Length; i++)
-            setGameObjectPosAndRot(blueAllianceMogos[i], mogoPositions[i]);
-        offsetLength += blueAllianceMogos.Length;
-        for (int i = 0; i < redAllianceMogos.Length; i++)
-            setGameObjectPosAndRot(redAllianceMogos[i], mogoPositions[i + offsetLength]);
-        offsetLength += redAllianceMogos.Length;
-        for (int i = 0; i < neutralMogos.Length; i++)
-            setGameObjectPosAndRot(neutralMogos[i], mogoPositions[i + offsetLength]);
+        ResetMogoPos();
 
 
         // reset ring positions
-        for (int i = 0; i < rings.Length; i++)
-        {
-            setGameObjectPosAndRot(rings[i], ringPositions[i]);
-            rings[i].SetActive(true);
-            rings[i].GetComponent<Rigidbody>().ResetInertiaTensor();
-        }
+        ResetRingPos();
 
         // reset score
         blueAllianceScore = 0;
@@ -176,26 +125,7 @@ public class GameManager : MonoBehaviour
 
 
         // enable all mogos
-        for (int i = 0; i < blueAllianceMogos.Length; i++)
-            blueAllianceMogos[i].SetActive(true);
-        for (int i = 0; i < redAllianceMogos.Length; i++)
-            redAllianceMogos[i].SetActive(true);
-        for (int i = 0; i < neutralMogos.Length; i++)
-            neutralMogos[i].SetActive(true);
-
-        int blueAllianceMogoIndex = Random.Range(0, blueAllianceMogos.Length);
-        int redAllianceMogoIndex = Random.Range(0, redAllianceMogos.Length);
-        blueAllianceMogos[blueAllianceMogoIndex].SetActive(false);
-        redAllianceMogos[redAllianceMogoIndex].SetActive(false);
-
-        List<int> list = new List<int>();
-        for (int i = 0; i < neutralMogos.Length; i++)
-            list.Add(i);
-        list.Sort((x, y) => 1 - 2 * Random.Range(0, 1));
-
-        int numToDisable = Random.Range(0, 1);
-        for (int i = 0; i < numToDisable; i++)
-            neutralMogos[list[i]].SetActive(false);
+        EnableMogos();
 
     }
 
@@ -222,34 +152,37 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < neutralMogos.Length; i++)
                 allMogoPos[i + blueAllianceMogos.Length + redAllianceMogos.Length] = neutralMogos[i].transform.position;
 
+
+            /* Disable non-ring rewards
+            //give mogo reward
             foreach (Vector3 mogoPos in allMogoPos)
             {
                 if (mogoPos.z < -no_man_zone_width)
                 {
-                    blueAgent.AddReward(20f);
-                    statsRecorder.Add("Blue Agent Mogo Reward", 20f);
-                    Debug.Log("Blue mogo reward: 20f");
+                    blueAgent.AddReward(.2f);
+                    statsRecorder.Add("Blue Agent Mogo Reward", .2f);
+                    Debug.Log("Blue mogo reward: .2f");
                 }
                 if (mogoPos.z > no_man_zone_width)
                 {
-                    redAgent.AddReward(20f);
-                    statsRecorder.Add("Red Agent Mogo Reward", 20f);
-                    Debug.Log("Red mogo reward: 20f");
+                    redAgent.AddReward(.2f);
+                    statsRecorder.Add("Red Agent Mogo Reward", .2f);
+                    Debug.Log("Red mogo reward: .2f");
                 }
             }
 
             //End of game rules - cannot be on other teams side to end game
             if (redAgent.transform.position.z < no_man_zone_width)
             {
-                redAgent.AddReward(-100f);
-                statsRecorder.Add("Red Agent Position Penalty", -100f);
-                Debug.Log("Red position penalty: -100f");
+                redAgent.AddReward(-1f);
+                statsRecorder.Add("Red Agent Position Penalty", -1f);
+                Debug.Log("Red position penalty: -1f");
             }
             if (blueAgent.transform.position.z > -no_man_zone_width)
             {
-                blueAgent.AddReward(-100f);
-                statsRecorder.Add("Blue Agent Position Penalty", -100f);
-                Debug.Log("Blue position penalty: -100f");
+                blueAgent.AddReward(-1f);
+                statsRecorder.Add("Blue Agent Position Penalty", -1f);
+                Debug.Log("Blue position penalty: -1f");
             }
 
 
@@ -258,6 +191,7 @@ public class GameManager : MonoBehaviour
 
             statsRecorder.Add("Blue Agent Ring Reward", blueRingReward);
             statsRecorder.Add("Red Agent Ring Reward", redRingReward);
+            */
 
             blueAgent.EndEpisode();
             redAgent.EndEpisode();
@@ -275,21 +209,23 @@ public class GameManager : MonoBehaviour
             timeTogether = 0;
         }
 
+        /* Disable non-ring rewards
         if (timeTogether >= 5f)
         {
-            blueAgent.AddReward(-100f);
-            redAgent.AddReward(-100f);
+            blueAgent.AddReward(-1f);
+            redAgent.AddReward(-1f);
 
-            bluePinningPenalty -= 100f;
-            redPinningPenalty -= 100f;
+            bluePinningPenalty -= 1f;
+            redPinningPenalty -= 1f;
 
-            Debug.Log("Pinning Penalty: -100f");
+            Debug.Log("Pinning Penalty: -1f");
 
             blueAgent.EndEpisode();
             redAgent.EndEpisode();
 
             ResetField();
         }
+        */
     }
 
     public void CollectRing(GameObject robot)
@@ -299,12 +235,12 @@ public class GameManager : MonoBehaviour
             blueAllianceScore++;
             if (blueAllianceScore <= 9)
             {
-                blueAgent.AddReward(3f);
-                redAgent.AddReward(-3f);
+                blueAgent.AddReward(.03f);
+                redAgent.AddReward(-.03f);
 
-                Debug.Log("Blue Agent Ring Reward: 3f");
+                Debug.Log("Blue Agent Ring Reward: .03f");
 
-                blueRingReward += 3f;
+                blueRingReward += .03f;
             }
             return;
         }
@@ -313,12 +249,12 @@ public class GameManager : MonoBehaviour
             redAllianceScore++;
             if (redAllianceScore <= 9)
             {
-                redAgent.AddReward(3f);
-                blueAgent.AddReward(-3f);
+                redAgent.AddReward(.03f);
+                blueAgent.AddReward(-.03f);
 
-                Debug.Log("Red Agent Ring Reward: 3f");
+                Debug.Log("Red Agent Ring Reward: .03f");
 
-                redRingReward += 3f;
+                redRingReward += .03f;
             }
             return;
         }
@@ -367,5 +303,113 @@ public class GameManager : MonoBehaviour
             opponentPrimary.transform.position,
             opponentSecondary.transform.position
         );
+    }
+
+    public System.Func<Vector3, Vector3> VectorAllianceTransform(GameObject robot)
+    {
+        if (robot != blueAllianceRobot15 && robot != blueAllianceRobot24 && robot != redAllianceRobot15 && robot != redAllianceRobot24)
+        {
+            throw new System.ArgumentException("Invalid robot");
+        }
+
+        return (Vector3 input) => input;
+    }
+
+    public System.Func<Vector3, Vector3> CombinedPositionTransform(GameObject robot)
+    {
+        var allianceTransform = VectorAllianceTransform(robot);
+        System.Func<Vector3, Vector3> scalePositionVector = (Vector3 input) => input / halfFieldSize;
+
+        return (Vector3 input) => allianceTransform(scalePositionVector(input));
+    }
+
+    private void GetRingPos()
+    {
+        ringPositions = new PosAndRot[rings.Length];
+        for (int i = 0; i < rings.Length; i++)
+            ringPositions[i] = getGameObjectPosAndRot(rings[i]);
+    }
+
+    private void GetMogoPos()
+    {
+        mogoPositions = new PosAndRot[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];
+
+        int offsetLength = 0;
+        for (int i = 0; i < blueAllianceMogos.Length; i++)
+            mogoPositions[i] = getGameObjectPosAndRot(blueAllianceMogos[i]);
+        offsetLength += blueAllianceMogos.Length;
+        for (int i = 0; i < redAllianceMogos.Length; i++)
+            mogoPositions[i + offsetLength] = getGameObjectPosAndRot(redAllianceMogos[i]);
+        offsetLength += redAllianceMogos.Length;
+        for (int i = 0; i < neutralMogos.Length; i++)
+            mogoPositions[i + offsetLength] = getGameObjectPosAndRot(neutralMogos[i]);
+    }
+
+    private void GetRobotPos()
+    {
+        robotPositions = new PosAndRot[4];
+        robotPositions[0] = getGameObjectPosAndRot(blueAllianceRobot15);
+        robotPositions[1] = getGameObjectPosAndRot(blueAllianceRobot24);
+        robotPositions[2] = getGameObjectPosAndRot(redAllianceRobot15);
+        robotPositions[3] = getGameObjectPosAndRot(redAllianceRobot24);
+
+        blueAgent = blueAllianceRobot15.GetComponent<Agent>();
+        redAgent = redAllianceRobot15.GetComponent<Agent>();
+    }
+
+    private void EnableMogos()
+    {
+        for (int i = 0; i < blueAllianceMogos.Length; i++)
+            blueAllianceMogos[i].SetActive(true);
+        for (int i = 0; i < redAllianceMogos.Length; i++)
+            redAllianceMogos[i].SetActive(true);
+        for (int i = 0; i < neutralMogos.Length; i++)
+            neutralMogos[i].SetActive(true);
+
+        int blueAllianceMogoIndex = Random.Range(0, blueAllianceMogos.Length);
+        int redAllianceMogoIndex = Random.Range(0, redAllianceMogos.Length);
+        blueAllianceMogos[blueAllianceMogoIndex].SetActive(false);
+        redAllianceMogos[redAllianceMogoIndex].SetActive(false);
+
+        List<int> list = new List<int>();
+        for (int i = 0; i < neutralMogos.Length; i++)
+            list.Add(i);
+        list.Sort((x, y) => 1 - 2 * Random.Range(0, 1));
+
+        //disable random amount of neutral mogos
+        int numToDisable = Random.Range(0, 1);
+        for (int i = 0; i < numToDisable; i++)
+            neutralMogos[list[i]].SetActive(false);
+    }
+
+    private void ResetRingPos()
+    {
+        for (int i = 0; i < rings.Length; i++)
+        {
+            setGameObjectPosAndRot(rings[i], ringPositions[i]);
+            rings[i].SetActive(true);
+            rings[i].GetComponent<Rigidbody>().ResetInertiaTensor();
+        }
+    }
+
+    private void ResetMogoPos()
+    {
+        int offsetLength = 0;
+        for (int i = 0; i < blueAllianceMogos.Length; i++)
+            setGameObjectPosAndRot(blueAllianceMogos[i], mogoPositions[i]);
+        offsetLength += blueAllianceMogos.Length;
+        for (int i = 0; i < redAllianceMogos.Length; i++)
+            setGameObjectPosAndRot(redAllianceMogos[i], mogoPositions[i + offsetLength]);
+        offsetLength += redAllianceMogos.Length;
+        for (int i = 0; i < neutralMogos.Length; i++)
+            setGameObjectPosAndRot(neutralMogos[i], mogoPositions[i + offsetLength]);
+    }
+
+    private void ResetRobotPos()
+    {
+        setGameObjectPosAndRot(blueAllianceRobot15, robotPositions[0]);
+        setGameObjectPosAndRot(blueAllianceRobot24, robotPositions[1]);
+        setGameObjectPosAndRot(redAllianceRobot15, robotPositions[2]);
+        setGameObjectPosAndRot(redAllianceRobot24, robotPositions[3]);
     }
 }
