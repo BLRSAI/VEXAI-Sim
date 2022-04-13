@@ -82,12 +82,11 @@ public class RobotAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        /* no need for math to be done, actions are alwasy between -1 and 1
+        // no need for math to be done, actions are alwasy between -1 and 1
         speed = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[0]));
         rotation = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[1]));
-        */
-        speed = actions.ContinuousActions[0];
-        rotation = actions.ContinuousActions[1];
+        // speed = actions.ContinuousActions[0];
+        // rotation = actions.ContinuousActions[1];
     }
 
     void FixedUpdate()
