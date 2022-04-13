@@ -76,8 +76,8 @@ public class RobotAgent : Agent
             sensor.AddObservation(ringRelative.z);
         }
 
-        var obs = this.GetObservations();
-        Debug.Log(obs.Count);
+        // var obs = this.GetObservations();
+        //Debug.Log(obs.Count);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
