@@ -1367,6 +1367,10 @@ PrefabInstance:
       propertyPath: localTransform
       value: 
       objectReference: {fileID: 918937641}
+    - target: {fileID: 8152154535649889232, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: fieldPerspectiveTransform
+      value: 
+      objectReference: {fileID: 918937641}
     - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Constraints
       value: 116
@@ -1385,7 +1389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 29
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_BrainParameters.NumStackedVectorObservations
@@ -5250,6 +5254,10 @@ PrefabInstance:
       propertyPath: visualizeCulling
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889232, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: fieldPerspectiveTransform
+      value: 
+      objectReference: {fileID: 905933827}
     - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Constraints
       value: 116
@@ -5264,7 +5272,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 29
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_BrainParameters.NumStackedVectorObservations

@@ -9,7 +9,7 @@ using Unity.Mathematics;
 public class RobotAgent : Agent
 {
     [Header("Observation Settings")]
-    [SerializeField] private Transform localTransform;
+    [SerializeField] private Transform fieldPerspectiveTransform;
 
     [Header("Robot Movement Settings")]
     [SerializeField] private float robotSpeed = 10f;
@@ -48,38 +48,36 @@ public class RobotAgent : Agent
         time = time / GameManager.maxTime;
         sensor.AddObservation(time);
 
-        Vector3 pointingVectorLocal = localTransform.InverseTransformVector(transform.forward);
+        Vector3 pointingVector = fieldPerspectiveTransform.InverseTransformVector(transform.forward);
 
-        var observations = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
-        var observationsArray = new Vector3[] { observations.Item1, observations.Item2, observations.Item3, observations.Item4 };
+        // var observations = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
+        // var observationsArray = new Vector3[] { observations.Item1, observations.Item2, observations.Item3, observations.Item4 };
 
-        for (int i = 0; i < observationsArray.Length; i++)
-        {
-            Vector3 observationLocal = localTransform.InverseTransformPoint(observationsArray[i]);
-            sensor.AddObservation(observationLocal.x);
-            sensor.AddObservation(observationLocal.z);
-        }
+        // for (int i = 0; i < observationsArray.Length; i++)
+        // {
+        //     Vector3 observationLocal = localTransform.InverseTransformPoint(observationsArray[i]);
+        //     sensor.AddObservation(observationLocal.x);
+        //     sensor.AddObservation(observationLocal.z);
+        // }
+
+        sensor.AddObservation(transform.position.x);
+        sensor.AddObservation(transform.position.z);
+        sensor.AddObservation(pointingVector.x);
+        sensor.AddObservation(pointingVector.z);
 
         CullRings();
         SortRings();
 
         for (int i = 0; i < numRings; i++)
         {
-            Vector3 ringLocal = localTransform.InverseTransformPoint(nearestRings[i]);
-            sensor.AddObservation(ringLocal.x);
-            sensor.AddObservation(ringLocal.z);
+            Vector3 ringRelative = transform.InverseTransformPoint(nearestRings[i]); // relative to robot's local space
+            // Vector3 ringLocal = fieldPerspectiveTransform.InverseTransformPoint(nearestRings[i]); // relative to robot's field perspective
+            sensor.AddObservation(ringRelative.x);
+            sensor.AddObservation(ringRelative.z);
         }
 
-        // print all observations
         var obs = this.GetObservations();
-        // Debug.Log(obs.Count);
-        // string obsStr = "";
-        // for (int i = 0; i < obs.Count; i++)
-        // {
-        //     obsStr += obs[i].ToString() + "|";
-        // }
-
-        // Debug.Log(obsStr);
+        Debug.Log(obs.Count);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
