@@ -67,6 +67,8 @@ public class GameManager : MonoBehaviour
     private float blueRingReward = 0f;
     private float redMogoReward = 0f;
     private float blueMogoReward = 0f;
+    private float bluePosPenalty = 0f;
+    private float redPosPenalty = 0f;
 
 
     private PosAndRot getGameObjectPosAndRot(GameObject go)
@@ -121,7 +123,10 @@ public class GameManager : MonoBehaviour
         redPinningPenalty = 0f;
         redRingReward = 0f;
         blueRingReward = 0f;
-
+        redMogoReward = 0f;
+        blueMogoReward = 0f;
+        bluePosPenalty = 0f;
+        redPosPenalty = 0f;
 
 
         // enable all mogos
@@ -131,6 +136,7 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        var statsRecorder = Academy.Instance.StatsRecorder;
         //Timer Control
         time -= Time.deltaTime;
         float min = Mathf.FloorToInt(time / 60);
@@ -142,7 +148,6 @@ public class GameManager : MonoBehaviour
 
         if (time <= 0)
         {
-            var statsRecorder = Academy.Instance.StatsRecorder;
 
             Vector3[] allMogoPos = new Vector3[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];
             for (int i = 0; i < blueAllianceMogos.Length; i++)
@@ -153,20 +158,19 @@ public class GameManager : MonoBehaviour
                 allMogoPos[i + blueAllianceMogos.Length + redAllianceMogos.Length] = neutralMogos[i].transform.position;
 
 
-            /* Disable non-ring rewards
             //give mogo reward
             foreach (Vector3 mogoPos in allMogoPos)
             {
                 if (mogoPos.z < -no_man_zone_width)
                 {
                     blueAgent.AddReward(.2f);
-                    statsRecorder.Add("Blue Agent Mogo Reward", .2f);
+                    blueMogoReward += .2f;
                     Debug.Log("Blue mogo reward: .2f");
                 }
                 if (mogoPos.z > no_man_zone_width)
                 {
                     redAgent.AddReward(.2f);
-                    statsRecorder.Add("Red Agent Mogo Reward", .2f);
+                    redMogoReward += .2f;
                     Debug.Log("Red mogo reward: .2f");
                 }
             }
@@ -175,23 +179,17 @@ public class GameManager : MonoBehaviour
             if (redAgent.transform.position.z < no_man_zone_width)
             {
                 redAgent.AddReward(-1f);
-                statsRecorder.Add("Red Agent Position Penalty", -1f);
+                redPosPenalty -= 1f;
                 Debug.Log("Red position penalty: -1f");
             }
             if (blueAgent.transform.position.z > -no_man_zone_width)
             {
                 blueAgent.AddReward(-1f);
-                statsRecorder.Add("Blue Agent Position Penalty", -1f);
+                bluePosPenalty -= 1f;
                 Debug.Log("Blue position penalty: -1f");
             }
 
-
-            statsRecorder.Add("Blue Agent Pinning Penalty", bluePinningPenalty);
-            statsRecorder.Add("Red Agent Pinning Penalty", redPinningPenalty);
-
-            statsRecorder.Add("Blue Agent Ring Reward", blueRingReward);
-            statsRecorder.Add("Red Agent Ring Reward", redRingReward);
-            */
+            LogStats(statsRecorder);
 
             blueAgent.EndEpisode();
             redAgent.EndEpisode();
@@ -209,7 +207,6 @@ public class GameManager : MonoBehaviour
             timeTogether = 0;
         }
 
-        /* Disable non-ring rewards
         if (timeTogether >= 5f)
         {
             blueAgent.AddReward(-1f);
@@ -220,15 +217,28 @@ public class GameManager : MonoBehaviour
 
             Debug.Log("Pinning Penalty: -1f");
 
+            LogStats(statsRecorder);
+
             blueAgent.EndEpisode();
             redAgent.EndEpisode();
 
             ResetField();
         }
-        */
     }
 
-    public void CollectRing(GameObject robot)
+  private void LogStats(StatsRecorder statsRecorder)
+  {
+    statsRecorder.Add("Blue Agent Mogo Reward", blueMogoReward);  
+    statsRecorder.Add("Red Agent Mogo Reward", redMogoReward);
+    statsRecorder.Add("Red Agent Position Penalty", redPosPenalty);
+    statsRecorder.Add("Blue Agent Position Penalty", bluePosPenalty);
+    statsRecorder.Add("Blue Agent Pinning Penalty", bluePinningPenalty);
+    statsRecorder.Add("Red Agent Pinning Penalty", redPinningPenalty);
+    statsRecorder.Add("Blue Agent Ring Reward", blueRingReward);
+    statsRecorder.Add("Red Agent Ring Reward", redRingReward);
+  }
+
+  public void CollectRing(GameObject robot)
     {
         if (robot == blueAllianceRobot15 || robot == blueAllianceRobot24)
         {

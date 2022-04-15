@@ -50,16 +50,6 @@ public class RobotAgent : Agent
 
         Vector3 pointingVector = fieldPerspectiveTransform.InverseTransformVector(transform.forward);
 
-        // var observations = GameManager.gameManager.GetObservationsFromAlliancePerspective(this.gameObject);
-        // var observationsArray = new Vector3[] { observations.Item1, observations.Item2, observations.Item3, observations.Item4 };
-
-        // for (int i = 0; i < observationsArray.Length; i++)
-        // {
-        //     Vector3 observationLocal = localTransform.InverseTransformPoint(observationsArray[i]);
-        //     sensor.AddObservation(observationLocal.x);
-        //     sensor.AddObservation(observationLocal.z);
-        // }
-
         sensor.AddObservation(transform.position.x);
         sensor.AddObservation(transform.position.z);
         sensor.AddObservation(pointingVector.x);
