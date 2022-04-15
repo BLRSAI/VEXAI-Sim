@@ -47,9 +47,9 @@ behaviors:
     self_play:
       window: 10
       play_against_latest_model_ratio: 0.5
-      save_steps: 10500
-      swap_steps: 10500
-      team_change: 52500
+      save_steps: 10000
+      swap_steps: 10000
+      team_change: 50000
     behavioral_cloning: null
 env_settings:
   env_path: null

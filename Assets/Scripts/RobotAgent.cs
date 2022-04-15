@@ -44,16 +44,22 @@ public class RobotAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        string observations = "";
         float time = GameManager.gameManager.time;
         time = time / GameManager.maxTime;
         sensor.AddObservation(time);
+        observations += "Time: " + time.ToString() + ",";
 
         Vector3 pointingVector = fieldPerspectiveTransform.InverseTransformVector(transform.forward);
 
         sensor.AddObservation(transform.position.x);
+        observations += " Robot Position X: " + transform.position.x + ", ";
         sensor.AddObservation(transform.position.z);
+        observations += " Robot Position Z: " + transform.position.z + ", ";
         sensor.AddObservation(pointingVector.x);
+        observations += " Robot Direction X: " + pointingVector.x + ", ";
         sensor.AddObservation(pointingVector.z);
+        observations += " Robot Direction Z: " + pointingVector.z + ", ";
 
         CullRings();
         SortRings();
@@ -63,20 +69,22 @@ public class RobotAgent : Agent
             Vector3 ringRelative = transform.InverseTransformPoint(nearestRings[i]); // relative to robot's local space
             // Vector3 ringLocal = fieldPerspectiveTransform.InverseTransformPoint(nearestRings[i]); // relative to robot's field perspective
             sensor.AddObservation(ringRelative.x);
+            observations += " Ring " + i + " Position X: " + ringRelative.x + ", ";
             sensor.AddObservation(ringRelative.z);
+            observations += " Ring " + i + " Position Z: " + ringRelative.z + ", ";
         }
 
-        // var obs = this.GetObservations();
-        //Debug.Log(obs.Count);
+        //Debug.Log(observations);
+        
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
         // no need for math to be done, actions are alwasy between -1 and 1
-        speed = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[0]));
-        rotation = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[1]));
-        // speed = actions.ContinuousActions[0];
-        // rotation = actions.ContinuousActions[1];
+        // speed = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[0]));
+        // rotation = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[1]));
+        speed = actions.ContinuousActions[0];
+        rotation = actions.ContinuousActions[1];
     }
 
     void FixedUpdate()
