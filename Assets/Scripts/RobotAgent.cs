@@ -32,6 +32,7 @@ public class RobotAgent : Agent
 
     private bool[] ringsCulled;
     private Vector3[] nearestRings;
+    private bool[] ringExists;
 
     // running movement variables
     private float speed = 0f;
@@ -66,7 +67,15 @@ public class RobotAgent : Agent
 
         for (int i = 0; i < numRings; i++)
         {
-            Vector3 ringRelative = transform.InverseTransformPoint(nearestRings[i]); // relative to robot's local space
+            Vector3 ringRelative;
+            if (ringExists[i])
+            {
+                ringRelative = transform.InverseTransformPoint(nearestRings[i]); // relative to robot's local spacea
+            }
+            else
+            {
+                ringRelative = new Vector3(0, 0, 0);
+            }
             // Vector3 ringLocal = fieldPerspectiveTransform.InverseTransformPoint(nearestRings[i]); // relative to robot's field perspective
             sensor.AddObservation(ringRelative.x);
             observations += " Ring " + i + " Position X: " + ringRelative.x + ", ";
@@ -74,8 +83,8 @@ public class RobotAgent : Agent
             observations += " Ring " + i + " Position Z: " + ringRelative.z + ", ";
         }
 
-        Debug.Log(observations);
-        
+        // Debug.Log(observations);
+
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -173,17 +182,19 @@ public class RobotAgent : Agent
         nearestRingsTemp.Sort((x, y) => Vector3.Distance(x, this.transform.position).CompareTo(Vector3.Distance(y, this.transform.position)));
 
         if (nearestRings == null) nearestRings = new Vector3[numRings];
+        if (ringExists == null) ringExists = new bool[numRings];
         for (int i = 0; i < numRings; i++)
         {
             if (i < nearestRingsTemp.Count)
             {
                 nearestRings[i] = nearestRingsTemp[i];
+                ringExists[i] = true;
             }
             else
             {
                 nearestRings[i] = Vector3.zero;
+                ringExists[i] = false;
             }
         }
-
     }
 }

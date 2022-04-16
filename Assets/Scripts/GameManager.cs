@@ -226,19 +226,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-  private void LogStats(StatsRecorder statsRecorder)
-  {
-    statsRecorder.Add("Blue Agent Mogo Reward", blueMogoReward);  
-    statsRecorder.Add("Red Agent Mogo Reward", redMogoReward);
-    statsRecorder.Add("Red Agent Position Penalty", redPosPenalty);
-    statsRecorder.Add("Blue Agent Position Penalty", bluePosPenalty);
-    statsRecorder.Add("Blue Agent Pinning Penalty", bluePinningPenalty);
-    statsRecorder.Add("Red Agent Pinning Penalty", redPinningPenalty);
-    statsRecorder.Add("Blue Agent Ring Reward", blueRingReward);
-    statsRecorder.Add("Red Agent Ring Reward", redRingReward);
-  }
+    private void LogStats(StatsRecorder statsRecorder)
+    {
+        statsRecorder.Add("Blue Agent Mogo Reward", blueMogoReward);
+        statsRecorder.Add("Red Agent Mogo Reward", redMogoReward);
+        statsRecorder.Add("Red Agent Position Penalty", redPosPenalty);
+        statsRecorder.Add("Blue Agent Position Penalty", bluePosPenalty);
+        statsRecorder.Add("Blue Agent Pinning Penalty", bluePinningPenalty);
+        statsRecorder.Add("Red Agent Pinning Penalty", redPinningPenalty);
+        statsRecorder.Add("Blue Agent Ring Reward", blueRingReward);
+        statsRecorder.Add("Red Agent Ring Reward", redRingReward);
+    }
 
-  public void CollectRing(GameObject robot)
+    public void CollectRing(GameObject robot)
     {
         if (robot == blueAllianceRobot15 || robot == blueAllianceRobot24)
         {
