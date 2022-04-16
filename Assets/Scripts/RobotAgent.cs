@@ -48,18 +48,18 @@ public class RobotAgent : Agent
         float time = GameManager.gameManager.time;
         time = time / GameManager.maxTime;
         sensor.AddObservation(time);
-        observations += "Time: " + time.ToString() + ",";
+        //observations += "Time: " + time.ToString() + ",";
 
         Vector3 pointingVector = fieldPerspectiveTransform.InverseTransformVector(transform.forward);
 
         sensor.AddObservation(transform.position.x);
-        observations += " Robot Position X: " + transform.position.x + ", ";
+        //observations += " Robot Position X: " + transform.position.x + ", ";
         sensor.AddObservation(transform.position.z);
-        observations += " Robot Position Z: " + transform.position.z + ", ";
+        //observations += " Robot Position Z: " + transform.position.z + ", ";
         sensor.AddObservation(pointingVector.x);
-        observations += " Robot Direction X: " + pointingVector.x + ", ";
+        //observations += " Robot Direction X: " + pointingVector.x + ", ";
         sensor.AddObservation(pointingVector.z);
-        observations += " Robot Direction Z: " + pointingVector.z + ", ";
+        //observations += " Robot Direction Z: " + pointingVector.z + ", ";
 
         CullRings();
         SortRings();
@@ -74,7 +74,7 @@ public class RobotAgent : Agent
             observations += " Ring " + i + " Position Z: " + ringRelative.z + ", ";
         }
 
-        //Debug.Log(observations);
+        Debug.Log(observations);
         
     }
 
