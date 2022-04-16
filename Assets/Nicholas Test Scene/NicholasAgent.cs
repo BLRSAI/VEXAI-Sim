@@ -37,9 +37,9 @@ public class NicholasAgent : Agent
   
   //Raycast variables
   [Header("Raycast Variables")]
-  [SerializeField] private float maxRaycastDist; //the maximum distance of the raycast
+  [SerializeField] private float maxRaycastDist = 20.0f; //the maximum distance of the raycast
+  [SerializeField] private Collider visionCollider; //the collider of the robot
   private RaycastHit m_Hit; //the raycast hit of the robot
-  private Collider collider; //the collider of the robot
   private bool m_HitDetect; //whether or not the robot can see something
   
 
@@ -153,7 +153,7 @@ public class NicholasAgent : Agent
 
   void Start() {
     //Set the collider of the robot
-    collider = this.gameObject.GetComponent<Collider>();
+    visionCollider = this.gameObject.GetComponent<Collider>();
 
     //Traverse the mogo game object array
     for (int i = 0; i < mogos.Length; i++) {
@@ -200,32 +200,33 @@ public class NicholasAgent : Agent
     GameObject[] temp_rings;//the temp array of rings that can be seen by the robot to be sorted later
 
     //TODO collect rings via raycasting from the robots perspective
-
+    m_HitDetect = Physics.BoxCast(visionCollider.bounds.center, transform.localScale, transform.forward, out m_Hit, transform.rotation, maxRaycastDist);//check if the raycast hits anything
+    if (m_HitDetect) {//if the raycast hits something
+      Debug.Log("Hit : " + m_Hit.collider.name); //Output the name of the Collider your Box hit
+    }
     //TODO sort ring array by nearest to farthest distance to the robot
     //use basic sorting function
   }
+  //Draw the BoxCast as a gizmo to show where it currently is testing. Click the Gizmos button to see this
+  void OnDrawGizmos()
+  {
+      Gizmos.color = Color.red;
 
-  //draw gizmo for debugging
-      //Draw the BoxCast as a gizmo to show where it currently is testing. Click the Gizmos button to see this
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-
-        //Check if there has been a hit yet
-        if (m_HitDetect)
-        {
-            //Draw a Ray forward from GameObject toward the hit
-            Gizmos.DrawRay(transform.position, transform.forward * m_Hit.distance);
-            //Draw a cube that extends to where the hit exists
-            Gizmos.DrawWireCube(transform.position + transform.forward * m_Hit.distance, transform.localScale);
-        }
-        //If there hasn't been a hit yet, draw the ray at the maximum distance
-        else
-        {
-            //Draw a Ray forward from GameObject toward the maximum distance
-            Gizmos.DrawRay(transform.position, transform.forward * m_MaxDistance);
-            //Draw a cube at the maximum distance
-            Gizmos.DrawWireCube(transform.position + transform.forward * m_MaxDistance, transform.localScale);
-        }
-    }
+      //Check if there has been a hit yet
+      if (m_HitDetect)
+      {
+          //Draw a Ray forward from GameObject toward the hit
+          Gizmos.DrawRay(transform.position, transform.forward * m_Hit.distance);
+          //Draw a cube that extends to where the hit exists
+          Gizmos.DrawWireCube(transform.position + transform.forward * m_Hit.distance, transform.localScale);
+      }
+      //If there hasn't been a hit yet, draw the ray at the maximum distance
+      else
+      {
+          //Draw a Ray forward from GameObject toward the maximum distance
+          Gizmos.DrawRay(transform.position, transform.forward * maxRaycastDist);
+          //Draw a cube at the maximum distance
+          Gizmos.DrawWireCube(transform.position + transform.forward * maxRaycastDist, transform.localScale);
+      }
+  }
 }
