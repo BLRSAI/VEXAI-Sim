@@ -53,9 +53,13 @@ public class RobotAgent : Agent
 
         Vector3 pointingVector = fieldPerspectiveTransform.InverseTransformVector(transform.forward);
 
-        sensor.AddObservation(transform.position.x);
+        //add noise to transform.position of the robot
+        Vector3 noisyPosition = transform.position;
+        noisyPosition.x += UnityEngine.Random.Range(-0.1f, 0.1f);
+        noisyPosition.z += UnityEngine.Random.Range(-0.1f, 0.1f);
+        sensor.AddObservation(noisyPosition.x);
         //observations += " Robot Position X: " + transform.position.x + ", ";
-        sensor.AddObservation(transform.position.z);
+        sensor.AddObservation(noisyPosition.z);
         //observations += " Robot Position Z: " + transform.position.z + ", ";
         sensor.AddObservation(pointingVector.x);
         //observations += " Robot Direction X: " + pointingVector.x + ", ";
@@ -77,14 +81,18 @@ public class RobotAgent : Agent
                 ringRelative = new Vector3(0, 0, 0);
             }
             // Vector3 ringLocal = fieldPerspectiveTransform.InverseTransformPoint(nearestRings[i]); // relative to robot's field perspective
+
+            //add noise to the ringRelative vector
+            float noise = UnityEngine.Random.Range(-0.1f, 0.1f);
+            ringRelative.x += noise;
+            ringRelative.y += noise;
+
             sensor.AddObservation(ringRelative.x);
             observations += " Ring " + i + " Position X: " + ringRelative.x + ", ";
             sensor.AddObservation(ringRelative.z);
             observations += " Ring " + i + " Position Z: " + ringRelative.z + ", ";
         }
-
-        // Debug.Log(observations);
-
+        //Debug.Log(observations);
     }
 
     public override void OnActionReceived(ActionBuffers actions)

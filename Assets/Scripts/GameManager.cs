@@ -163,15 +163,15 @@ public class GameManager : MonoBehaviour
             {
                 if (mogoPos.z < -no_man_zone_width)
                 {
-                    blueAgent.AddReward(.2f);
-                    blueMogoReward += .2f;
-                    Debug.Log("Blue mogo reward: .2f");
+                    blueAgent.AddReward(2f);
+                    blueMogoReward += 2f;
+                    Debug.Log("Blue mogo reward: 20f");
                 }
                 if (mogoPos.z > no_man_zone_width)
                 {
-                    redAgent.AddReward(.2f);
-                    redMogoReward += .2f;
-                    Debug.Log("Red mogo reward: .2f");
+                    redAgent.AddReward(2f);
+                    redMogoReward += 2f;
+                    Debug.Log("Red mogo reward: 20f");
                 }
             }
 
@@ -180,13 +180,13 @@ public class GameManager : MonoBehaviour
             {
                 redAgent.AddReward(-1f);
                 redPosPenalty -= 1f;
-                Debug.Log("Red position penalty: -1f");
+                Debug.Log("Red position penalty: -10f");
             }
             if (blueAgent.transform.position.z > -no_man_zone_width)
             {
                 blueAgent.AddReward(-1f);
                 bluePosPenalty -= 1f;
-                Debug.Log("Blue position penalty: -1f");
+                Debug.Log("Blue position penalty: -10f");
             }
 
             LogStats(statsRecorder);
@@ -245,12 +245,12 @@ public class GameManager : MonoBehaviour
             blueAllianceScore++;
             if (blueAllianceScore <= 9)
             {
-                blueAgent.AddReward(.03f);
-                redAgent.AddReward(-.03f);
+                blueAgent.AddReward(5f);
+                //redAgent.AddReward(-5f);
 
                 Debug.Log("Blue Agent Ring Reward: .03f");
 
-                blueRingReward += .03f;
+                blueRingReward += 3f;
             }
             return;
         }
@@ -259,12 +259,12 @@ public class GameManager : MonoBehaviour
             redAllianceScore++;
             if (redAllianceScore <= 9)
             {
-                redAgent.AddReward(.03f);
-                blueAgent.AddReward(-.03f);
+                redAgent.AddReward(5f);
+                //blueAgent.AddReward(-3f);
 
                 Debug.Log("Red Agent Ring Reward: .03f");
 
-                redRingReward += .03f;
+                redRingReward += 3f;
             }
             return;
         }
