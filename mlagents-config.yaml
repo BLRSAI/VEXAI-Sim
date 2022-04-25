@@ -42,7 +42,7 @@ behaviors:
     checkpoint_interval: 500000
     max_steps: 1000000
     time_horizon: 64
-    summary_freq: 10500
+    summary_freq: 3150
     threaded: false
     self_play:
       window: 10

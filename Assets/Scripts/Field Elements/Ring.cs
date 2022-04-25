@@ -36,7 +36,11 @@ public class Ring : CullableFieldElement
         if (other.gameObject.CompareTag("Intake"))
         {
             GameManager.gameManager.CollectRing(other.gameObject.transform.parent.gameObject);
-            gameObject.SetActive(false);
+            if (other.GetComponentInParent<RobotAgent>().ringFull == false) {
+                gameObject.SetActive(false);
+            } else { 
+                gameObject.transform.position = other.GetComponentInParent<RobotAgent>().outtake.transform.position;
+            }   
         }
     }
 }

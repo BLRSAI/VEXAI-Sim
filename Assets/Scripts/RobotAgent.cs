@@ -27,6 +27,8 @@ public class RobotAgent : Agent
 
     [Header("AI Settings")]
     [SerializeField] private int numRings = 10;
+    [SerializeField] public GameObject outtake;
+    public bool ringFull = false;
 
     private Rigidbody rb;
 
@@ -57,6 +59,14 @@ public class RobotAgent : Agent
         Vector3 noisyPosition = transform.position;
         noisyPosition.x += UnityEngine.Random.Range(-0.1f, 0.1f);
         noisyPosition.z += UnityEngine.Random.Range(-0.1f, 0.1f);
+    
+        /* gaussian noise
+        float u1 = 1.0f - UnityEngine.Random.Range(0,1);
+        float u2 = 1.0f - UnityEngine.Random.Range(0,1);
+        float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2); //random normal(0,1)
+        float randNormal = transform.position.x + .05f * randStdNormal;
+        */
+        
         sensor.AddObservation(noisyPosition.x);
         //observations += " Robot Position X: " + transform.position.x + ", ";
         sensor.AddObservation(noisyPosition.z);
@@ -126,8 +136,6 @@ public class RobotAgent : Agent
         control[0] = Input.GetAxis("Vertical");
         control[1] = Input.GetAxis("Horizontal");
     }
-
-
     public void CullRings()
     {
         if (ringsCulled == null) ringsCulled = new bool[GameManager.gameManager.rings.Length];

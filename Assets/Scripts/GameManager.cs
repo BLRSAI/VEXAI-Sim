@@ -50,6 +50,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] neutralMogos;
     private PosAndRot[] mogoPositions;
 
+    [Header("Reward Settings")]
+    [SerializeField] private float pinningPenalty = 10f;
+    [SerializeField] private float mogoReward = 10f;
+    [SerializeField] private float positionPenatly = 10f;
+    [SerializeField] private float ringReward = 3f;
+    [SerializeField] private bool randMogos = false;
+
     public GameObject[] rings { get; set; }
     private PosAndRot[] ringPositions;
 
@@ -163,13 +170,13 @@ public class GameManager : MonoBehaviour
             {
                 if (mogoPos.z < -no_man_zone_width)
                 {
-                    blueAgent.AddReward(2f);
-                    blueMogoReward += 2f;
+                    blueAgent.AddReward(mogoReward);
+                    blueMogoReward += mogoReward;
                     Debug.Log("Blue mogo reward: 20f");
                 }
                 if (mogoPos.z > no_man_zone_width)
                 {
-                    redAgent.AddReward(2f);
+                    redAgent.AddReward(mogoReward);
                     redMogoReward += 2f;
                     Debug.Log("Red mogo reward: 20f");
                 }
@@ -178,14 +185,14 @@ public class GameManager : MonoBehaviour
             //End of game rules - cannot be on other teams side to end game
             if (redAgent.transform.position.z < no_man_zone_width)
             {
-                redAgent.AddReward(-1f);
-                redPosPenalty -= 1f;
+                redAgent.AddReward(-positionPenatly);
+                redPosPenalty -= positionPenatly;
                 Debug.Log("Red position penalty: -10f");
             }
             if (blueAgent.transform.position.z > -no_man_zone_width)
             {
-                blueAgent.AddReward(-1f);
-                bluePosPenalty -= 1f;
+                blueAgent.AddReward(-positionPenatly);
+                bluePosPenalty -= positionPenatly;
                 Debug.Log("Blue position penalty: -10f");
             }
 
@@ -209,13 +216,13 @@ public class GameManager : MonoBehaviour
 
         if (timeTogether >= 5f)
         {
-            blueAgent.AddReward(-1f);
-            redAgent.AddReward(-1f);
+            blueAgent.AddReward(-pinningPenalty);
+            redAgent.AddReward(-pinningPenalty);
 
-            bluePinningPenalty -= 1f;
-            redPinningPenalty -= 1f;
+            bluePinningPenalty -= pinningPenalty;
+            redPinningPenalty -= pinningPenalty;
 
-            Debug.Log("Pinning Penalty: -1f");
+            Debug.Log("Pinning Penalty: -" + pinningPenalty);
 
             LogStats(statsRecorder);
 
@@ -245,12 +252,14 @@ public class GameManager : MonoBehaviour
             blueAllianceScore++;
             if (blueAllianceScore <= 9)
             {
-                blueAgent.AddReward(5f);
+                blueAgent.AddReward(ringReward);
                 //redAgent.AddReward(-5f);
 
                 Debug.Log("Blue Agent Ring Reward: .03f");
 
-                blueRingReward += 3f;
+                blueRingReward += ringReward;
+            } else {
+                blueAgent.gameObject.GetComponent<RobotAgent>().ringFull = true;
             }
             return;
         }
@@ -259,12 +268,14 @@ public class GameManager : MonoBehaviour
             redAllianceScore++;
             if (redAllianceScore <= 9)
             {
-                redAgent.AddReward(5f);
+                redAgent.AddReward(ringReward);
                 //blueAgent.AddReward(-3f);
 
                 Debug.Log("Red Agent Ring Reward: .03f");
 
-                redRingReward += 3f;
+                redRingReward += ringReward;
+            } else {
+                redAgent.gameObject.GetComponent<RobotAgent>().ringFull = true;
             }
             return;
         }
@@ -376,20 +387,25 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < neutralMogos.Length; i++)
             neutralMogos[i].SetActive(true);
 
-        int blueAllianceMogoIndex = Random.Range(0, blueAllianceMogos.Length);
-        int redAllianceMogoIndex = Random.Range(0, redAllianceMogos.Length);
-        blueAllianceMogos[blueAllianceMogoIndex].SetActive(false);
-        redAllianceMogos[redAllianceMogoIndex].SetActive(false);
+        if (randMogos) {
+            int blueAllianceMogoIndex = Random.Range(0, blueAllianceMogos.Length);
+            int redAllianceMogoIndex = Random.Range(0, redAllianceMogos.Length);
+            blueAllianceMogos[blueAllianceMogoIndex].SetActive(false);
+            redAllianceMogos[redAllianceMogoIndex].SetActive(false);
+        }
+
 
         List<int> list = new List<int>();
         for (int i = 0; i < neutralMogos.Length; i++)
             list.Add(i);
         list.Sort((x, y) => 1 - 2 * Random.Range(0, 1));
 
-        //disable random amount of neutral mogos
-        int numToDisable = Random.Range(0, 1);
-        for (int i = 0; i < numToDisable; i++)
-            neutralMogos[list[i]].SetActive(false);
+        //disable random amount of neutral mogos if the user chooses to
+        if (randMogos) {
+            int numToDisable = Random.Range(0, 1);
+            for (int i = 0; i < numToDisable; i++)
+                neutralMogos[list[i]].SetActive(false);
+        }
     }
 
     private void ResetRingPos()
