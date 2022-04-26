@@ -60,22 +60,26 @@ public class RobotAgent : Agent
         Vector3 noisyPosition = transform.position;
         noisyPosition.x += UnityEngine.Random.Range(-0.1f, 0.1f);
         noisyPosition.z += UnityEngine.Random.Range(-0.1f, 0.1f);
-    
+
         /* gaussian noise
         float u1 = 1.0f - UnityEngine.Random.Range(0,1);
         float u2 = 1.0f - UnityEngine.Random.Range(0,1);
         float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2); //random normal(0,1)
         float randNormal = transform.position.x + .05f * randStdNormal;
         */
-        
-        sensor.AddObservation(noisyPosition.x);
+
+        // sensor.AddObservation(noisyPosition.x);
         //observations += " Robot Position X: " + transform.position.x + ", ";
-        sensor.AddObservation(noisyPosition.z);
+        // sensor.AddObservation(noisyPosition.z);
         //observations += " Robot Position Z: " + transform.position.z + ", ";
-        sensor.AddObservation(pointingVector.x);
+        // sensor.AddObservation(pointingVector.x);
         //observations += " Robot Direction X: " + pointingVector.x + ", ";
-        sensor.AddObservation(pointingVector.z);
+        // sensor.AddObservation(pointingVector.z);
         //observations += " Robot Direction Z: " + pointingVector.z + ", ";
+        sensor.AddObservation(0.0f);
+        sensor.AddObservation(0.0f);
+        sensor.AddObservation(0.0f);
+        sensor.AddObservation(0.0f);
 
         CullRings();
         SortRings();
@@ -85,7 +89,7 @@ public class RobotAgent : Agent
             Vector3 ringRelative;
             if (ringExists[i])
             {
-                ringRelative = transform.InverseTransformPoint(nearestRings[i]); // relative to robot's local spacea
+                ringRelative = transform.InverseTransformPoint(nearestRings[i]); // relative to robot's local space
             }
             else
             {
@@ -94,7 +98,7 @@ public class RobotAgent : Agent
             // Vector3 ringLocal = fieldPerspectiveTransform.InverseTransformPoint(nearestRings[i]); // relative to robot's field perspective
 
             //add noise to the ringRelative vector
-            float noise = UnityEngine.Random.Range(-0.1f, 0.1f);
+            float noise = UnityEngine.Random.Range(-0.5f, 0.5f);
             ringRelative.x += noise;
             ringRelative.y += noise;
 
@@ -137,7 +141,7 @@ public class RobotAgent : Agent
         control[0] = Input.GetAxis("Vertical");
         control[1] = Input.GetAxis("Horizontal");
     }
-    
+
     public void CullRings()
     {
         if (ringsCulled == null) ringsCulled = new bool[GameManager.gameManager.rings.Length];

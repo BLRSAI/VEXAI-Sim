@@ -61,8 +61,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] rings { get; set; }
     private PosAndRot[] ringPositions;
 
-    // private const float initTime = 120f - 15f;
-    private const float initTime = 1f;
+    private const float initTime = 120f - 15f;
     private const float no_man_zone_width = 0.6f;
 
     public float time { get; set; } = initTime;
