@@ -442,6 +442,10 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 126
       objectReference: {fileID: 0}
+    - target: {fileID: 4028720681043828744, guid: d79093b0701c188a394cd4d63ec45940, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4028720681043828745, guid: d79093b0701c188a394cd4d63ec45940, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -1409,6 +1413,10 @@ PrefabInstance:
     - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Constraints
       value: 116
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: TeamId
@@ -5154,6 +5162,10 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 126
       objectReference: {fileID: 0}
+    - target: {fileID: 4028720681043828744, guid: d79093b0701c188a394cd4d63ec45940, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4028720681043828745, guid: d79093b0701c188a394cd4d63ec45940, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -5347,6 +5359,10 @@ PrefabInstance:
     - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Constraints
       value: 116
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Model
