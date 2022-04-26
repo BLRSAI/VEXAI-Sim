@@ -28,6 +28,7 @@ public class RobotAgent : Agent
     [Header("AI Settings")]
     [SerializeField] private int numRings = 10;
     [SerializeField] public GameObject outtake;
+    [SerializeField] private float penatly24 = 1f;
     public bool ringFull = false;
 
     private Rigidbody rb;
@@ -136,6 +137,7 @@ public class RobotAgent : Agent
         control[0] = Input.GetAxis("Vertical");
         control[1] = Input.GetAxis("Horizontal");
     }
+    
     public void CullRings()
     {
         if (ringsCulled == null) ringsCulled = new bool[GameManager.gameManager.rings.Length];
@@ -213,4 +215,10 @@ public class RobotAgent : Agent
             }
         }
     }
+
+    // private void OnCollisionEnter(Collision other) {
+    //     if (other.gameObject.CompareTag("24")) {
+    //         AddReward(-penatly24);
+    //     }
+    // }
 }

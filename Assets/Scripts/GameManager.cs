@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float positionPenatly = 10f;
     [SerializeField] private float ringReward = 3f;
     [SerializeField] private bool randMogos = false;
+    [SerializeField] private int maxRingsPerGoal = 10;
 
     public GameObject[] rings { get; set; }
     private PosAndRot[] ringPositions;
@@ -250,7 +251,7 @@ public class GameManager : MonoBehaviour
         if (robot == blueAllianceRobot15 || robot == blueAllianceRobot24)
         {
             blueAllianceScore++;
-            if (blueAllianceScore <= 9)
+            if (blueAllianceScore <= maxRingsPerGoal)
             {
                 blueAgent.AddReward(ringReward);
                 //redAgent.AddReward(-5f);
@@ -266,7 +267,7 @@ public class GameManager : MonoBehaviour
         else if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
         {
             redAllianceScore++;
-            if (redAllianceScore <= 9)
+            if (redAllianceScore <= maxRingsPerGoal)
             {
                 redAgent.AddReward(ringReward);
                 //blueAgent.AddReward(-3f);
