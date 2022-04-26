@@ -60,7 +60,8 @@ public class GameManager : MonoBehaviour
     public GameObject[] rings { get; set; }
     private PosAndRot[] ringPositions;
 
-    private const float initTime = 120f - 15f;
+    // private const float initTime = 120f - 15f;
+    private const float initTime = 1f;
     private const float no_man_zone_width = 0.6f;
 
     public float time { get; set; } = initTime;
@@ -76,6 +77,8 @@ public class GameManager : MonoBehaviour
     private float blueMogoReward = 0f;
     private float bluePosPenalty = 0f;
     private float redPosPenalty = 0f;
+
+    [SerializeField] private bool randomizeRingCount = false;
 
 
     private PosAndRot getGameObjectPosAndRot(GameObject go)
@@ -109,6 +112,7 @@ public class GameManager : MonoBehaviour
     void ResetField()
     {
         time = initTime;
+        Random.InitState(System.DateTime.Now.Millisecond);
 
         // reset robot positions
         ResetRobotPos();
@@ -258,7 +262,9 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Blue Agent Ring Reward: .03f");
 
                 blueRingReward += ringReward;
-            } else {
+            }
+            else
+            {
                 blueAgent.gameObject.GetComponent<RobotAgent>().ringFull = true;
             }
             return;
@@ -274,7 +280,9 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Red Agent Ring Reward: .03f");
 
                 redRingReward += ringReward;
-            } else {
+            }
+            else
+            {
                 redAgent.gameObject.GetComponent<RobotAgent>().ringFull = true;
             }
             return;
@@ -387,7 +395,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < neutralMogos.Length; i++)
             neutralMogos[i].SetActive(true);
 
-        if (randMogos) {
+        if (randMogos)
+        {
             int blueAllianceMogoIndex = Random.Range(0, blueAllianceMogos.Length);
             int redAllianceMogoIndex = Random.Range(0, redAllianceMogos.Length);
             blueAllianceMogos[blueAllianceMogoIndex].SetActive(false);
@@ -401,7 +410,8 @@ public class GameManager : MonoBehaviour
         list.Sort((x, y) => 1 - 2 * Random.Range(0, 1));
 
         //disable random amount of neutral mogos if the user chooses to
-        if (randMogos) {
+        if (randMogos)
+        {
             int numToDisable = Random.Range(0, 1);
             for (int i = 0; i < numToDisable; i++)
                 neutralMogos[list[i]].SetActive(false);
@@ -410,11 +420,32 @@ public class GameManager : MonoBehaviour
 
     private void ResetRingPos()
     {
+        var idx = new List<int>();
         for (int i = 0; i < rings.Length; i++)
         {
-            setGameObjectPosAndRot(rings[i], ringPositions[i]);
-            rings[i].SetActive(true);
-            rings[i].GetComponent<Rigidbody>().ResetInertiaTensor();
+            idx.Add(i);
+        }
+
+        int numRings;
+        if (randomizeRingCount)
+        {
+            idx.Sort((x, y) => 1 - 2 * Random.Range(0, 1));
+            numRings = Random.Range(rings.Length / 4, rings.Length);
+        }
+        else
+        {
+            numRings = rings.Length;
+        }
+
+        for (int i = 0; i < rings.Length; i++)
+        {
+            setGameObjectPosAndRot(rings[idx[i]], ringPositions[idx[i]]);
+            rings[idx[i]].GetComponent<Rigidbody>().ResetInertiaTensor();
+
+            if (i < numRings)
+                rings[idx[i]].SetActive(true);
+            else
+                rings[idx[i]].SetActive(false);
         }
     }
 
