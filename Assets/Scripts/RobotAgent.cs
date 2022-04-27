@@ -54,8 +54,6 @@ public class RobotAgent : Agent
         sensor.AddObservation(time);
         //observations += "Time: " + time.ToString() + ",";
 
-        Vector3 pointingVector = fieldPerspectiveTransform.InverseTransformVector(transform.forward);
-
         //add noise to transform.position of the robot
         Vector3 noisyPosition = transform.position;
         noisyPosition.x += UnityEngine.Random.Range(-0.1f, 0.1f);
@@ -68,6 +66,7 @@ public class RobotAgent : Agent
         float randNormal = transform.position.x + .05f * randStdNormal;
         */
 
+        //Vector3 pointingVector = fieldPerspectiveTransform.InverseTransformVector(transform.forward);
         // sensor.AddObservation(noisyPosition.x);
         //observations += " Robot Position X: " + transform.position.x + ", ";
         // sensor.AddObservation(noisyPosition.z);
@@ -76,9 +75,11 @@ public class RobotAgent : Agent
         //observations += " Robot Direction X: " + pointingVector.x + ", ";
         // sensor.AddObservation(pointingVector.z);
         //observations += " Robot Direction Z: " + pointingVector.z + ", ";
+
+
+        sensor.AddObservation(0.0f); //stopped using pointing vectors
         sensor.AddObservation(0.0f);
-        sensor.AddObservation(0.0f);
-        sensor.AddObservation(0.0f);
+        sensor.AddObservation(0.0f); //stopped using gps data for now
         sensor.AddObservation(0.0f);
 
         CullRings();

@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
     private const float initTime = 120f - 15f;
     private const float no_man_zone_width = 0.6f;
 
-    public float time { get; set; } = initTime;
+    public float time { get; set; } = 0f;
     private int blueAllianceScore;
     private int redAllianceScore;
     private float timeTogether = 0f;
@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
 
     void ResetField()
     {
-        time = initTime;
+        time = 0f;
         Random.InitState(System.DateTime.Now.Millisecond);
 
         // reset robot positions
@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
     {
         var statsRecorder = Academy.Instance.StatsRecorder;
         //Timer Control
-        time -= Time.deltaTime;
+        time += Time.deltaTime;
         float min = Mathf.FloorToInt(time / 60);
         float sec = Mathf.FloorToInt(time % 60);
         timer.text = "Time: " + string.Format("{0:00}:{1:00}", min, sec);
@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour
         scoreBlue.text = "Blue Rings: " + blueAllianceScore.ToString();
         scoreRed.text = "Red Rings: " + redAllianceScore.ToString();
 
-        if (time <= 0)
+        if (time >= initTime)
         {
 
             Vector3[] allMogoPos = new Vector3[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];

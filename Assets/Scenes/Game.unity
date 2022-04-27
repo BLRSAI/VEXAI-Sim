@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 18936056}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.482, z: -0.835}
+  m_LocalPosition: {x: -0, y: -0.389, z: -1.292}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1469,6 +1469,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 719540102}
     - target: {fileID: 8152154535649889232, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: robotSpeed
+      value: 0.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889232, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: rotationSpeed
+      value: 276.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889232, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: localTransform
       value: 
       objectReference: {fileID: 918937641}
@@ -1476,6 +1484,10 @@ PrefabInstance:
       propertyPath: fieldPerspectiveTransform
       value: 
       objectReference: {fileID: 918937641}
+    - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Constraints
       value: 116
@@ -1491,7 +1503,7 @@ PrefabInstance:
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: c1496c8ebc0207746a7a066417a3f4b6, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_BehaviorType
       value: 0
@@ -1942,7 +1954,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 719540102}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.482, z: -0.835}
+  m_LocalPosition: {x: 0, y: -0.411, z: -1.368}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5558,7 +5570,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: randomizeRingCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6105863120855784999, guid: b4b2dd8577a563145a7ccb5d203b16f2, type: 3}
       propertyPath: redAllianceRobot15
@@ -5614,6 +5626,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 18936056}
     - target: {fileID: 8152154535649889232, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: robotSpeed
+      value: 0.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889232, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: rotationSpeed
+      value: 276.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889232, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: localTransform
       value: 
       objectReference: {fileID: 1799734537}
@@ -5626,6 +5646,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 905933827}
     - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8152154535649889233, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Constraints
       value: 116
       objectReference: {fileID: 0}
@@ -5636,7 +5660,7 @@ PrefabInstance:
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: c1496c8ebc0207746a7a066417a3f4b6, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8152154535649889235, guid: ed6a9f672c79f2adea6f774e9cb03145, type: 3}
       propertyPath: m_BehaviorType
       value: 0
