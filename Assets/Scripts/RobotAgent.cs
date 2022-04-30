@@ -170,7 +170,7 @@ public class RobotAgent : Agent
                 ) / ringPosTransformed.z;
                 ringInFrame &= projectedPos.x > 0 && projectedPos.x < w && projectedPos.y > 0 && projectedPos.y < h;
 
-                if (!ringInFrame)
+                if (!ringInFrame || Mathf.Abs(rotation) > 0.5f)
                 {
                     ringsCulled[i] = true;
                     if (visualizeCulling)
@@ -220,6 +220,7 @@ public class RobotAgent : Agent
                 ringExists[i] = false;
             }
         }
+
     }
 
     // private void OnCollisionEnter(Collision other) {
