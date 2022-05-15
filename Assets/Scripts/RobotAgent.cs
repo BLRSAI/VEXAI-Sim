@@ -24,7 +24,7 @@ public class RobotAgent : Agent
     [Header("AI Settings")]
     [SerializeField] private int numRings = 10; // The number of rings the robot can pickup and gain points for
     [SerializeField] public GameObject outtake; // where the rings would end up if the robots mobile goal is full
-    [SerializeField] private float penatly24 = 1f; // The penalty for hitting ones own 24in robot
+    //[SerializeField] private float penatly24 = 1f; // The penalty for hitting ones own 24in robot //TODO: use this to penalize hitting the 24in robot
 
     public bool ringFull = false; // Whether or not the robots mobile goal is full
 
