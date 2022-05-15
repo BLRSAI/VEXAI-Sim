@@ -33,13 +33,13 @@ public class Ring : CullableFieldElement
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Intake"))
+        if (other.gameObject.CompareTag("Intake")) //if the ring collides with a robot intake
         {
-            GameManager.gameManager.CollectRing(other.gameObject.transform.parent.gameObject);
-            if (other.GetComponentInParent<RobotAgent>().ringFull == false) {
+            GameManager.gameManager.CollectRing(other.gameObject.transform.parent.gameObject); //call the collect ring function on the robot
+            if (other.GetComponentInParent<RobotAgent>().ringFull == false) { //if the robot is not full
                 gameObject.SetActive(false);
             } else { 
-                gameObject.transform.position = other.GetComponentInParent<RobotAgent>().outtake.transform.position;
+                gameObject.transform.position = other.GetComponentInParent<RobotAgent>().outtake.transform.position; //move the ring to the robot's outtake
             }   
         }
     }
