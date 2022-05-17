@@ -134,9 +134,9 @@ public class RobotAgent : Agent
         rotation = 0;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        System.Array.Clear(ringExists, 0, ringExists.Length);
-        System.Array.Clear(ringsCulled, 0, ringsCulled.Length);
-        System.Array.Clear(nearestRings, 0, nearestRings.Length);
+        // System.Array.Clear(ringExists, 0, ringExists.Length);
+        // System.Array.Clear(ringsCulled, 0, ringsCulled.Length);
+        // System.Array.Clear(nearestRings, 0, nearestRings.Length);
     }
 
     //If the user wants to control the robot, the following code will be used

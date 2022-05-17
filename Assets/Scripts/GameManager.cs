@@ -261,7 +261,7 @@ public class GameManager : MonoBehaviour
                 blueAgent.AddReward(ringReward);
                 //redAgent.AddReward(-5f); //give the other robot a penalty for letting the robot collect the ring
 
-                Debug.Log(string.Format("Blue Agent Ring Reward: {}f", ringReward));
+                //Debug.Log(string.Format("Blue Agent Ring Reward: {}f", ringReward));
 
                 blueRingReward += ringReward;
             }
@@ -280,7 +280,7 @@ public class GameManager : MonoBehaviour
                 redAgent.AddReward(ringReward);
                 //blueAgent.AddReward(-3f);
 
-                Debug.Log(string.Format("Red Agent Ring Reward: {}f", ringReward));
+                //Debug.Log(string.Format("Red Agent Ring Reward: {}f", ringReward));
 
                 redRingReward += ringReward;
             }
