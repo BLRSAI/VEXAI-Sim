@@ -6,71 +6,70 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager gameManager; //current instance of the gamemanger script
+    public static GameManager gameManager;
 
     public GameManager()
     {
-        gameManager = this; //set the current instance of the gamemanager script
+        gameManager = this;
     }
 
-    private struct PosAndRot 
+    private struct PosAndRot
     {
-        public Vector3 pos; //position of the agent
-        public Quaternion rot; //rotation of the agent
+        public Vector3 pos;
+        public Quaternion rot;
 
-        public PosAndRot(Vector3 pos, Quaternion rot) 
+        public PosAndRot(Vector3 pos, Quaternion rot)
         {
-            this.pos = pos; //set the position of the agent
-            this.rot = rot; //set the rotation of the agent
+            this.pos = pos;
+            this.rot = rot;
         }
     }
 
-    public const float fieldSize = 12f * 0.3048f; //the size of the field in meters
-    public const float halfFieldSize = fieldSize / 2f; //the half size of the field in meters
-    public const float maxTime = 120f - 15f; //the maximum time in seconds
-    //public const float maxRingXDist = 3.404f; //max 
-    //public const float maxRingZDist = 3.404f;
-    //public const float maxPosDist = 1.64f;
+    public const float fieldSize = 12f * 0.3048f;
+    public const float halfFieldSize = fieldSize / 2f;
+    public const float maxTime = 120f - 15f;
+    public const float maxRingXDist = 3.404f;
+    public const float maxRingZDist = 3.404f;
+    public const float maxPosDist = 1.64f;
 
-    [SerializeField] private Text timer; //the timer text
-    [SerializeField] private Text scoreBlue; //the score text for blue
-    [SerializeField] private Text scoreRed; //the score text for red
+    [SerializeField] private Text timer;
+    [SerializeField] private Text scoreBlue;
+    [SerializeField] private Text scoreRed;
 
-    [SerializeField] private GameObject blueAllianceRobot15; //the blue alliance robot 15
-    [SerializeField] private GameObject blueAllianceRobot24; //the blue alliance robot 24
-    [SerializeField] private GameObject redAllianceRobot15; //the red alliance robot 15
-    [SerializeField] private GameObject redAllianceRobot24; //the red alliance robot 24
-    private PosAndRot[] robotPositions; //the positions and rotations of the robots
+    [SerializeField] private GameObject blueAllianceRobot15;
+    [SerializeField] private GameObject blueAllianceRobot24;
+    [SerializeField] private GameObject redAllianceRobot15;
+    [SerializeField] private GameObject redAllianceRobot24;
+    private PosAndRot[] robotPositions;
 
-    private Agent blueAgent; //the blue agent
-    private Agent redAgent; //the red agent
+    private Agent blueAgent;
+    private Agent redAgent;
 
-    [SerializeField] private GameObject[] blueAllianceMogos; //the blue alliance mogos
-    [SerializeField] private GameObject[] redAllianceMogos; //the red alliance mogos
-    [SerializeField] private GameObject[] neutralMogos; //the neutral mogos
-    private PosAndRot[] mogoPositions; //the positions and rotations of the mogos
+    [SerializeField] private GameObject[] blueAllianceMogos;
+    [SerializeField] private GameObject[] redAllianceMogos;
+    [SerializeField] private GameObject[] neutralMogos;
+    private PosAndRot[] mogoPositions;
 
     [Header("Reward Settings")]
-    [SerializeField] private float pinningPenalty = 10f; //the penalty for pinning
-    [SerializeField] private float mogoReward = 10f; //the reward for mogo
-    [SerializeField] private float positionPenatly = 10f; //the penalty for position
-    [SerializeField] private float ringReward = 3f; //the reward for ring
-    [SerializeField] private bool randMogos = false; //whether or not to randomize the mogos
-    [SerializeField] private int maxRingsPerGoal = 10; //the maximum number of rings per goal
+    [SerializeField] private float pinningPenalty = 10f;
+    [SerializeField] private float mogoReward = 10f;
+    [SerializeField] private float positionPenatly = 10f;
+    [SerializeField] private float ringReward = 3f;
+    [SerializeField] private bool randMogos = false;
+    [SerializeField] private int maxRingsPerGoal = 10;
 
-    public GameObject[] rings { get; set; } //the rings
-    private PosAndRot[] ringPositions; //the positions and rotations of the rings
+    public GameObject[] rings { get; set; }
+    private PosAndRot[] ringPositions;
 
-    private const float initTime = 120f - 15f; //the initial time
-    private const float no_man_zone_width = 0.6f; //the width of the no man zone on the field
+    private const float initTime = 120f - 15f;
+    private const float no_man_zone_width = 0.6f;
 
     public float time { get; set; } = 0f;
-    private int blueAllianceScore; //the blues score
+    private int blueAllianceScore;
     private int redAllianceScore;
     private float timeTogether = 0f;
 
-    //The totals for all penalties/rewards calculated in the current episode to be logged
-    private float bluePinningPenalty = 0f; 
+    private float bluePinningPenalty = 0f;
     private float redPinningPenalty = 0f;
     private float redRingReward = 0f;
     private float blueRingReward = 0f;
@@ -79,44 +78,52 @@ public class GameManager : MonoBehaviour
     private float bluePosPenalty = 0f;
     private float redPosPenalty = 0f;
 
-    [SerializeField] private bool randomizeRingCount = false; //whether or not to randomize the number of rings per goal
+    [SerializeField] private bool randomizeRingCount = false;
 
 
-    private PosAndRot getGameObjectPosAndRot(GameObject go) //get the position and rotation of the gameobject
+    private PosAndRot getGameObjectPosAndRot(GameObject go)
     {
         return new PosAndRot(go.transform.position, go.transform.rotation);
     }
 
-    private void setGameObjectPosAndRot(GameObject go, PosAndRot posAndRot) //set the position and rotation of the gameobject
+    private void setGameObjectPosAndRot(GameObject go, PosAndRot posAndRot)
     {
         go.transform.position = posAndRot.pos;
         go.transform.rotation = posAndRot.rot;
     }
 
     void Awake()
-    {        
-        GetRobotPos();// get robot positions
-        
-        GetMogoPos();// get mogo positions
-        
-        rings = GameObject.FindGameObjectsWithTag("Ring");// get rings
-        
-        GetRingPos();// get ring positions
+    {
+        // get robot positions
+        GetRobotPos();
 
-        ResetField();// Reset the field
+        // get mogo positions
+        GetMogoPos();
+
+        // get rings
+        rings = GameObject.FindGameObjectsWithTag("Ring");
+
+        // get ring positions
+        GetRingPos();
+
+        ResetField();
     }
 
     void ResetField()
     {
-        time = 0f; //reset the time
-        
-        Random.InitState(System.DateTime.Now.Millisecond); //initialize random seed
+        time = 0f;
+        Random.InitState(System.DateTime.Now.Millisecond);
 
-        ResetRobotPos();// reset robot positions
-        
-        ResetMogoPos();// reset mogo positions
-        
-        ResetRingPos();// reset ring positions
+        // reset robot positions
+        ResetRobotPos();
+
+
+        // reset mogo positions
+        ResetMogoPos();
+
+
+        // reset ring positions
+        ResetRingPos();
 
         // reset score
         blueAllianceScore = 0;
@@ -132,42 +139,87 @@ public class GameManager : MonoBehaviour
         bluePosPenalty = 0f;
         redPosPenalty = 0f;
 
-        EnableMogos();// enable all mogos
+
+        // enable all mogos
+        EnableMogos();
 
     }
 
     void FixedUpdate()
     {
-        var statsRecorder = Academy.Instance.StatsRecorder; //get the stats recorder for tensorboard logging
-
+        var statsRecorder = Academy.Instance.StatsRecorder;
         //Timer Control
         time += Time.deltaTime;
         float min = Mathf.FloorToInt(time / 60);
         float sec = Mathf.FloorToInt(time % 60);
         timer.text = "Time: " + string.Format("{0:00}:{1:00}", min, sec);
 
-        //Score Logging
         scoreBlue.text = "Blue Rings: " + blueAllianceScore.ToString();
         scoreRed.text = "Red Rings: " + redAllianceScore.ToString();
 
-        if (time >= initTime) //once the end of the game is reached
+        if (time >= initTime)
         {
-            EndGame(statsRecorder); //end the game
+
+            Vector3[] allMogoPos = new Vector3[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];
+            for (int i = 0; i < blueAllianceMogos.Length; i++)
+                allMogoPos[i] = blueAllianceMogos[i].transform.position;
+            for (int i = 0; i < redAllianceMogos.Length; i++)
+                allMogoPos[i + blueAllianceMogos.Length] = redAllianceMogos[i].transform.position;
+            for (int i = 0; i < neutralMogos.Length; i++)
+                allMogoPos[i + blueAllianceMogos.Length + redAllianceMogos.Length] = neutralMogos[i].transform.position;
+
+
+            //give mogo reward
+            foreach (Vector3 mogoPos in allMogoPos)
+            {
+                if (mogoPos.z < -no_man_zone_width)
+                {
+                    blueAgent.AddReward(mogoReward);
+                    blueMogoReward += mogoReward;
+                    Debug.Log("Blue mogo reward: 20f");
+                }
+                if (mogoPos.z > no_man_zone_width)
+                {
+                    redAgent.AddReward(mogoReward);
+                    redMogoReward += 2f;
+                    Debug.Log("Red mogo reward: 20f");
+                }
+            }
+
+            //End of game rules - cannot be on other teams side to end game
+            if (redAgent.transform.position.z < no_man_zone_width)
+            {
+                redAgent.AddReward(-positionPenatly);
+                redPosPenalty -= positionPenatly;
+                Debug.Log("Red position penalty: -10f");
+            }
+            if (blueAgent.transform.position.z > -no_man_zone_width)
+            {
+                blueAgent.AddReward(-positionPenatly);
+                bluePosPenalty -= positionPenatly;
+                Debug.Log("Blue position penalty: -10f");
+            }
+
+            LogStats(statsRecorder);
+
+            blueAgent.EndEpisode();
+            redAgent.EndEpisode();
+
+            ResetField();
         }
 
-    //Pinning rule
-    if (Vector3.Distance(blueAgent.transform.position, redAgent.transform.position) < 0.5f)
+        //Pinning rule
+        if (Vector3.Distance(blueAgent.transform.position, redAgent.transform.position) < 0.5f)
         {
-            timeTogether += Time.deltaTime; //increment the time together
+            timeTogether += Time.deltaTime;
         }
         else
         {
-            timeTogether = 0; //once the robots are separated reset the time together
+            timeTogether = 0;
         }
 
-        if (timeTogether >= 5f) //end the episode without giving out the endgame rewards 
+        if (timeTogether >= 5f)
         {
-            //Give the pinning penalty
             blueAgent.AddReward(-pinningPenalty);
             redAgent.AddReward(-pinningPenalty);
 
@@ -185,60 +237,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-  private void EndGame(StatsRecorder statsRecorder)
-  {
-    Vector3[] allMogoPos = new Vector3[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length]; //all mogos positions
-
-    //get all mogos positions
-    for (int i = 0; i < blueAllianceMogos.Length; i++)
-      allMogoPos[i] = blueAllianceMogos[i].transform.position;
-    for (int i = 0; i < redAllianceMogos.Length; i++)
-      allMogoPos[i + blueAllianceMogos.Length] = redAllianceMogos[i].transform.position;
-    for (int i = 0; i < neutralMogos.Length; i++)
-      allMogoPos[i + blueAllianceMogos.Length + redAllianceMogos.Length] = neutralMogos[i].transform.position;
-
-
-    //give mogo reward
-    foreach (Vector3 mogoPos in allMogoPos)
-    {
-      if (mogoPos.z < -no_man_zone_width) //if the mogo is on the robots side
-      {
-        blueAgent.AddReward(mogoReward);
-        blueMogoReward += mogoReward;
-        Debug.Log("Blue mogo reward: 20f");
-      }
-
-      if (mogoPos.z > no_man_zone_width) //if the mogo is on the robots side
-      {
-        redAgent.AddReward(mogoReward);
-        redMogoReward += 2f;
-        Debug.Log("Red mogo reward: 20f");
-      }
-    }
-
-    //Give the position penalty to the robots that end up on the other teams side
-    if (redAgent.transform.position.z < no_man_zone_width)
-    {
-      redAgent.AddReward(-positionPenatly);
-      redPosPenalty -= positionPenatly;
-      Debug.Log("Red position penalty: -10f");
-    }
-    if (blueAgent.transform.position.z > -no_man_zone_width)
-    {
-      blueAgent.AddReward(-positionPenatly);
-      bluePosPenalty -= positionPenatly;
-      Debug.Log("Blue position penalty: -10f");
-    }
-
-    LogStats(statsRecorder); //log the stats for tensorboard
-
-    blueAgent.EndEpisode(); //end the episode
-    redAgent.EndEpisode(); //end the episode
-
-    ResetField(); //reset the field
-  }
-
-  private void LogStats(StatsRecorder statsRecorder)
+    private void LogStats(StatsRecorder statsRecorder)
     {
         statsRecorder.Add("Blue Agent Mogo Reward", blueMogoReward);
         statsRecorder.Add("Red Agent Mogo Reward", redMogoReward);
@@ -250,29 +249,27 @@ public class GameManager : MonoBehaviour
         statsRecorder.Add("Red Agent Ring Reward", redRingReward);
     }
 
-    public void CollectRing(GameObject robot) //collect the rings and give the reward
+    public void CollectRing(GameObject robot)
     {
-        //if (robot == blueAllianceRobot15 || robot == blueAllianceRobot24)
-        if (robot == blueAllianceRobot15)
+        if (robot == blueAllianceRobot15 || robot == blueAllianceRobot24)
         {
-            blueAllianceScore++; //increase the number of rings collected by the robot
-            if (blueAllianceScore <= maxRingsPerGoal) //as long as the goal isnt full, give the reward
+            blueAllianceScore++;
+            if (blueAllianceScore <= maxRingsPerGoal)
             {
                 blueAgent.AddReward(ringReward);
-                //redAgent.AddReward(-5f); //give the other robot a penalty for letting the robot collect the ring
+                //redAgent.AddReward(-5f);
 
-                //Debug.Log(string.Format("Blue Agent Ring Reward: {}f", ringReward));
+                Debug.Log("Blue Agent Ring Reward: .03f");
 
                 blueRingReward += ringReward;
             }
             else
             {
-                blueAgent.gameObject.GetComponent<RobotAgent>().ringFull = true; //if goal is full, mark it as so
+                blueAgent.gameObject.GetComponent<RobotAgent>().ringFull = true;
             }
             return;
         }
-        //else if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
-        else if (robot == redAllianceRobot15)
+        else if (robot == redAllianceRobot15 || robot == redAllianceRobot24)
         {
             redAllianceScore++;
             if (redAllianceScore <= maxRingsPerGoal)
@@ -280,7 +277,7 @@ public class GameManager : MonoBehaviour
                 redAgent.AddReward(ringReward);
                 //blueAgent.AddReward(-3f);
 
-                //Debug.Log(string.Format("Red Agent Ring Reward: {}f", ringReward));
+                Debug.Log("Red Agent Ring Reward: .03f");
 
                 redRingReward += ringReward;
             }
@@ -294,16 +291,75 @@ public class GameManager : MonoBehaviour
         throw new System.ArgumentException("Invalid robot");
     }
 
-    
-    private void GetRingPos() //Get the ring positions
+    public (Vector3, Vector3, Vector3, Vector3) GetObservationsFromAlliancePerspective(GameObject robot)
+    {
+        GameObject allianceSecondary;
+        GameObject opponentPrimary;
+        GameObject opponentSecondary;
+
+        if (robot == blueAllianceRobot15)
+        {
+            allianceSecondary = blueAllianceRobot24;
+            opponentPrimary = redAllianceRobot15;
+            opponentSecondary = redAllianceRobot24;
+        }
+        else if (robot == blueAllianceRobot24)
+        {
+            allianceSecondary = blueAllianceRobot15;
+            opponentPrimary = redAllianceRobot15;
+            opponentSecondary = redAllianceRobot24;
+        }
+        else if (robot == redAllianceRobot15)
+        {
+            allianceSecondary = redAllianceRobot24;
+            opponentPrimary = blueAllianceRobot15;
+            opponentSecondary = blueAllianceRobot24;
+        }
+        else if (robot == redAllianceRobot24)
+        {
+            allianceSecondary = redAllianceRobot15;
+            opponentPrimary = blueAllianceRobot15;
+            opponentSecondary = blueAllianceRobot24;
+        }
+        else
+        {
+            throw new System.ArgumentException("Invalid robot");
+        }
+
+        return (
+            robot.transform.position,
+            allianceSecondary.transform.position,
+            opponentPrimary.transform.position,
+            opponentSecondary.transform.position
+        );
+    }
+
+    public System.Func<Vector3, Vector3> VectorAllianceTransform(GameObject robot)
+    {
+        if (robot != blueAllianceRobot15 && robot != blueAllianceRobot24 && robot != redAllianceRobot15 && robot != redAllianceRobot24)
+        {
+            throw new System.ArgumentException("Invalid robot");
+        }
+
+        return (Vector3 input) => input;
+    }
+
+    public System.Func<Vector3, Vector3> CombinedPositionTransform(GameObject robot)
+    {
+        var allianceTransform = VectorAllianceTransform(robot);
+        System.Func<Vector3, Vector3> scalePositionVector = (Vector3 input) => input / halfFieldSize;
+
+        return (Vector3 input) => allianceTransform(scalePositionVector(input));
+    }
+
+    private void GetRingPos()
     {
         ringPositions = new PosAndRot[rings.Length];
         for (int i = 0; i < rings.Length; i++)
             ringPositions[i] = getGameObjectPosAndRot(rings[i]);
     }
 
-    
-    private void GetMogoPos() //Get the mogo positions
+    private void GetMogoPos()
     {
         mogoPositions = new PosAndRot[blueAllianceMogos.Length + redAllianceMogos.Length + neutralMogos.Length];
 
@@ -318,7 +374,7 @@ public class GameManager : MonoBehaviour
             mogoPositions[i + offsetLength] = getGameObjectPosAndRot(neutralMogos[i]);
     }
 
-    private void GetRobotPos() //Get the robot positions
+    private void GetRobotPos()
     {
         robotPositions = new PosAndRot[4];
         robotPositions[0] = getGameObjectPosAndRot(blueAllianceRobot15);
@@ -330,7 +386,7 @@ public class GameManager : MonoBehaviour
         redAgent = redAllianceRobot15.GetComponent<Agent>();
     }
 
-    private void EnableMogos() //Enabled all the mogos
+    private void EnableMogos()
     {
         for (int i = 0; i < blueAllianceMogos.Length; i++)
             blueAllianceMogos[i].SetActive(true);
@@ -339,7 +395,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < neutralMogos.Length; i++)
             neutralMogos[i].SetActive(true);
 
-        if (randMogos) //if the amount of active mogos is random, then set a random amount active
+        if (randMogos)
         {
             int blueAllianceMogoIndex = Random.Range(0, blueAllianceMogos.Length);
             int redAllianceMogoIndex = Random.Range(0, redAllianceMogos.Length);
@@ -362,10 +418,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
-    private void ResetRingPos() //Reset all the ring positions
+    private void ResetRingPos()
     {
-        //Create a list of the rings
         var idx = new List<int>();
         for (int i = 0; i < rings.Length; i++)
         {
@@ -395,8 +449,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
-    private void ResetMogoPos() //Reset mogo positions
+    private void ResetMogoPos()
     {
         int offsetLength = 0;
         for (int i = 0; i < blueAllianceMogos.Length; i++)
@@ -409,8 +462,7 @@ public class GameManager : MonoBehaviour
             setGameObjectPosAndRot(neutralMogos[i], mogoPositions[i + offsetLength]);
     }
 
-    
-    private void ResetRobotPos() //Reset robot positions
+    private void ResetRobotPos()
     {
         setGameObjectPosAndRot(blueAllianceRobot15, robotPositions[0]);
         setGameObjectPosAndRot(blueAllianceRobot24, robotPositions[1]);

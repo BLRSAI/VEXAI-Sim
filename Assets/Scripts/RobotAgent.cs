@@ -1,63 +1,66 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using Unity.Mathematics;
 
 public class RobotAgent : Agent
 {
+    [Header("Observation Settings")]
+    [SerializeField] private Transform fieldPerspectiveTransform;
 
     [Header("Robot Movement Settings")]
-    [SerializeField] private float robotSpeed = 10f; // The speed of the robot
-    [SerializeField] private float rotationSpeed = 10f; // The speed of the robot's rotation
+    [SerializeField] private float robotSpeed = 10f;
+    [SerializeField] private float rotationSpeed = 10f;
 
     [Header("Ring Culling Settings")]
-    [SerializeField] private bool visualizeCulling; // Whether or not to visualize the culling
-    [SerializeField] private Transform cameraLocation; // The location of the camera
-    [SerializeField] private float fx = 608.38952271f; // The focal x length of the camera
-    [SerializeField] private float fy = 610.59807426f; // The focal y length of the camera
-    [SerializeField] private float cx = 332.60130193f; // The center x length of the camera
-    [SerializeField] private float cy = 236.58507294f; // The center y length of the camera
-    [SerializeField] private float h = 480f; // The height of the camera
-    [SerializeField] private float w = 640f; // The width of the camera
- 
+    [SerializeField] private bool visualizeCulling;
+    [SerializeField] private Transform cameraLocation;
+    [SerializeField] private float fx = 608.38952271f;
+    [SerializeField] private float fy = 610.59807426f;
+    [SerializeField] private float cx = 332.60130193f;
+    [SerializeField] private float cy = 236.58507294f;
+    [SerializeField] private float h = 480f;
+    [SerializeField] private float w = 640f;
+
     [Header("AI Settings")]
-    [SerializeField] private int numRings = 10; // The number of rings the robot can pickup and gain points for
-    [SerializeField] public GameObject outtake; // where the rings would end up if the robots mobile goal is full
-    //[SerializeField] private float penatly24 = 1f; // The penalty for hitting ones own 24in robot //TODO: use this to penalize hitting the 24in robot
+    [SerializeField] private int numRings = 10;
+    [SerializeField] public GameObject outtake;
+    [SerializeField] private float penatly24 = 1f;
+    public bool ringFull = false;
 
-    public bool ringFull = false; // Whether or not the robots mobile goal is full
+    private Rigidbody rb;
 
-    private Rigidbody rb; // The rigidbody of the robot    
-    private bool[] ringsCulled; // Whether or not the robot has culled the individual ring
-    private Vector3[] nearestRings; // The culled rings sorted by distance
-    private bool[] ringExists; // Whether or not the ring exists/picked up
+    private bool[] ringsCulled;
+    private Vector3[] nearestRings;
+    private bool[] ringExists;
 
     // running movement variables
     private float speed = 0f;
     private float rotation = 0f;
 
-    //On Script Awake Get Ribigbody
     void Awake()
     {
-        rb = this.gameObject.GetComponent<Rigidbody>(); // Get the rigidbody of the robot
+        rb = this.gameObject.GetComponent<Rigidbody>();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         string observations = "";
-
-        //Get the time and normalize it
         float time = GameManager.gameManager.time;
         time = time / GameManager.maxTime;
         sensor.AddObservation(time);
+
+        //observations += "Time: " + time.ToString() + ",";
 
         //add noise to transform.position of the robot
         Vector3 noisyPosition = transform.position;
         noisyPosition.x += UnityEngine.Random.Range(-0.1f, 0.1f);
         noisyPosition.z += UnityEngine.Random.Range(-0.1f, 0.1f);
 
-        /* TODO implement gaussian noise
+        /* gaussian noise
         float u1 = 1.0f - UnityEngine.Random.Range(0,1);
         float u2 = 1.0f - UnityEngine.Random.Range(0,1);
         float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.PI * u2); //random normal(0,1)
@@ -71,33 +74,33 @@ public class RobotAgent : Agent
 
         //Pointer vector
         //Vector3 pointingVector = fieldPerspectiveTransform.InverseTransformVector(transform.forward);
-        //sensor.AddObservation(pointingVector.x);
+        // sensor.AddObservation(pointingVector.x);
         //observations += " Robot Direction X: " + pointingVector.x + ", ";
-        //sensor.AddObservation(pointingVector.z);
+        // sensor.AddObservation(pointingVector.z);
         //observations += " Robot Direction Z: " + pointingVector.z + ", ";
-        sensor.AddObservation(0.0f); //stopped using pointing vectors
-        sensor.AddObservation(0.0f); //stopped using pointing vectors
 
-        //Cull and Sort the Rings For Obervation
+
+        sensor.AddObservation(0.0f); //stopped using pointing vectors
+        sensor.AddObservation(0.0f);
+
         CullRings();
         SortRings();
 
-        //Add the Ring Observations
         for (int i = 0; i < numRings; i++)
         {
-            //If the ring exists i.e not picked up, then give the observation of the ring relative to the robots position
             Vector3 ringRelative;
             if (ringExists[i])
             {
-                ringRelative = transform.InverseTransformPoint(nearestRings[i]); // relative to robot's local space i.e robot's position is (0,0,0)
+                ringRelative = transform.InverseTransformPoint(nearestRings[i]); // relative to robot's local space
             }
             else
             {
-                ringRelative = new Vector3(0, 0, 0); // if the ring doesn't exist, the robot doesn't see it
+                ringRelative = new Vector3(0, 0, 0);
             }
+            // Vector3 ringLocal = fieldPerspectiveTransform.InverseTransformPoint(nearestRings[i]); // relative to robot's field perspective
 
             //add noise to the ringRelative vector
-            float noise = UnityEngine.Random.Range(-0.25f, 0.25f);
+            float noise = UnityEngine.Random.Range(-0.5f, 0.5f);
             ringRelative.x += noise;
             ringRelative.y += noise;
 
@@ -109,14 +112,15 @@ public class RobotAgent : Agent
         //Debug.Log(observations);
     }
 
-    // When the model makes a decision, update the speed and rotation of the robot
     public override void OnActionReceived(ActionBuffers actions)
     {
+        // no need for math to be done, actions are alwasy between -1 and 1
+        // speed = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[0]));
+        // rotation = Mathf.Min(1f, Mathf.Max(-1f, actions.ContinuousActions[1]));
         speed = actions.ContinuousActions[0];
         rotation = actions.ContinuousActions[1];
     }
 
-    // Move the robot according to the speed and rotation decided on by the model 
     void FixedUpdate()
     {
         Vector3 movement = transform.forward * robotSpeed * speed * Time.fixedDeltaTime;
@@ -127,19 +131,12 @@ public class RobotAgent : Agent
         rb.MoveRotation(rb.rotation * turn);
     }
 
-    //Clear all variables and arrays used in calculations
     public override void OnEpisodeBegin()
     {
         speed = 0;
         rotation = 0;
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        // System.Array.Clear(ringExists, 0, ringExists.Length);
-        // System.Array.Clear(ringsCulled, 0, ringsCulled.Length);
-        // System.Array.Clear(nearestRings, 0, nearestRings.Length);
     }
 
-    //If the user wants to control the robot, the following code will be used
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         ActionSegment<float> control = actionsOut.ContinuousActions;
@@ -147,45 +144,43 @@ public class RobotAgent : Agent
         control[1] = Input.GetAxis("Horizontal");
     }
 
-    // Cull the rings within the robot's view
     public void CullRings()
     {
-        if (ringsCulled == null) ringsCulled = new bool[GameManager.gameManager.rings.Length]; // Initialize the array if it hasn't been initialized yet
+        if (ringsCulled == null) ringsCulled = new bool[GameManager.gameManager.rings.Length];
 
-        for (int i = 0; i < ringsCulled.Length; i++) //Traverse the ringsCulled array
+        for (int i = 0; i < ringsCulled.Length; i++)
         {
-            GameObject ring = GameManager.gameManager.rings[i]; // Get the ring from the game managers list of all rings in the game
+            GameObject ring = GameManager.gameManager.rings[i];
 
-            if (ring.activeSelf) //if the ring is active
+            if (ring.activeSelf)
             {
-                if (visualizeCulling) //if the user wants to visualize the culling
-                    ring.GetComponent<CullableFieldElement>().culled = false; //set the ring to not culled
-                ringsCulled[i] = false; //set the ring to not culled
+                if (visualizeCulling)
+                    ring.GetComponent<CullableFieldElement>().culled = false;
+                ringsCulled[i] = false;
 
-                bool ringInFrame = true; //set the ring to be in the frame to true
+                bool ringInFrame = true;
 
-                Vector3 ringPosTransformed = cameraLocation.InverseTransformPoint(ring.transform.position); //transform the ring's position from the camera's world space to local space
-                ringInFrame &= ringPosTransformed.z > 0; //ring has to be in from of the camera in order to be in the frame
+                Vector3 ringPosTransformed = cameraLocation.InverseTransformPoint(ring.transform.position);
+                ringInFrame &= ringPosTransformed.z > 0;
 
-                //if the ring is in the frame, then check if it is within the field of view
                 Vector3 projectedPos = new Vector3(
                     (fx * ringPosTransformed.x) + (cx * ringPosTransformed.z),
                     (fy * ringPosTransformed.y) + (cy * ringPosTransformed.z),
                     (ringPosTransformed.z)
                 ) / ringPosTransformed.z;
-                ringInFrame &= projectedPos.x > 0 && projectedPos.x < w && projectedPos.y > 0 && projectedPos.y < h; //ring has to be within the field of view
+                ringInFrame &= projectedPos.x > 0 && projectedPos.x < w && projectedPos.y > 0 && projectedPos.y < h;
 
-                if (!ringInFrame || Mathf.Abs(rotation) > 0.5f) //TODO why the rotation being above 0.5f??
+                if (!ringInFrame || Mathf.Abs(rotation) > 0.5f)
                 {
                     ringsCulled[i] = true;
                     if (visualizeCulling)
                         ring.GetComponent<CullableFieldElement>().culled = true;
                 }
-                else //if the ring is in the frame
+                else
                 {
-                    if (Physics.Linecast(cameraLocation.position, ring.transform.position, out RaycastHit hit)) //send out a linecast to the ring and detect if the ring was hit
+                    if (Physics.Linecast(cameraLocation.position, ring.transform.position, out RaycastHit hit))
                     {
-                        if (!hit.collider.gameObject.CompareTag("Ring Collider")) //TODO why if NOT hit collider is Ring Collider??
+                        if (!hit.collider.gameObject.CompareTag("Ring Collider"))
                         {
                             ringsCulled[i] = true;
                             if (visualizeCulling)
@@ -197,23 +192,22 @@ public class RobotAgent : Agent
         }
     }
 
-    // Sort the rings according to their distance from the robot
     void SortRings()
     {
         var nearestRingsTemp = new List<Vector3>();
-        for (int i = 0; i < GameManager.gameManager.rings.Length; i++) //Traverse the rings in the game
+        for (int i = 0; i < GameManager.gameManager.rings.Length; i++)
         {
-            if (!ringsCulled[i]) //if the ring is not culled
+            if (!ringsCulled[i])
             {
-                nearestRingsTemp.Add(GameManager.gameManager.rings[i].transform.position); //add the ring to the list of nearest rings
+                nearestRingsTemp.Add(GameManager.gameManager.rings[i].transform.position);
             }
         }
 
-        nearestRingsTemp.Sort((x, y) => Vector3.Distance(x, this.transform.position).CompareTo(Vector3.Distance(y, this.transform.position))); //sort the list of nearest rings according to their distance from the robot
+        nearestRingsTemp.Sort((x, y) => Vector3.Distance(x, this.transform.position).CompareTo(Vector3.Distance(y, this.transform.position)));
 
-        if (nearestRings == null) nearestRings = new Vector3[numRings]; // Initialize the array if it hasn't been initialized yet
-        if (ringExists == null) ringExists = new bool[numRings]; // Initialize the array if it hasn't been initialized yet
-        for (int i = 0; i < numRings; i++) //fill nearestRings with the sorted rings
+        if (nearestRings == null) nearestRings = new Vector3[numRings];
+        if (ringExists == null) ringExists = new bool[numRings];
+        for (int i = 0; i < numRings; i++)
         {
             if (i < nearestRingsTemp.Count)
             {
@@ -226,5 +220,12 @@ public class RobotAgent : Agent
                 ringExists[i] = false;
             }
         }
+
     }
+
+    // private void OnCollisionEnter(Collision other) {
+    //     if (other.gameObject.CompareTag("24")) {
+    //         AddReward(-penatly24);
+    //     }
+    // }
 }
