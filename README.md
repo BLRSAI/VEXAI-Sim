@@ -1,10 +1,10 @@
-# VEXAI Simulation and Training
+VEXAI Simulation and Training
 
-##Simulation
+Simulation
 1. Download Repo
 2. Launch repo in latest unity version
 
-##Training
+Training
 1. Install anaconda python virutal enviroment manager - conda on package managers, lookup anaconda online for windows download
 2. Navigate to where you downloaded the simulation
 3. Run command inside terminal in linux or anaconda powershell prompt on windows "conda create --name name python=3.6"
@@ -16,4 +16,7 @@
 4. Run "mlagents-learn mlagents-config.yaml" to train on our hyperparameters
   Edit the mlagents-config.yaml file for tuning your own hyperparameters
 
-##Tensorboard logging
+Tensorboard logging
+1. Open a separate terminal from the one that is training the model
+2. Navigate to the directory where the simulation is, activate the virtual enviroment, and run "tensorboard --logdir /results"
+3. In a browser enter "http://localhost:6006/" for your tensorboard stats
