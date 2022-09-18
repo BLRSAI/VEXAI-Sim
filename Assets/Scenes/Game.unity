@@ -175,6 +175,25 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6348634326763842433, guid: 9ea13d2f40160074ea20d72f57c8b26e, type: 3}
   m_PrefabInstance: {fileID: 6348634326927264680}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1330662094 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3896840644838075977, guid: 1a0009a2d3fb70446a255678b42d5b3b, type: 3}
+  m_PrefabInstance: {fileID: 4239349850974770319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1330662098
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330662094}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -462981019419857548, guid: 9bcb357f524e07c459888ded05c25c8b, type: 3}
 --- !u!1 &1395577748 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4296182798590913600, guid: 7d31406e08b464e419e5d28994ac6c7d, type: 3}
@@ -860,6 +879,14 @@ PrefabInstance:
       propertyPath: scoreBlue
       value: 
       objectReference: {fileID: 391699579}
+    - target: {fileID: 8766619052945294522, guid: 975baae184460c14cac0366b9612d082, type: 3}
+      propertyPath: mogoReward
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766619052945294522, guid: 975baae184460c14cac0366b9612d082, type: 3}
+      propertyPath: positionPenatly
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8766619052945294522, guid: 975baae184460c14cac0366b9612d082, type: 3}
       propertyPath: redAllianceRobot15
       value: 
