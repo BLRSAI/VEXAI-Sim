@@ -1,4 +1,6 @@
-VEXAI Simulation and Training
+# VEXAI Simulation and Training
+
+Check out our [technical report here!](https://arxiv.org/abs/2211.14385)
 
 Simulation
 1. Download Repo
